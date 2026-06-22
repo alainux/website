@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+
+<head>
+  <meta charset="utf8">
+  <title>{% block title %}{{ config.title }} | {{ config.description }}{% endblock title %}</title>
+
+  <link rel="stylesheet"
+    href="{{ get_url(path='style.css', trailing_slash=false) }}">
+
+  <link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack-subset.css'>
+</head>
+
+<body>
+  {% block header_title %}
+  <a href="{{ config.base_url }}">
+    <h1>
+      {{ config.title }}
+    </h1>
+  </a>
+  {% endblock header_title %}
+
+  <div>
+    {% block content %}
+    {% for page in section.pages | reverse %}
+    <div>
+      <span>{{ page.date | date(format="%-d %b %Y") }}</span>
+      <span>
+        <a href="{{ page.permalink }}">
+          {{ page.title | safe }}
+        </a>
+      </span>
+    </div>
+    {% endfor %}
+    {% endblock content %}
+  </div>
+</body>
+
+</html>
