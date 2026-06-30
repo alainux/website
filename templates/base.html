@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{% block description %}{{ config.description }}{% endblock description %}">
+  <meta name="author" content="{{ config.title }}">
+  <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+
+  <link rel="canonical" href="{{ current_url | safe }}">
+
+  <meta property="og:site_name" content="{{ config.title }}">
+  <meta property="og:title" content="{% block og_title %}{{ config.title }}{% endblock og_title %}">
+  <meta property="og:description" content="{% block og_description %}{{ config.description }}{% endblock og_description %}">
+  <meta property="og:url" content="{{ current_url | safe }}">
+  <meta property="og:type" content="{% block og_type %}website{% endblock og_type %}">
+  <meta property="og:locale" content="en">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{% block twitter_title %}{{ config.title }}{% endblock twitter_title %}">
+  <meta name="twitter:description" content="{% block twitter_description %}{{ config.description }}{% endblock twitter_description %}">
+
+  <!-- CSS Styles -->
+  <link rel="stylesheet" href="{{ get_url(path='style.css', trailing_slash=false) }}">
+  <!-- Hack Font CDN for terminal monospace typography -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css">
+
+  <!-- Inline JavaScript to prevent theme flash -->
+  <script>
+    (function() {
+      const storedTheme = localStorage.getItem('theme');
+      const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      if (storedTheme === 'light' || (!storedTheme && systemPrefersLight)) {
+        document.documentElement.classList.add('light-theme');
+      }
+    })();
+  </script>
+
+  {% if page.extra.math or section.extra.math %}
+  <!-- KaTeX for math formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\(', right: '\\)', display: false}, {left: '\\[', right: '\\]', display: true}], throwOnError: false});"></script>
+  {% endif %}
+</head>
+<body>
+  <div class="terminal-container">
+    <div class="crt-lines"></div>
+    <div class="crt-glow"></div>
+
+    <main class="terminal-window">
+      <!-- Window Titlebar -->
+      <header class="window-header" id="window-header">
+        <div class="window-controls">
+          <span class="window-dot dot-close"></span>
+          <span class="window-dot dot-minimize"></span>
+          <span class="window-dot dot-maximize"></span>
+        </div>
+        <div class="window-title">alain@tty1: ~/website{{ current_path }}</div>
+        <div class="window-spacer"></div>
+      </header>
+
+      <!-- Navigation Status Bar (Vim-style) -->
+      <nav class="vim-navbar" aria-label="Main Navigation">
+        <div class="nav-links">
+          <a id="nav-home" href="{{ get_url(path="") }}" class="nav-item {% if current_path == "/" %}active{% endif %}">{{ config.extra.nav_home }}</a>
+          <a id="nav-blog" href="{{ get_url(path="blog/") }}" class="nav-item {% if current_path is starting_with("/blog") or current_path is starting_with("/tags") %}active{% endif %}">{{ config.extra.nav_blog }}</a>
+          <a id="nav-projects" href="{{ get_url(path="projects/") }}" class="nav-item {% if current_path is starting_with("/projects") %}active{% endif %}">{{ config.extra.nav_projects }}</a>
+          <a id="nav-cv" href="{{ get_url(path="cv") }}" class="nav-item {% if current_path is starting_with("/cv") %}active{% endif %}">{{ config.extra.nav_cv }}</a>
+          <a id="nav-contact" href="{{ get_url(path="contact") }}" class="nav-item {% if current_path is starting_with("/contact") %}active{% endif %}">{{ config.extra.nav_contact }}</a>
+        </div>
+        <div class="nav-spacer"></div>
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Light/Dark Theme">[ THEME: DARK ]</button>
+      </nav>
+
+      <!-- Main Content Block -->
+      <div class="window-body">
+        {% block content %}{% endblock content %}
+      </div>
+
+      <!-- Bottom Vim-style Status Bar -->
+      <footer class="vim-footer">
+        <div class="footer-left">© 2026 Alain Jacomet</div>
+        <div class="footer-right">
+          {% block footer_info %}{% endblock footer_info %}
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Theme Toggle JS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggleBtn = document.getElementById('theme-toggle');
+      if (!toggleBtn) return;
+
+      const updateButtonText = () => {
+        const isLight = document.documentElement.classList.contains('light-theme');
+        toggleBtn.textContent = isLight ? '[ THEME: LIGHT ]' : '[ THEME: DARK ]';
+      };
+
+      updateButtonText();
+
+      toggleBtn.addEventListener('click', () => {
+        document.documentElement.classList.toggle('light-theme');
+        const isLight = document.documentElement.classList.contains('light-theme');
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        updateButtonText();
+      });
+    });
+  </script>
+</body>
+</html>

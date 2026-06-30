@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Tag: #{{ term.name }} | {{ config.title }}{% endblock %}
+{% block description %}Posts tagged #{{ term.name }} on {{ config.title }}.{% endblock %}
+{% block og_title %}#{{ term.name }}{% endblock %}
+{% block og_description %}Posts tagged #{{ term.name }}.{% endblock %}
+
+{% block content %}
+<div class="ascii-box taxonomy-container">
+  <h1 class="box-header">[ TAG: #{{ term.name | upper }} ]</h1>
+
+  <p class="welcome-desc">> Showing all posts matching the topic term #{{ term.name }}:</p>
+
+  {% set active_tag = term.name %}
+  {% include "partials/tag_filter.html" %}
+
+  <ul class="terminal-list">
+    {% for page in term.pages %}
+      <li class="list-item section-list-item">
+        <div class="list-item-row">
+          {% if page.date %}
+            <span class="item-date">{{ page.date | date(format=config.extra.date_format) }}</span>
+          {% endif %}
+          {% if page.extra.lang %}
+            <span class="item-lang-badge">[{{ page.extra.lang | upper }}]</span>
+          {% endif %}
+          <a href="{{ page.permalink }}" class="item-link">{{ page.title }}</a>
+        </div>
+        {% if page.description %}
+          <p class="project-desc">{{ page.description }}</p>
+        {% endif %}
+        {% if page.taxonomies.tags %}
+          <div class="item-tags">
+            {% for tag in page.taxonomies.tags %}
+              <a href="{{ get_taxonomy_url(kind="tags", name=tag) }}" class="item-tag">#{{ tag }}</a>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </li>
+    {% else %}
+      <li class="list-item empty-list">No posts found with this tag.</li>
+    {% endfor %}
+  </ul>
+
+  <div class="box-footer-link">
+    <a href="{{ get_url(path="blog/") }}" class="terminal-btn">[ BACK TO BLOG ]</a>
+    <a href="{{ get_url(path="") }}" class="terminal-btn">[{{ config.extra.back_to_home }}]</a>
+  </div>
+</div>
+{% endblock content %}
+
+{% block footer_info %}
+{{ term.pages | length }} items
+{% endblock footer_info %}

@@ -1,2 +1,47 @@
-$background-color: #F1F1F1;
-$primary-color: #212121;
+:root {
+  /* Default Dark Mode - Catppuccin Mocha terminal theme */
+  --bg-main: #181825;       // Outer body dark background
+  --bg-window: #1e1e2e;     // Terminal window background
+  --bg-darker: #11111b;     // Darkest elements (like terminal header or code blocks)
+  --bg-status: #313244;     // Vim status bar background
+  --bg-status-hover: #45475a; // Vim status bar hover
+  --bg-ascii-box: rgba(30, 30, 46, 0.4);
+  
+  --fg-main: #cdd6f4;       // Primary text
+  --fg-dim: #a6adc8;        // Dim text/comments
+  --fg-accent: #89b4fa;     // Accent/links (Blue)
+  --fg-accent-hover: #b4befe; // Accent/links hover (Lavender)
+  --fg-accent-glow: rgba(137, 180, 250, 0.25);
+  
+  --fg-green: #a6e3a1;      // Success/Spanish badge (Green)
+  --fg-red: #f38ba8;        // Danger/Close window button (Red)
+  --fg-yellow: #f9e2af;     // Warning/Minimize window button (Yellow)
+  --fg-blue: #89b4fa;       // Maximize window button (Blue)
+
+  --border-color: #45475a;  // Terminal line borders
+  --border-focus: #b4befe;  // Selected borders (Lavender)
+}
+
+.light-theme {
+  /* Light Mode - Catppuccin Latte terminal theme */
+  --bg-main: #eff1f5;       // Outer body background
+  --bg-window: #e6e9ef;     // Terminal window background
+  --bg-darker: #ccd0da;     // Darkest elements (like terminal header or code blocks)
+  --bg-status: #bcc0cc;     // Vim status bar background
+  --bg-status-hover: #acb0be; // Vim status bar hover
+  --bg-ascii-box: rgba(230, 233, 239, 0.4);
+  
+  --fg-main: #4c4f69;       // Primary text
+  --fg-dim: #6c6f85;        // Dim text/comments
+  --fg-accent: #1e66f5;     // Accent/links (Royal Blue)
+  --fg-accent-hover: #7287fd; // Accent/links hover (Indigo)
+  --fg-accent-glow: rgba(30, 102, 245, 0.15);
+  
+  --fg-green: #40a02b;      // Success/Spanish badge (Forest Green)
+  --fg-red: #d20f39;        // Close window button (Red)
+  --fg-yellow: #df8e1d;     // Minimize window button (Orange/Yellow)
+  --fg-blue: #1e66f5;       // Maximize window button (Royal Blue)
+
+  --border-color: #bcc0cc;  // Terminal line borders
+  --border-focus: #7287fd;  // Selected borders (Indigo)
+}

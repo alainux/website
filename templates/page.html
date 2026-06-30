@@ -1,11 +1,63 @@
-{% extends "index.html" %}
+{% extends "base.html" %}
 
-{% block title %}{{ config.title }} - {{ page.title }}{% endblock %}
+{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
+{% block description %}{{ page.description | default(value=config.description) }}{% endblock %}
+{% block og_title %}{{ page.title }}{% endblock %}
+{% block og_description %}{{ page.description | default(value=config.description) }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block twitter_title %}{{ page.title }}{% endblock %}
+{% block twitter_description %}{{ page.description | default(value=config.description) }}{% endblock %}
 
 {% block content %}
-<div>
-  <h1>{{ page.title }}</h1>
-  <span>{{ page.date | date(format="%-d %b %Y") }}</span>
-  {{ page.content | safe }}
-</div>
+<article class="ascii-box page-container">
+  <h1 class="box-header">[ {{ page.title | upper }} ]</h1>
+
+  <header class="page-meta">
+    {% if page.date and not page.extra.print %}
+      <span class="meta-item">DATE: {{ page.date | date(format=config.extra.date_format) }}</span>
+    {% endif %}
+    {% if page.extra.lang %}
+      <span class="meta-item-lang">LANG: {{ page.extra.lang | upper }}</span>
+    {% endif %}
+    {% if page.extra.github %}
+      <span class="meta-item">CODE: <a href="{{ page.extra.github }}" target="_blank" rel="noopener noreferrer" class="terminal-link">{{ page.extra.github }}</a></span>
+    {% endif %}
+  </header>
+
+  {% if page.taxonomies.tags %}
+    <div class="page-tags">
+      {% for tag in page.taxonomies.tags %}
+        <a href="{{ get_taxonomy_url(kind="tags", name=tag) }}" class="terminal-btn">#{{ tag }}</a>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="terminal-divider"></div>
+
+  <div class="markdown-content">
+    {{ page.content | safe }}
+  </div>
+
+  <div class="terminal-divider"></div>
+
+  {% if page.extra.print %}
+    <div class="print-btn-row">
+      <button class="terminal-btn" onclick="window.print()" aria-label="Print or save CV as PDF">[ PRINT / SAVE AS PDF ]</button>
+    </div>
+  {% endif %}
+
+  <div class="page-actions">
+    {% if page.ancestors | length > 0 %}
+      {% set parent_path = page.ancestors | last %}
+      {% set parent_section = get_section(path=parent_path) %}
+      <a href="{{ parent_section.permalink }}" class="terminal-btn">[:back_to_{{ parent_section.title | default(value="home") | lower }}]</a>
+    {% else %}
+      <a href="{{ get_url(path="") }}" class="terminal-btn">[:back_to_home]</a>
+    {% endif %}
+  </div>
+</article>
 {% endblock content %}
+
+{% block footer_info %}
+{{ page.word_count }} Wrd
+{% endblock footer_info %}

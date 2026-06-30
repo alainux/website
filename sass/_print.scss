@@ -1,0 +1,158 @@
+/* ============================================================
+   Print Stylesheet — renders CV (and any page) as clean,
+   professional black-on-white output for PDF export.
+   ============================================================ */
+
+@media print {
+  /* Hide all terminal chrome */
+  .crt-lines,
+  .crt-glow,
+  .window-header,
+  .vim-navbar,
+  .vim-footer,
+  .page-actions,
+  .page-tags,
+  .terminal-divider,
+  .print-btn-row {
+    display: none !important;
+  }
+
+  /* Flatten container / window to plain white page */
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-family: "Georgia", "Times New Roman", serif !important;
+    font-size: 11pt !important;
+    line-height: 1.5 !important;
+  }
+
+  .terminal-container {
+    min-height: unset;
+    padding: 0;
+    background: #fff !important;
+    display: block;
+  }
+
+  .terminal-window {
+    max-width: 100%;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  .window-body {
+    padding: 0 !important;
+  }
+
+  /* Strip the ASCII box frame on print */
+  .ascii-box {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin-bottom: 0 !important;
+
+    &::before,
+    &::after {
+      display: none !important;
+    }
+
+    .box-header {
+      display: none !important; /* hide "[CV]" label — h1 title takes over */
+    }
+  }
+
+  /* Typography — clean academic style */
+  .markdown-content {
+    margin-top: 0;
+
+    h1, h2, h3, h4, h5, h6 {
+      color: #000 !important;
+      text-shadow: none !important;
+      page-break-after: avoid;
+      margin-top: 1.4em;
+      margin-bottom: 0.3em;
+    }
+
+    /* Remove the ## prefix decorations on headings */
+    h1::before, h2::before, h3::before,
+    h4::before, h5::before, h6::before {
+      content: "" !important;
+    }
+
+    h1 { font-size: 18pt; border-bottom: 1.5pt solid #000; padding-bottom: 3pt; }
+    h2 { font-size: 14pt; border-bottom: 0.5pt solid #555; padding-bottom: 2pt; }
+    h3 { font-size: 12pt; }
+    h4 { font-size: 11pt; font-style: italic; font-weight: normal; }
+
+    p, li {
+      color: #000 !important;
+      orphans: 3;
+      widows: 3;
+    }
+
+    a {
+      color: #000 !important;
+      text-decoration: none;
+    }
+
+    /* Print links as text (no underline) — the URL is beside contact anyway */
+    a[href]::after {
+      content: none !important;
+    }
+
+    ul {
+      padding-left: 1.2em;
+      margin-bottom: 0.6em;
+
+      li::before {
+        content: "–" !important;
+        color: #000 !important;
+      }
+    }
+
+    hr {
+      border: none;
+      border-top: 0.5pt solid #999;
+      margin: 0.8em 0;
+    }
+
+    code {
+      background: none !important;
+      border: none !important;
+      color: #000 !important;
+      font-family: "Courier New", monospace;
+      font-size: 10pt;
+    }
+
+    pre {
+      border: 0.5pt solid #ccc !important;
+      padding: 0.5em !important;
+      font-size: 9pt;
+      page-break-inside: avoid;
+    }
+
+    table {
+      white-space: normal !important;
+      border: 0.5pt solid #ccc !important;
+      font-size: 10pt;
+      page-break-inside: avoid;
+
+      th, td {
+        border: 0.5pt solid #ccc !important;
+        padding: 3pt 6pt !important;
+        color: #000 !important;
+      }
+
+      th {
+        background: #eee !important;
+        color: #000 !important;
+      }
+    }
+  }
+
+  /* Page margin setup */
+  @page {
+    margin: 2cm;
+    size: A4;
+  }
+}

@@ -1,0 +1,36 @@
+{# Inline tag filter — used on the blog section and tag post-list pages. #}
+{# Optional: pass `active_tag` to highlight the current term. #}
+{% set tags_taxonomy = get_taxonomy(kind="tags") %}
+{% set tag_limit = 8 %}
+
+{% if tags_taxonomy.items %}
+  <nav class="section-tag-filter" aria-label="Filter posts by tag">
+    <span class="tag-filter-label">FILTER BY TAG:</span>
+
+    {% if tags_taxonomy.items | length > tag_limit %}
+      <div class="tags-expand">
+        <input type="checkbox" id="tag-filter-toggle" class="tags-expand-state" aria-label="Show all tags">
+        <div class="tags-cloud">
+          {% for term in tags_taxonomy.items %}
+            {% if loop.index <= tag_limit %}
+              <a href="{{ term.permalink }}" class="item-tag{% if active_tag is defined and active_tag == term.name %} item-tag-active{% endif %}">#{{ term.name }} ({{ term.pages | length }})</a>
+            {% else %}
+              <a href="{{ term.permalink }}" class="item-tag tags-cloud-extra{% if active_tag is defined and active_tag == term.name %} item-tag-active{% endif %}">#{{ term.name }} ({{ term.pages | length }})</a>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <label for="tag-filter-toggle" class="terminal-btn tags-expand-toggle">
+          <span class="tags-expand-more">[ + MORE TAGS ]</span>
+          <span class="tags-expand-less">[ - FEWER TAGS ]</span>
+        </label>
+      </div>
+    {% else %}
+      <div class="tags-cloud">
+        {% for term in tags_taxonomy.items %}
+          <a href="{{ term.permalink }}" class="item-tag{% if active_tag is defined and active_tag == term.name %} item-tag-active{% endif %}">#{{ term.name }} ({{ term.pages | length }})</a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </nav>
+  <div class="terminal-divider-light"></div>
+{% endif %}

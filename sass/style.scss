@@ -1,7 +1,9 @@
 @import "variables";
-
-body {
-  background-color: $background-color;
-  color: $primary-color;
-  font-family: Hack, monospace;
-}
+@import "base";
+@import "crt";
+@import "window";
+@import "boxes";
+@import "lists";
+@import "navigation";
+@import "markdown";
+@import "print";

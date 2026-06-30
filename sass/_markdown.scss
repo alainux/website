@@ -1,0 +1,288 @@
+/* Markdown & Typography Overrides */
+
+.markdown-content {
+  margin-top: 1.5rem;
+  
+  p {
+    margin-bottom: 1.2rem;
+  }
+
+  /* Headings — size scale + Markdown prefix decoration */
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--fg-accent);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    font-weight: bold;
+    text-shadow: var(--fg-accent-glow) 0 0 2px;
+    line-height: 1.3;
+  }
+
+  h1 { font-size: 1.4rem; }
+  h2 { font-size: 1.2rem; }
+  h3 { font-size: 1.05rem; }
+  /* h4–h6: body size — prefix string alone marks depth */
+
+  h1::before { content: "# ";      color: var(--fg-green); }
+  h2::before { content: "## ";     color: var(--fg-green); }
+  h3::before { content: "### ";    color: var(--fg-green); }
+  h4::before { content: "#### ";   color: var(--fg-green); }
+  h5::before { content: "##### ";  color: var(--fg-green); }
+  h6::before { content: "###### "; color: var(--fg-green); }
+
+  /* Code Formatting */
+  code {
+    font-family: "Hack", monospace;
+    background-color: var(--bg-darker);
+    color: var(--fg-green);
+    padding: 0.15rem 0.4rem;
+    font-size: 0.9rem;
+    border-radius: 3px;
+    border: 1px solid var(--border-color);
+  }
+
+  pre {
+    background-color: var(--bg-darker);
+    border: 1px solid var(--border-color);
+    padding: 1.2rem;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+    border-radius: 4px;
+    
+    code {
+      background-color: transparent;
+      color: inherit;
+      padding: 0;
+      border: none;
+      font-size: 0.85rem;
+    }
+  }
+
+  /* List rendering */
+  ul {
+    list-style: none;
+    padding-left: 1.5rem;
+    margin-bottom: 1.2rem;
+    
+    li {
+      position: relative;
+      margin-bottom: 0.4rem;
+      
+      &::before {
+        content: "*";
+        position: absolute;
+        left: -1.2rem;
+        color: var(--fg-green);
+        font-weight: bold;
+      }
+    }
+  }
+
+  ol {
+    list-style: none;
+    padding-left: 1.5rem;
+    margin-bottom: 1.2rem;
+    counter-reset: o-list;
+    
+    li {
+      position: relative;
+      margin-bottom: 0.4rem;
+      counter-increment: o-list;
+      
+      &::before {
+        content: counter(o-list) ".";
+        position: absolute;
+        left: -1.5rem;
+        color: var(--fg-green);
+      }
+    }
+  }
+
+  /* Blockquotes */
+  blockquote {
+    border-left: 3px solid var(--border-color);
+    padding-left: 1.2rem;
+    margin: 1.5rem 0;
+    color: var(--fg-dim);
+    font-style: italic;
+    
+    p::before {
+      content: "> ";
+      color: var(--fg-green);
+      font-weight: bold;
+    }
+  }
+
+  /* Markdown Links style override */
+  a:not(.terminal-btn) {
+    color: var(--fg-accent);
+    text-decoration: underline;
+    &:hover {
+      color: var(--fg-accent-hover);
+    }
+  }
+
+  /* Markdown Tables Styling (Scrollable on overflow) */
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.8rem 0;
+    font-size: 0.9rem;
+    border: 1px dashed var(--border-color);
+    
+    th, td {
+      border: 1px dashed var(--border-color);
+      padding: 0.6rem 0.8rem;
+      text-align: left;
+    }
+    th {
+      background-color: var(--bg-darker);
+      color: var(--fg-green);
+      font-weight: bold;
+      border-bottom: 1px solid var(--border-color);
+    }
+    tr:nth-child(even) {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+  }
+
+  /* Markdown Figures & Figcaption */
+  figure {
+    margin: 1.8rem 0;
+    padding: 0.8rem;
+    border: 1px dashed var(--border-color);
+    background-color: rgba(0, 0, 0, 0.01);
+    text-align: center;
+    
+    img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid var(--border-color);
+      display: block;
+      margin: 0 auto;
+    }
+    
+    figcaption {
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      color: var(--fg-dim);
+      font-family: monospace;
+      
+      &::before {
+        content: "[fig] ";
+        color: var(--fg-green);
+      }
+    }
+  }
+
+  /* Horizontal Rules */
+  hr {
+    border: none;
+    border-top: 1px dashed var(--border-color);
+    margin: 2rem 0;
+  }
+}
+
+/* Page Meta Header */
+.page-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--fg-dim);
+  margin-bottom: 1rem;
+  
+  a {
+    color: var(--fg-accent);
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.meta-item-lang {
+  color: var(--fg-green);
+  font-weight: bold;
+}
+
+.terminal-divider {
+  border-top: 1px dashed var(--border-color);
+  margin: 1rem 0 1.5rem 0;
+}
+
+.page-actions {
+  margin-top: 2rem;
+}
+
+/* Taxonomy / Tags System */
+.section-tag-filter {
+  margin: 1.2rem 0 0.8rem 0;
+}
+
+.tag-filter-label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--fg-dim);
+  margin-bottom: 0.6rem;
+  letter-spacing: 0.05em;
+}
+
+.terminal-divider-light {
+  border-top: 1px dashed var(--border-color);
+  margin: 1rem 0 1.5rem 0;
+  opacity: 0.5;
+}
+
+.tags-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 1.5rem 0;
+}
+
+/* Inline tags on list items */
+.item-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.3rem;
+}
+
+.item-tag {
+  display: inline-block;
+  color: var(--fg-green);
+  font-size: 0.72rem;
+  padding: 0.1rem 0.35rem;
+  border: 1px dashed var(--border-color);
+  font-family: monospace;
+  white-space: nowrap;
+  transition: all 0.1s ease;
+  
+  &:hover {
+    background-color: var(--fg-green);
+    color: var(--bg-window);
+    border-color: var(--fg-green);
+    text-decoration: none;
+  }
+}
+
+/* Tags on single page view */
+.page-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin: 1rem 0 1.5rem 0;
+
+  /* Use green accent for page-level tags to distinguish from action buttons */
+  .terminal-btn {
+    color: var(--fg-green);
+    border-color: var(--border-color);
+    &:hover {
+      background-color: var(--fg-green);
+      color: var(--bg-window);
+      border-color: var(--fg-green);
+    }
+  }
+}

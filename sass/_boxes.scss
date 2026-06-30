@@ -1,0 +1,86 @@
+/* ASCII Border Box and Grid Layouts */
+
+.ascii-box {
+  border: 1px solid var(--border-color);
+  position: relative;
+  padding: 1.8rem;
+  margin-bottom: 2.5rem;
+  background-color: var(--bg-ascii-box);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  
+  .box-header {
+    position: absolute;
+    top: -11px;
+    left: 15px;
+    background-color: var(--bg-window);
+    padding: 0 8px;
+    font-weight: bold;
+    color: var(--fg-green);
+    font-size: 0.8rem;
+    font-family: monospace;
+    margin: 0;
+    line-height: 1;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+  }
+
+  &::before, &::after {
+    position: absolute;
+    color: var(--border-color);
+    font-family: monospace;
+    font-size: 14px;
+    width: 12px;
+    height: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-window);
+    line-height: 1;
+    pointer-events: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  &::before {
+    content: "+";
+    top: -6px;
+    left: -6px;
+  }
+
+  &::after {
+    content: "+";
+    top: -6px;
+    right: -6px;
+  }
+}
+
+.welcome-title {
+  font-size: 2rem;
+  color: var(--fg-accent);
+  margin-bottom: 0.5rem;
+  text-shadow: var(--fg-accent-glow) 0 0 4px;
+}
+
+.welcome-subtitle {
+  color: var(--fg-green);
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.welcome-desc {
+  color: var(--fg-dim);
+}
+
+.grid-two-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .grid-two-cols {
+    grid-template-columns: 1fr;
+  }
+  .window-body {
+    padding: 1.5rem;
+  }
+}

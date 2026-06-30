@@ -1,10 +1,10 @@
-
 # The URL the site will be built for
 base_url = "https://www.ialan.eu"
 
 # The site title and description; used in feeds by default.
 title = "Alain Jacomet"
-description = "Personal site"
+description = "Personal site & blog — software engineering, electronics, music, and life."
+default_language = "en"
 
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
@@ -12,14 +12,28 @@ compile_sass = true
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = false
 
+generate_sitemap = true
+generate_robots_txt = true
+
+# Taxonomies config
+taxonomies = [
+  { name = "tags", feed = true }
+]
+
 [markdown]
 
 [markdown.highlighting]
 theme = "catppuccin-mocha"
 
-# Multilingual support
-[languages.es]
-# No configuration for now
-
 [extra]
-# Put all your custom variables here
+nav_home          = "HOME"
+nav_blog          = "BLOG"
+nav_projects      = "PROJECTS"
+nav_cv            = "CV"
+nav_contact       = "CONTACT"
+date_format       = "%-d %b %Y"
+back_to_home      = "BACK TO HOME"
+latest_posts      = "LATEST POSTS"
+latest_projects   = "LATEST PROJECTS"
+view_all_posts    = "VIEW ALL POSTS"
+view_all_projects = "VIEW ALL PROJECTS"

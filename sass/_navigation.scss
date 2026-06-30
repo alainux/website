@@ -1,0 +1,121 @@
+/* Navigation Navbar, Toggles & Paginations */
+
+.print-btn-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.vim-navbar {
+  background-color: var(--bg-status);
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: bold;
+  border-bottom: 1px solid var(--border-color);
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.nav-links {
+  display: flex;
+  gap: 0;
+  padding: 0;
+  flex-wrap: nowrap;
+}
+
+.nav-item {
+  color: var(--fg-main);
+  padding: 0.4rem 1.2rem;
+  border-right: 1px solid var(--border-color);
+  white-space: nowrap;
+  &:first-child {
+    border-left: 1px solid var(--border-color);
+  }
+  &:hover {
+    background-color: var(--bg-status-hover);
+    color: var(--fg-main);
+  }
+  &.active {
+    background-color: var(--bg-window);
+    color: var(--fg-accent);
+    border-bottom: 2px solid var(--fg-accent);
+  }
+}
+
+.nav-spacer {
+  flex-grow: 1;
+}
+
+.theme-toggle-btn {
+  background-color: transparent;
+  border: none;
+  border-left: 1px solid var(--border-color);
+  color: var(--fg-accent);
+  padding: 0.4rem 1.2rem;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: bold;
+  font-size: inherit;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  &:hover {
+    background-color: var(--bg-status-hover);
+    color: var(--fg-green);
+  }
+  &:focus {
+    outline: none;
+  }
+}
+
+.terminal-btn {
+  display: inline-block;
+  color: var(--fg-accent);
+  font-family: monospace;
+  font-size: 0.85rem;  /* match navbar scale, not body scale */
+  font-weight: bold;
+  padding: 0.2rem 0.5rem;
+  border: 1px dashed var(--border-color);
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.1s ease;
+  
+  &:hover {
+    background-color: var(--fg-accent);
+    color: var(--bg-window);
+    border: 1px solid var(--fg-accent);
+    text-decoration: none;
+  }
+}
+
+.pagination-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1.5rem 0 2rem 0;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.pagination-status {
+  color: var(--fg-dim);
+}
+
+.terminal-btn-disabled {
+  display: inline-block;
+  color: var(--fg-dim);
+  font-family: monospace;
+  font-size: 0.85rem;  /* match .terminal-btn */
+  font-weight: bold;
+  padding: 0.2rem 0.5rem;
+  border: 1px dashed var(--border-color);
+  background: transparent;
+  cursor: not-allowed;
+  opacity: 0.5;
+}

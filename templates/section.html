@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}{{ section.title }} | {{ config.title }}{% endblock %}
+{% block og_title %}{{ section.title }}{% endblock %}
+
+{% block content %}
+<div class="ascii-box section-container">
+  <h1 class="box-header">[ {{ section.title | upper }} ]</h1>
+
+  {% if section.content %}
+    <div class="section-intro">
+      {{ section.content | safe }}
+    </div>
+  {% endif %}
+
+  {% if section.path == "/blog/" %}
+    {% include "partials/tag_filter.html" %}
+  {% endif %}
+
+  {# Select standard section pages or paginated pages if pagination is active #}
+  {% if paginator %}
+    {% set pages_to_render = paginator.pages %}
+  {% else %}
+    {% set pages_to_render = section.pages %}
+  {% endif %}
+
+  <ul class="terminal-list">
+    {% for page in pages_to_render %}
+      <li class="list-item section-list-item">
+        <div class="list-item-row">
+          {% if page.date %}
+            <span class="item-date">{{ page.date | date(format=config.extra.date_format) }}</span>
+          {% endif %}
+          {% if page.extra.lang %}
+            <span class="item-lang-badge">[{{ page.extra.lang | upper }}]</span>
+          {% endif %}
+          <a href="{{ page.permalink }}" class="item-link">{{ page.title }}</a>
+        </div>
+        {% if page.description %}
+          <p class="project-desc">{{ page.description }}</p>
+        {% endif %}
+        {% if page.taxonomies.tags %}
+          <div class="item-tags">
+            {% for tag in page.taxonomies.tags %}
+              <a href="{{ get_taxonomy_url(kind="tags", name=tag) }}" class="item-tag">#{{ tag }}</a>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </li>
+    {% else %}
+      <li class="list-item empty-list">No entries found.</li>
+    {% endfor %}
+  </ul>
+
+  {# Pagination Controls #}
+  {% if paginator %}
+    <nav class="pagination-nav" aria-label="Pagination">
+      {% if paginator.previous %}
+        <a href="{{ paginator.previous }}" class="terminal-btn">[ &lt; PREV ]</a>
+      {% else %}
+        <span class="terminal-btn-disabled">[ &lt; PREV ]</span>
+      {% endif %}
+
+      <span class="pagination-status">Page {{ paginator.current_index }} of {{ paginator.number_pagers }}</span>
+
+      {% if paginator.next %}
+        <a href="{{ paginator.next }}" class="terminal-btn">[ NEXT &gt; ]</a>
+      {% else %}
+        <span class="terminal-btn-disabled">[ NEXT &gt; ]</span>
+      {% endif %}
+    </nav>
+  {% endif %}
+
+  <div class="box-footer-link">
+    <a href="{{ get_url(path="") }}" class="terminal-btn">[{{ config.extra.back_to_home }}]</a>
+  </div>
+</div>
+{% endblock content %}
+
+{% block footer_info %}
+{% if paginator %}
+Pg {{ paginator.current_index }}/{{ paginator.number_pagers }}
+{% else %}
+1,{{ section.pages | length }} Lst
+{% endif %}
+{% endblock footer_info %}

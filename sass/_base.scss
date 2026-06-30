@@ -1,0 +1,35 @@
+/* Base HTML & Reset Overrides */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--fg-main);
+  font-family: "Hack", "Courier New", Courier, monospace;
+  line-height: 1.6;
+  font-size: 15px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a {
+  color: var(--fg-accent);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  &:hover {
+    color: var(--fg-accent-hover);
+  }
+}
+
+/* Focus outline override for a custom retro-TUI style */
+button:focus-visible, a:focus-visible, .terminal-btn:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 1px dashed var(--fg-green) !important;
+  outline-offset: 3px !important;
+  box-shadow: none !important;
+}
+
+button:focus, a:focus, .terminal-btn:focus, input:focus, textarea:focus {
+  outline: none;
+}
