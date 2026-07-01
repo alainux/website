@@ -104,6 +104,24 @@
     }
   } catch (_) {}
 
+  /* ── Glare follow on .tui-panel ────────────────────────────── */
+  var panels = document.querySelectorAll('.tui-panel');
+  if (panels.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    for (var p = 0; p < panels.length; p++) {
+      (function (panel) {
+        var glare = document.createElement('div');
+        glare.className = 'tui-panel__glare';
+        panel.insertBefore(glare, panel.firstChild);
+
+        panel.addEventListener('mousemove', function (e) {
+          var r = panel.getBoundingClientRect();
+          glare.style.setProperty('--glare-x', (e.clientX - r.left) + 'px');
+          glare.style.setProperty('--glare-y', (e.clientY - r.top) + 'px');
+        });
+      })(panels[p]);
+    }
+  }
+
   /* ── Print button (CV pages) ─────────────────────────────── */
   var printBtn = document.querySelector('.print-btn');
   if (printBtn) printBtn.addEventListener('click', function () { window.print(); });

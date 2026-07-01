@@ -40,13 +40,13 @@
   --bg: #1a1b26;           /* editor background */
   --bg-page: #13141c;      /* page/desktop behind the terminal window */
   --bg-darker: #16161e;    /* statusline, header, panel chrome */
-  --bg-highlight: #292e42; /* visual selection, hovered rows */
+  --bg-highlight: rgba(41, 46, 66, 0.45); /* visual selection, hovered rows */
   --bg-panel: #1f2335;     /* panel/box background */
 
   /* Foregrounds */
   --fg: #c0caf5;           /* primary text */
-  --fg-dim: #565f89;       /* comments, line numbers, dim text */
-  --fg-muted: #3b4261;     /* very dim (borders when inactive) */
+  --fg-dim: #7982a9;       /* comments, line numbers, dim text */
+  --fg-muted: #686e99;     /* very dim (borders when inactive) */
 
   /* Accent colors (Tokyo Night spec) */
   --accent: #7aa2f7;       /* blue - links, active, focus */
@@ -91,22 +91,24 @@
   --bg-page-grad: linear-gradient(180deg, #13141c 0%, #0f1017 100%);
   --bg-win-grad: linear-gradient(180deg, #1a1b26 0%, #16161e 100%);
   --accent-glow: rgba(122, 162, 247, 0.08);
+  --chip-bg: var(--bg);
 }
 
 /* --- Tokyo Night "day" (light) --- */
 [data-theme="light"] {
-  --bg-page-grad: linear-gradient(180deg, #cbccd1 0%, #c0c1c6 100%);
-  --bg-win-grad: linear-gradient(180deg, #d5d6db 0%, #e1e2e7 100%);
-  --accent-glow: rgba(46, 125, 233, 0.06);
-  --bg: #d5d6db;
-  --bg-page: #cbccd1;
-  --bg-darker: #e1e2e7;
-  --bg-highlight: #c4c8da;
-  --bg-panel: #cfd1db;
+  --bg-page-grad: linear-gradient(180deg, #f4f4f8 0%, #ededf1 100%);
+  --bg-win-grad: linear-gradient(180deg, #e8e8ee 0%, #dddde4 100%);
+  --accent-glow: rgba(46, 125, 233, 0.14);
+  --chip-bg: var(--bg);
+  --bg: #e8e8ee;
+  --bg-page: #f4f4f8;
+  --bg-darker: #dddde4;
+  --bg-highlight: rgba(160, 163, 189, 0.2);
+  --bg-panel: #dddde4;
 
   --fg: #1a1b26;
-  --fg-dim: #6a6e88;
-  --fg-muted: #a4a8c0;
+  --fg-dim: #4b5076;
+  --fg-muted: #7a7fa5;
 
   --accent: #2e7de9;
   --accent-dim: #2663b5;
@@ -117,8 +119,8 @@
   --cyan: #007197;
   --orange: #b1561f;
 
-  --border:        #c4c8da;
-  --border-soft:   #969bbd;
+  --border:        #d8d8e0;
+  --border-soft:   #a8abbd;
   --border-focus:  #2e7de9;
 
   --status-bg: var(--bg-darker);

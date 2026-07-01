@@ -36,6 +36,7 @@
   <meta name="twitter:title" content="{% block twitter_title %}{{ config.title }}{% endblock twitter_title %}">
   <meta name="twitter:description" content="{% block twitter_description %}{{ config.description }}{% endblock twitter_description %}">
 
+  <link rel="icon" type="image/svg+xml" href="{{ get_url(path='favicon.svg', trailing_slash=false) }}">
   <link rel="stylesheet" href="{{ get_url(path='style.css', trailing_slash=false) }}">
 
   <!-- Self-hosted Nerd Font preloads -->
@@ -159,13 +160,15 @@
             <span class="winbar-text">— min</span>
           </div>
           {% if page.date and not page.extra.print %}
-            {% set updated_label = page.date | date(format=config.extra.date_format) %}
+            {% set updated_label = page.date | date(format="%Y-%m-%d") %}
+            {% set updated_title = page.date | date(format="%Y-%m-%dT%H:%M%z") %}
             {% set updated_attr  = "article" %}
           {% else %}
             {% set updated_label = site_updated_label %}
+            {% set updated_title = build_iso %}
             {% set updated_attr  = "site" %}
           {% endif %}
-          <div class="winbar-item" id="winbar-updated" title="Last updated ({{ updated_attr }})">
+          <div class="winbar-item" id="winbar-updated" title="{{ updated_title }} ({{ updated_attr }})">
             <span class="control-icon">↻</span>
             <span class="winbar-text">updated {{ updated_label }}</span>
           </div>
@@ -184,6 +187,6 @@
     </div>
   </div>
 
-  <script src="{{ get_url(path='js/main.js', trailing_slash=false) }}"></script>
+  <script defer src="{{ get_url(path='js/main.js', trailing_slash=false) }}"></script>
 </body>
 </html>

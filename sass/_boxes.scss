@@ -42,11 +42,29 @@
   }
 }
 
-/* Use horizontal flex/padding derived from terminal character widths
-   so the box "feels" typographic, not widgety. */
 .tui-panel__body {
+  position: relative;
+  z-index: 2;
   padding: 2rem 1.75rem 1.5rem;
-  background-color: var(--bg);
+}
+
+.tui-panel__glare {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  top: 1px;
+  right: 1px;
+  bottom: 1px;
+  left: 1px;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(
+    320px circle at var(--glare-x, 50%) var(--glare-y, 50%),
+    var(--accent-glow),
+    transparent 70%
+  );
+
+  .tui-panel:hover & { opacity: 1; }
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -62,12 +80,12 @@
      top border (y=0). */
   top: calc((var(--chip-h) / 2 - 1px) * -1);
   left: 16px;
-  z-index: 2;
+  z-index: 3;
   display: inline-flex;
   align-items: center;
   height: var(--chip-h);
   padding: 0 8px;
-  background-color: var(--bg);
+  background-color: var(--chip-bg);
   font-family: var(--font-mono);
   font-size: 13px;
   font-weight: 700;
@@ -99,13 +117,13 @@
   bottom: calc((var(--chip-h) / 2 - 1px) * -1);
   left: 50%;
   transform: translateX(-50%);
-  z-index: 2;
+  z-index: 3;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   height: var(--chip-h);
   padding: 0 8px;
-  background-color: var(--bg);
+  background-color: var(--chip-bg);
   font-family: var(--font-mono);
   font-size: var(--font-size-md);
   font-weight: 700;
@@ -137,7 +155,7 @@
   }
 
   > a:hover        { color: var(--accent); }
-  > .is-disabled   { color: var(--fg-muted); cursor: not-allowed; }
+  > .is-disabled   { color: var(--fg-dim); cursor: not-allowed; opacity: 0.6; }
   > .is-page       { color: var(--green); }
 
   > a.terminal-btn {
@@ -174,5 +192,6 @@
   }
   .tui-panel__head,
   .tui-panel__foot { display: none !important; }
+  .tui-panel__glare { display: none !important; }
   .tui-panel__body { padding: 0 !important; }
 }
