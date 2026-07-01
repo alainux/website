@@ -1,86 +1,173 @@
-/* ASCII Border Box and Grid Layouts */
+/* ============================================================
+   TUI ASCII Box System
+   ------------------------------------------------------------
+   A `.tui-panel` renders a CSS-bordered rectangular box.
+   Optional `.tui-panel__head` punches through the top border
+   as a "tab" (a [ TITLE ] pill sitting flush with the top
+   line — like Neovim's floating windows / Telescope).
 
-.ascii-box {
-  border: 1px solid var(--border-color);
+   Visual model:
+
+     ┌──────────────────────────────────────────────────┐
+     │  [ TITLE ]                                       │
+     │                                                  │
+     │  body                                            │
+     │                                                  │
+     └──────────────────────────────[ ACTION ]──────────┘
+
+   The chip background is opaque (set to `var(--bg)`) so the
+   pierced border line is masked by the chip's text region.
+   No connector pseudo-elements — the chip simply sits
+   offset from the border edge, its background covering
+   the border underneath.
+   ============================================================ */
+
+:root {
+  --chip-h: 22px;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   The bordered box
+   ────────────────────────────────────────────────────────────── */
+.tui-panel {
   position: relative;
-  padding: 1.8rem;
-  margin-bottom: 2.5rem;
-  background-color: var(--bg-ascii-box);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-  
-  .box-header {
-    position: absolute;
-    top: -11px;
-    left: 15px;
-    background-color: var(--bg-window);
-    padding: 0 8px;
-    font-weight: bold;
-    color: var(--fg-green);
-    font-size: 0.8rem;
-    font-family: monospace;
-    margin: 0;
-    line-height: 1;
-    text-transform: uppercase;
-    transition: background-color 0.3s ease;
-  }
-
-  &::before, &::after {
-    position: absolute;
-    color: var(--border-color);
-    font-family: monospace;
-    font-size: 14px;
-    width: 12px;
-    height: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--bg-window);
-    line-height: 1;
-    pointer-events: none;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-
-  &::before {
-    content: "+";
-    top: -6px;
-    left: -6px;
-  }
-
-  &::after {
-    content: "+";
-    top: -6px;
-    right: -6px;
-  }
+  margin: 2.25rem 0 2.25rem;            /* extra top/bottom room so chips
+                                           can sit outside the border */
+  background-color: transparent;        /* outline only — see-through */
+  border: 1px solid var(--border-soft);
+  transition: border-color 0.2s ease;
 }
 
-.welcome-title {
-  font-size: 2rem;
-  color: var(--fg-accent);
-  margin-bottom: 0.5rem;
-  text-shadow: var(--fg-accent-glow) 0 0 4px;
+/* Use horizontal flex/padding derived from terminal character widths
+   so the box "feels" typographic, not widgety. */
+.tui-panel__body {
+  padding: 1.6rem 1.5rem 1.25rem;
 }
 
-.welcome-subtitle {
-  color: var(--fg-green);
-  font-weight: bold;
-  margin-bottom: 1rem;
+/* ──────────────────────────────────────────────────────────────
+   Title bar — punched through the top border
+   ──────────────────────────────────────────────────────────────
+   The chip's vertical centreline sits exactly on the panel's
+   1px top border. Its opaque `var(--bg)` background covers
+   the border underneath, creating a clean punch-through.
+   ────────────────────────────────────────────────────────────── */
+.tui-panel__head {
+  position: absolute;
+  /* Vertical centre of the chip (11px) lands on the panel's 1px
+     top border (y=0). */
+  top: calc((var(--chip-h) / 2 - 1px) * -1);
+  left: 16px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  height: var(--chip-h);
+  padding: 0 8px;
+  background-color: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--green);
+  white-space: nowrap;
+  line-height: 1;
 }
 
-.welcome-desc {
+.tui-panel__title {
+  color: var(--green);
+  line-height: 1;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Footer pill — mirror of the title chip on the bottom border.
+   Two variants share the same geometry:
+
+     .tui-panel__foot            — centered (pagination chips
+                                    `[ < PREV ]   PAGE x / y   [ NEXT > ]`)
+     .tui-panel__foot--right     — right-aligned (action buttons
+                                    `[ VIEW ALL POSTS ]`, `[ BACK ]`, …)
+
+   Both punch through the bottom border like a Neovim winbar tab.
+   ────────────────────────────────────────────────────────────── */
+.tui-panel__foot {
+  position: absolute;
+  bottom: calc((var(--chip-h) / 2 - 1px) * -1);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: var(--chip-h);
+  padding: 0 8px;
+  background-color: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
   color: var(--fg-dim);
+  white-space: nowrap;
+  line-height: 1;
+
+  &--right {
+    left: auto;
+    right: 16px;
+    transform: none;
+  }
+
+  > a,
+  > span {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 8px;
+    color: var(--fg-dim);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: transparent;
+    border: none;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  > a:hover        { color: var(--accent); }
+  > .is-disabled   { color: var(--fg-muted); cursor: not-allowed; }
+  > .is-page       { color: var(--green); }
+
+  > a.terminal-btn {
+    color: var(--accent);
+    border: none;
+    padding: 0 8px;
+  }
+  > a.terminal-btn:hover {
+    background-color: transparent;
+    color: var(--green);
+  }
 }
 
+/* ============================================================
+    Two-panel home grid
+   ============================================================ */
 .grid-two-cols {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: 1.25rem;
+}
+@media (max-width: 900px) {
+  .grid-two-cols { grid-template-columns: 1fr; }
 }
 
-@media (max-width: 768px) {
-  .grid-two-cols {
-    grid-template-columns: 1fr;
+/* ============================================================
+   Print
+   ============================================================ */
+@media print {
+  .tui-panel {
+    margin: 0.5rem 0 !important;
+    background: transparent !important;
+    border: 1px solid #ccc !important;
   }
-  .window-body {
-    padding: 1.5rem;
-  }
+  .tui-panel__head,
+  .tui-panel__foot { display: none !important; }
+  .tui-panel__body { padding: 0 !important; }
 }

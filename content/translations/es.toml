@@ -1,0 +1,66 @@
+# Spanish translations
+[ui]
+# Statusline
+mode_normal = "NORMAL"
+mode_insert = "INSERTAR"
+mode_visual = "VISUAL"
+path_prefix = "alain@tty1: ~/website"
+
+# Statusline segments
+file_label = "ARCHIVO"
+modified_indicator = "●"
+readonly_indicator = ""
+language_label = "IDIOMA"
+layout_centered = "CENTRADO"
+layout_full = "COMPLETO"
+theme_dark = "OSCURO"
+theme_light = "CLARO"
+
+# Winbar
+encoding = "UTF-8"
+file_format = "unix"
+position_label = "Ln"
+percentage_label = "%"
+
+# Navigation
+home = "INICIO"
+blog = "BLOG"
+projects = "PROYECTOS"
+cv = "CV"
+contact = "CONTACTO"
+
+# Buttons & Actions
+back_to_home = "VOLVER AL INICIO"
+view_all_posts = "VER TODAS LAS ENTRADAS"
+view_all_posts_es = "VER TODAS LAS ENTRADAS"
+view_all_projects = "VER TODOS LOS PROYECTOS"
+view_all_projects_es = "VER TODOS LOS PROYECTOS"
+print_pdf = "IMPRIMIR / GUARDAR COMO PDF"
+prev = "ANTERIOR"
+next = "SIGUIENTE"
+page = "Página"
+
+# Content labels
+latest_posts = "ÚLTIMAS ENTRADAS"
+latest_projects = "ÚLTIMOS PROYECTOS"
+no_posts = "No se encontraron entradas."
+no_projects = "No se encontraron proyectos."
+no_entries = "No se encontraron entradas."
+date_label = "FECHA"
+lang_label = "IDIOMA"
+code_label = "CÓDIGO"
+tags_label = "ETIQUETAS"
+word_count = "Pal"
+list_count = "Lst"
+
+# Welcome
+welcome_title = "Bienvenido a mi espacio de trabajo terminal personal."
+welcome_subtitle = "Diseño aplicaciones web robustas, backends de baja latencia y herramientas de línea de comandos."
+welcome_desc = "Aquí encontrarás mis pensamientos sobre ingeniería, algunos registros de proyectos e información sobre mi carrera profesional."
+
+# Meta
+copyright = "© 2026 Alain Jacomet"
+
+# Language names
+lang_en = "English"
+lang_es = "Español"

@@ -1,47 +1,113 @@
+/* ============================================================
+   Tokyo Night Palette + Typography
+   ============================================================ */
+
+/* --- JetBrainsMono Nerd Font (self-hosted) ---
+   Self-hosted TTF files include both ASCII characters and
+   Nerd Font icon glyphs (PUA range). */
+@font-face {
+  font-family: 'JetBrainsMono Nerd Font';
+  src: url('/fonts/JetBrainsMono-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrainsMono Nerd Font';
+  src: url('/fonts/JetBrainsMono-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrainsMono Nerd Font';
+  src: url('/fonts/JetBrainsMono-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrainsMono Nerd Font';
+  src: url('/fonts/JetBrainsMono-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* --- Tokyo Night "night" (default dark) --- */
 :root {
-  /* Default Dark Mode - Catppuccin Mocha terminal theme */
-  --bg-main: #181825;       // Outer body dark background
-  --bg-window: #1e1e2e;     // Terminal window background
-  --bg-darker: #11111b;     // Darkest elements (like terminal header or code blocks)
-  --bg-status: #313244;     // Vim status bar background
-  --bg-status-hover: #45475a; // Vim status bar hover
-  --bg-ascii-box: rgba(30, 30, 46, 0.4);
-  
-  --fg-main: #cdd6f4;       // Primary text
-  --fg-dim: #a6adc8;        // Dim text/comments
-  --fg-accent: #89b4fa;     // Accent/links (Blue)
-  --fg-accent-hover: #b4befe; // Accent/links hover (Lavender)
-  --fg-accent-glow: rgba(137, 180, 250, 0.25);
-  
-  --fg-green: #a6e3a1;      // Success/Spanish badge (Green)
-  --fg-red: #f38ba8;        // Danger/Close window button (Red)
-  --fg-yellow: #f9e2af;     // Warning/Minimize window button (Yellow)
-  --fg-blue: #89b4fa;       // Maximize window button (Blue)
+  /* Base backgrounds */
+  --bg: #1a1b26;           /* editor background */
+  --bg-page: #13141c;      /* page/desktop behind the terminal window */
+  --bg-darker: #16161e;    /* statusline, header, panel chrome */
+  --bg-highlight: #292e42; /* visual selection, hovered rows */
+  --bg-panel: #1f2335;     /* panel/box background */
 
-  --border-color: #45475a;  // Terminal line borders
-  --border-focus: #b4befe;  // Selected borders (Lavender)
+  /* Foregrounds */
+  --fg: #c0caf5;           /* primary text */
+  --fg-dim: #565f89;       /* comments, line numbers, dim text */
+  --fg-muted: #3b4261;     /* very dim (borders when inactive) */
+
+  /* Accent colors (Tokyo Night spec) */
+  --accent: #7aa2f7;       /* blue - links, active, focus */
+  --accent-dim: #3d59a1;   /* blue0 */
+  --green: #9ece6a;        /* green - success, strings, diff add */
+  --yellow: #e0af68;       /* yellow - warning, diff change */
+  --red: #f7768e;          /* red - error, close, diff delete */
+  --magenta: #bb9af7;      /* magenta - keywords */
+  --cyan: #7dcfff;         /* cyan - operators, types */
+  --orange: #ff9e64;       /* orange - numbers, constants */
+
+  /* Borders & focus */
+  --border:        #292e42;   /* default subtle divider */
+  --border-soft:   #565f89;   /* prominent ASCII-box border (panels only) */
+  --border-focus:  #7aa2f7;   /* focused border */
+
+  /* Statusline segments */
+  --status-bg: var(--bg-darker);
+  --status-fg: var(--fg);
+  --status-active-bg: var(--bg-highlight);
+  --status-active-fg: var(--accent);
+
+  /* Layout */
+  --max-width-centered: 920px;
+  --max-width-full: 100%;
+
+  /* Typography */
+  --font-mono: 'JetBrainsMono Nerd Font', 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  --font-size-base: 14px;
+  --line-height-base: 1.6;
 }
 
-.light-theme {
-  /* Light Mode - Catppuccin Latte terminal theme */
-  --bg-main: #eff1f5;       // Outer body background
-  --bg-window: #e6e9ef;     // Terminal window background
-  --bg-darker: #ccd0da;     // Darkest elements (like terminal header or code blocks)
-  --bg-status: #bcc0cc;     // Vim status bar background
-  --bg-status-hover: #acb0be; // Vim status bar hover
-  --bg-ascii-box: rgba(230, 233, 239, 0.4);
-  
-  --fg-main: #4c4f69;       // Primary text
-  --fg-dim: #6c6f85;        // Dim text/comments
-  --fg-accent: #1e66f5;     // Accent/links (Royal Blue)
-  --fg-accent-hover: #7287fd; // Accent/links hover (Indigo)
-  --fg-accent-glow: rgba(30, 102, 245, 0.15);
-  
-  --fg-green: #40a02b;      // Success/Spanish badge (Forest Green)
-  --fg-red: #d20f39;        // Close window button (Red)
-  --fg-yellow: #df8e1d;     // Minimize window button (Orange/Yellow)
-  --fg-blue: #1e66f5;       // Maximize window button (Royal Blue)
+/* --- Tokyo Night "day" (light) --- */
+[data-theme="light"] {
+  --bg: #d5d6db;
+  --bg-page: #cbccd1;
+  --bg-darker: #e1e2e7;
+  --bg-highlight: #c4c8da;
+  --bg-panel: #cfd1db;
 
-  --border-color: #bcc0cc;  // Terminal line borders
-  --border-focus: #7287fd;  // Selected borders (Indigo)
+  --fg: #1a1b26;
+  --fg-dim: #6a6e88;
+  --fg-muted: #a4a8c0;
+
+  --accent: #2e7de9;
+  --accent-dim: #2663b5;
+  --green: #587539;
+  --yellow: #8c6c3e;
+  --red: #c64343;
+  --magenta: #8842d3;
+  --cyan: #007197;
+  --orange: #b1561f;
+
+  --border:        #c4c8da;
+  --border-soft:   #969bbd;
+  --border-focus:  #2e7de9;
+
+  --status-bg: var(--bg-darker);
+  --status-fg: var(--fg);
+  --status-active-bg: var(--bg-highlight);
+  --status-active-fg: var(--accent);
 }
+
+/* --- Print overrides (handled in _print.scss) --- */

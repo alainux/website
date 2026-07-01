@@ -2,6 +2,7 @@
 title = "Hola Mundo"
 date = "2026-06-30"
 extra = { lang = "es", math = true }
+description = "Bienvenidos a mi espacio personal con estética de terminal retro."
 taxonomies = { tags = ["cartas en espanol", "welcome"] }
 +++
 

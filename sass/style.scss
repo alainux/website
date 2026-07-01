@@ -1,9 +1,9 @@
+/* Tokyo-Vim TUI theme — compiled by Zola
+   Import order matters: tokens → reset → chrome → content → print */
 @import "variables";
 @import "base";
-@import "crt";
 @import "window";
 @import "boxes";
-@import "lists";
 @import "navigation";
 @import "markdown";
 @import "print";

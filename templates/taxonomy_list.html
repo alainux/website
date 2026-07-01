@@ -1,12 +1,16 @@
-{# Zola requires this template; tag selection lives on the blog page instead. #}
 {% extends "base.html" %}
 
 {% block title %}{{ config.title }}{% endblock %}
 
 {% block content %}
-<div class="ascii-box">
-  <p class="welcome-desc">> Redirecting to the blog…</p>
-  <p class="welcome-desc">Filter posts by tag on the <a href="{{ get_url(path="blog/") }}">blog page</a>.</p>
+<div class="tui-panel">
+  <div class="tui-panel__head">
+    <span class="tui-panel__title">[ REDIRECT ]</span>
+  </div>
+  <div class="tui-panel__body">
+    <p class="welcome-desc">> Redirecting to the blog…</p>
+    <p class="welcome-desc">Filter posts by tag on the <a href="{{ get_url(path="blog/") }}">blog page</a>.</p>
+  </div>
 </div>
 <script>window.location.replace("{{ get_url(path="blog/") }}");</script>
 {% endblock content %}

@@ -1,78 +1,111 @@
-/* Markdown & Typography Overrides */
+/* ============================================================
+   Markdown Content & Typography
+   Optimized for reading Markdown as a Vim buffer
+   ============================================================ */
 
 .markdown-content {
-  margin-top: 1.5rem;
-  
+  margin-top: 1rem;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--fg);
+
+  /* Paragraphs */
   p {
-    margin-bottom: 1.2rem;
+    margin-bottom: 1rem;
   }
 
-  /* Headings — size scale + Markdown prefix decoration */
+  /* --- Headings with Markdown Prefix Decoration --- */
   h1, h2, h3, h4, h5, h6 {
-    color: var(--fg-accent);
+    color: var(--accent);
     margin-top: 2rem;
     margin-bottom: 0.75rem;
-    font-weight: bold;
-    text-shadow: var(--fg-accent-glow) 0 0 2px;
+    font-weight: 700;
     line-height: 1.3;
+    font-family: var(--font-mono);
   }
 
-  h1 { font-size: 1.4rem; }
-  h2 { font-size: 1.2rem; }
-  h3 { font-size: 1.05rem; }
-  /* h4–h6: body size — prefix string alone marks depth */
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+  h3 { font-size: 1.1rem; }
+  h4 { font-size: 1rem; }
+  h5 { font-size: 1rem; }
+  h6 { font-size: 1rem; }
 
-  h1::before { content: "# ";      color: var(--fg-green); }
-  h2::before { content: "## ";     color: var(--fg-green); }
-  h3::before { content: "### ";    color: var(--fg-green); }
-  h4::before { content: "#### ";   color: var(--fg-green); }
-  h5::before { content: "##### ";  color: var(--fg-green); }
-  h6::before { content: "###### "; color: var(--fg-green); }
+  /* Markdown-style prefix: # ## ### etc. */
+  h1::before { content: "# ";      color: var(--green); font-weight: 700; }
+  h2::before { content: "## ";     color: var(--green); font-weight: 700; }
+  h3::before { content: "### ";    color: var(--green); font-weight: 700; }
+  h4::before { content: "#### ";   color: var(--green); font-weight: 700; }
+  h5::before { content: "##### ";  color: var(--green); font-weight: 700; }
+  h6::before { content: "###### "; color: var(--green); font-weight: 700; }
 
-  /* Code Formatting */
+  /* --- Inline Code --- */
   code {
-    font-family: "Hack", monospace;
+    font-family: var(--font-mono);
     background-color: var(--bg-darker);
-    color: var(--fg-green);
-    padding: 0.15rem 0.4rem;
-    font-size: 0.9rem;
-    border-radius: 3px;
-    border: 1px solid var(--border-color);
+    color: var(--green);
+    padding: 2px 6px;
+    font-size: 0.9em;
+    border: 1px solid var(--border);
+    border-radius: 0;
   }
 
+  /* --- Code Blocks --- */
   pre {
     background-color: var(--bg-darker);
-    border: 1px solid var(--border-color);
-    padding: 1.2rem;
+    border: 1px solid var(--border);
+    padding: 1.25rem;
     overflow-x: auto;
-    margin-bottom: 1.5rem;
-    border-radius: 4px;
-    
+    margin: 1.5rem 0;
+    border-radius: 0;
+    position: relative;
+
     code {
       background-color: transparent;
       color: inherit;
       padding: 0;
       border: none;
-      font-size: 0.85rem;
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    /* Language label (if added by highlighter) */
+    &::before {
+      content: attr(data-language);
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      padding: 2px 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-bottom: none;
+      border-right: none;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--fg-dim);
+      font-family: var(--font-mono);
     }
   }
 
-  /* List rendering */
+  /* --- Lists --- */
   ul {
     list-style: none;
     padding-left: 1.5rem;
-    margin-bottom: 1.2rem;
-    
+    margin-bottom: 1rem;
+
     li {
       position: relative;
-      margin-bottom: 0.4rem;
-      
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+
       &::before {
-        content: "*";
+        content: "•";
         position: absolute;
-        left: -1.2rem;
-        color: var(--fg-green);
-        font-weight: bold;
+        left: -1.25rem;
+        color: var(--green);
+        font-weight: 700;
+        font-family: var(--font-mono);
       }
     }
   }
@@ -80,209 +113,224 @@
   ol {
     list-style: none;
     padding-left: 1.5rem;
-    margin-bottom: 1.2rem;
-    counter-reset: o-list;
-    
+    margin-bottom: 1rem;
+    counter-reset: ordered-list;
+
     li {
       position: relative;
-      margin-bottom: 0.4rem;
-      counter-increment: o-list;
-      
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+      counter-increment: ordered-list;
+
       &::before {
-        content: counter(o-list) ".";
+        content: counter(ordered-list) ".";
         position: absolute;
         left: -1.5rem;
-        color: var(--fg-green);
+        color: var(--green);
+        font-weight: 700;
+        font-family: var(--font-mono);
+        text-align: right;
+        width: 1.25rem;
       }
     }
   }
 
-  /* Blockquotes */
+  /* Nested lists */
+  li > ul,
+  li > ol {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* --- Blockquotes --- */
   blockquote {
-    border-left: 3px solid var(--border-color);
-    padding-left: 1.2rem;
+    border-left: 3px solid var(--border);
+    padding-left: 1.25rem;
     margin: 1.5rem 0;
     color: var(--fg-dim);
     font-style: italic;
-    
-    p::before {
-      content: "> ";
-      color: var(--fg-green);
-      font-weight: bold;
+
+    p {
+      margin-bottom: 0.5rem;
+
+      &::before {
+        content: "> ";
+        color: var(--green);
+        font-weight: 700;
+        font-family: var(--font-mono);
+      }
+    }
+
+    &:last-child p:last-child {
+      margin-bottom: 0;
     }
   }
 
-  /* Markdown Links style override */
-  a:not(.terminal-btn) {
-    color: var(--fg-accent);
+  /* --- Links --- */
+  a:not(.terminal-btn):not(.item-tag):not(.terminal-link):not(.nav-item):not(.status-segment) {
+    color: var(--accent);
     text-decoration: underline;
+    text-underline-offset: 2px;
+
     &:hover {
-      color: var(--fg-accent-hover);
+      color: var(--accent-dim);
     }
   }
 
-  /* Markdown Tables Styling (Scrollable on overflow) */
+  /* --- Tables --- */
   table {
     display: block;
     overflow-x: auto;
     white-space: nowrap;
     width: 100%;
     border-collapse: collapse;
-    margin: 1.8rem 0;
-    font-size: 0.9rem;
-    border: 1px dashed var(--border-color);
-    
+    margin: 1.5rem 0;
+    font-size: 0.875rem;
+    border: 1px solid var(--border);
+    font-family: var(--font-mono);
+
     th, td {
-      border: 1px dashed var(--border-color);
-      padding: 0.6rem 0.8rem;
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.75rem;
       text-align: left;
     }
+
     th {
       background-color: var(--bg-darker);
-      color: var(--fg-green);
-      font-weight: bold;
-      border-bottom: 1px solid var(--border-color);
+      color: var(--green);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
     }
-    tr:nth-child(even) {
-      background-color: rgba(0, 0, 0, 0.02);
+
+    tr:nth-child(even) td {
+      background-color: var(--bg-highlight);
     }
   }
 
-  /* Markdown Figures & Figcaption */
+  /* --- Figures & Images --- */
   figure {
-    margin: 1.8rem 0;
-    padding: 0.8rem;
-    border: 1px dashed var(--border-color);
-    background-color: rgba(0, 0, 0, 0.01);
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border: 1px dashed var(--border);
+    background-color: var(--bg-darker);
     text-align: center;
-    
+
     img {
       max-width: 100%;
       height: auto;
-      border: 1px solid var(--border-color);
-      display: block;
+      border: 1px solid var(--border);
       margin: 0 auto;
     }
-    
+
     figcaption {
-      margin-top: 0.6rem;
-      font-size: 0.8rem;
+      margin-top: 0.75rem;
+      font-size: 11px;
       color: var(--fg-dim);
-      font-family: monospace;
-      
+      font-family: var(--font-mono);
+
       &::before {
         content: "[fig] ";
-        color: var(--fg-green);
+        color: var(--green);
+        font-weight: 700;
       }
     }
   }
 
-  /* Horizontal Rules */
+  /* --- Horizontal Rules --- */
   hr {
     border: none;
-    border-top: 1px dashed var(--border-color);
+    border-top: 1px dashed var(--border);
     margin: 2rem 0;
+  }
+
+  /* --- Definition Lists --- */
+  dl {
+    margin: 1.5rem 0;
+
+    dt {
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 1rem;
+
+      &::before {
+        content: "$ ";
+        color: var(--green);
+        font-family: var(--font-mono);
+      }
+    }
+
+    dd {
+      margin-left: 1.5rem;
+      color: var(--fg-dim);
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  /* --- Task Lists (GitHub style) --- */
+  ul.contains-task-list {
+    list-style: none;
+    padding-left: 0;
+
+    li {
+      padding-left: 2rem;
+
+      &::before {
+        content: "";
+        left: 0;
+        width: 1.5rem;
+      }
+
+      input[type="checkbox"] {
+        position: absolute;
+        left: 0;
+        margin-top: 3px;
+        accent-color: var(--accent);
+      }
+    }
+  }
+
+  /* --- Footnotes --- */
+  .footnotes {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--border);
+    font-size: 0.875rem;
+    color: var(--fg-dim);
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  /* --- KaTeX Math --- */
+  .katex {
+    font-size: 1em !important;
+  }
+
+  .katex-display {
+    overflow-x: auto;
+    margin: 1.5rem 0 !important;
   }
 }
 
-/* Page Meta Header */
+/* --- Page Meta Header --- */
 .page-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
-  font-size: 0.8rem;
+  font-size: 12px;
+  font-family: var(--font-mono);
   color: var(--fg-dim);
   margin-bottom: 1rem;
-  
+
   a {
-    color: var(--fg-accent);
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}
-
-.meta-item-lang {
-  color: var(--fg-green);
-  font-weight: bold;
-}
-
-.terminal-divider {
-  border-top: 1px dashed var(--border-color);
-  margin: 1rem 0 1.5rem 0;
-}
-
-.page-actions {
-  margin-top: 2rem;
-}
-
-/* Taxonomy / Tags System */
-.section-tag-filter {
-  margin: 1.2rem 0 0.8rem 0;
-}
-
-.tag-filter-label {
-  display: block;
-  font-size: 0.75rem;
-  color: var(--fg-dim);
-  margin-bottom: 0.6rem;
-  letter-spacing: 0.05em;
-}
-
-.terminal-divider-light {
-  border-top: 1px dashed var(--border-color);
-  margin: 1rem 0 1.5rem 0;
-  opacity: 0.5;
-}
-
-.tags-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  margin: 1.5rem 0;
-}
-
-/* Inline tags on list items */
-.item-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.3rem;
-}
-
-.item-tag {
-  display: inline-block;
-  color: var(--fg-green);
-  font-size: 0.72rem;
-  padding: 0.1rem 0.35rem;
-  border: 1px dashed var(--border-color);
-  font-family: monospace;
-  white-space: nowrap;
-  transition: all 0.1s ease;
-  
-  &:hover {
-    background-color: var(--fg-green);
-    color: var(--bg-window);
-    border-color: var(--fg-green);
+    color: var(--accent);
     text-decoration: none;
+
+    &:hover { text-decoration: underline; }
   }
 }
 
-/* Tags on single page view */
-.page-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  margin: 1rem 0 1.5rem 0;
-
-  /* Use green accent for page-level tags to distinguish from action buttons */
-  .terminal-btn {
-    color: var(--fg-green);
-    border-color: var(--border-color);
-    &:hover {
-      background-color: var(--fg-green);
-      color: var(--bg-window);
-      border-color: var(--fg-green);
-    }
-  }
-}
+/* All print overrides live in _print.scss to keep concerns separated. */

@@ -1,6 +1,7 @@
 +++
 title = "Contact Information"
 path = "contact"
+description = "Contact Alain Jacomet — AI Engineering Lead & Senior Software Engineer"
 +++
 
 You can reach me via any of the following channels:

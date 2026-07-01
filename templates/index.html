@@ -1,71 +1,81 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="ascii-box welcome-box">
-  <h2 class="box-header">[ Welcome ]</h2>
-  <h1 class="welcome-title">Alain Jacomet</h1>
-  <p class="welcome-subtitle">> Senior Software Engineer & Tinkerer</p>
-  <p class="welcome-desc">
-    Welcome to my personal terminal workspace. I design robust web applications, low-latency backends, and command line tools. Here you will find my thoughts on engineering, some project logs, and information about my professional career.
-  </p>
+<div class="tui-panel">
+  <div class="tui-panel__head">
+    <span class="tui-panel__title">[ WELCOME ]</span>
+  </div>
+  <div class="tui-panel__body">
+    <h1 class="welcome-title">Alain Jacomet</h1>
+    <p class="welcome-subtitle">> AI Engineering Lead and Senior Software Engineer</p>
+    <p class="welcome-desc">
+      Welcome to my personal terminal workspace. I design robust web applications, low-latency backends, and command line tools. Here you will find my thoughts on engineering, some project logs, and information about my professional career.
+    </p>
+  </div>
 </div>
 
 <div class="grid-two-cols">
   <!-- Latest Posts -->
-  <section class="ascii-box section-posts" id="home-posts">
-    <h2 class="box-header">[ {{ config.extra.latest_posts }} ]</h2>
-    <ul class="terminal-list">
-      {% set blog_section = get_section(path="blog/_index.md") %}
-      {% if blog_section and blog_section.pages %}
-        {% for page in blog_section.pages | slice(end=5) %}
-          <li class="list-item">
-            <div class="list-item-row">
-              <span class="item-date">{{ page.date | date(format=config.extra.date_format) }}</span>
-              {% if page.extra.lang %}
-                <span class="item-lang-badge">[{{ page.extra.lang | upper }}]</span>
-              {% endif %}
-              <a href="{{ page.permalink }}" class="item-link">{{ page.title }}</a>
-            </div>
-            {% if page.taxonomies.tags %}
-              <div class="item-tags">
-                {% for tag in page.taxonomies.tags %}
-                  <a href="{{ get_taxonomy_url(kind="tags", name=tag) }}" class="item-tag">#{{ tag }}</a>
-                {% endfor %}
-              </div>
-            {% endif %}
-          </li>
-        {% endfor %}
-      {% else %}
-        <li class="list-item empty-list">No posts found.</li>
-      {% endif %}
-    </ul>
-
-    <div class="box-footer-link">
-      <a href="{{ get_url(path="blog/") }}" class="terminal-btn">[{{ config.extra.view_all_posts }}]</a>
+  <section class="tui-panel" id="home-posts">
+    <div class="tui-panel__head">
+      <span class="tui-panel__title">[ {{ config.extra.latest_posts }} ]</span>
     </div>
+    <div class="tui-panel__body">
+      <ul class="terminal-list">
+        {% set blog_section = get_section(path="blog/_index.md") %}
+        {% if blog_section and blog_section.pages %}
+          {% for page in blog_section.pages | slice(end=5) %}
+            <li class="list-item">
+              <div class="list-item-row">
+                <span class="item-date">{{ page.date | date(format=config.extra.date_format) }}</span>
+                {% if page.extra.lang %}
+                  <span class="item-lang-badge">[{{ page.extra.lang | upper }}]</span>
+                {% endif %}
+                <a href="{{ page.permalink }}" class="item-link">{{ page.title }}</a>
+              </div>
+              {% if page.taxonomies.tags %}
+                <div class="item-tags">
+                  {% for tag in page.taxonomies.tags %}
+                    <a href="{{ get_taxonomy_url(kind="tags", name=tag) }}" class="item-tag">#{{ tag }}</a>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </li>
+          {% endfor %}
+        {% else %}
+          <li class="list-item empty-list">No posts found.</li>
+        {% endif %}
+      </ul>
+    </div>
+    <nav class="tui-panel__foot tui-panel__foot--right" aria-label="View all posts">
+      <a href="{{ get_url(path="blog/") }}" class="terminal-btn">[{{ config.extra.view_all_posts }}]</a>
+    </nav>
   </section>
 
   <!-- Latest Projects -->
-  <section class="ascii-box section-projects" id="home-projects">
-    <h2 class="box-header">[ {{ config.extra.latest_projects }} ]</h2>
-    <ul class="terminal-list">
-      {% set projects_section = get_section(path="projects/_index.md") %}
-      {% if projects_section and projects_section.pages %}
-        {% for page in projects_section.pages | slice(end=5) %}
-          <li class="list-item project-item">
-            <a href="{{ page.permalink }}" class="item-link">{{ page.title }}</a>
-            <p class="project-desc">{{ page.description }}</p>
-          </li>
-        {% endfor %}
-      {% else %}
-        <li class="list-item empty-list">No projects found.</li>
-      {% endif %}
-    </ul>
-
+  <section class="tui-panel" id="home-projects">
+    <div class="tui-panel__head">
+      <span class="tui-panel__title">[ {{ config.extra.latest_projects }} ]</span>
+    </div>
+    <div class="tui-panel__body">
+      <ul class="terminal-list">
+        {% set projects_section = get_section(path="projects/_index.md") %}
+        {% if projects_section and projects_section.pages %}
+          {% for page in projects_section.pages | slice(end=5) %}
+            <li class="list-item project-item">
+              <a href="{{ page.permalink }}" class="item-link">{{ page.title }}</a>
+              <p class="project-desc">{{ page.description }}</p>
+            </li>
+          {% endfor %}
+        {% else %}
+          <li class="list-item empty-list">No projects found.</li>
+        {% endif %}
+      </ul>
+    </div>
     {% if projects_section and projects_section.pages | length > 5 %}
-      <div class="box-footer-link">
-        <a href="{{ get_url(path="projects/") }}" class="terminal-btn">[{{ config.extra.view_all_projects }}]</a>
-      </div>
+    <nav class="tui-panel__foot tui-panel__foot--right" aria-label="View all projects">
+      <a href="{{ get_url(path="projects/") }}" class="terminal-btn">[{{ config.extra.view_all_projects }}]</a>
+    </nav>
     {% endif %}
   </section>
 </div>

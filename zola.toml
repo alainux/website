@@ -3,7 +3,6 @@ base_url = "https://www.ialan.eu"
 
 # The site title and description; used in feeds by default.
 title = "Alain Jacomet"
-description = "Personal site & blog — software engineering, electronics, music, and life."
 default_language = "en"
 
 # Whether to automatically compile all Sass files in the sass directory
@@ -23,17 +22,28 @@ taxonomies = [
 [markdown]
 
 [markdown.highlighting]
-theme = "catppuccin-mocha"
+theme = "monokai"
+
+[languages]
+[languages.en]
+description = "Personal site and blog — software engineering, electronics, music, and life."
 
 [extra]
-nav_home          = "HOME"
-nav_blog          = "BLOG"
-nav_projects      = "PROJECTS"
-nav_cv            = "CV"
-nav_contact       = "CONTACT"
+# Navigation labels
+nav_home          = "home"
+nav_blog          = "blog"
+nav_projects      = "projects"
+nav_cv            = "cv"
+nav_contact       = "contact"
+
+# Date & display
 date_format       = "%-d %b %Y"
-back_to_home      = "BACK TO HOME"
+
+# List labels
 latest_posts      = "LATEST POSTS"
 latest_projects   = "LATEST PROJECTS"
+
+# Button labels
+back_to_home      = "BACK TO HOME"
 view_all_posts    = "VIEW ALL POSTS"
 view_all_projects = "VIEW ALL PROJECTS"

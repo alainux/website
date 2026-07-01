@@ -1,19 +1,18 @@
 /* ============================================================
    Print Stylesheet — renders CV (and any page) as clean,
    professional black-on-white output for PDF export.
+   Compiled after markdown/navigation so it can override style.
    ============================================================ */
 
 @media print {
   /* Hide all terminal chrome */
-  .crt-lines,
-  .crt-glow,
-  .window-header,
-  .vim-navbar,
-  .vim-footer,
-  .page-actions,
+  .vim-statusline,
+  .vim-winbar,
   .page-tags,
   .terminal-divider,
-  .print-btn-row {
+  .print-btn-row,
+  .section-tag-filter,
+  .terminal-btn {
     display: none !important;
   }
 
@@ -27,53 +26,41 @@
   }
 
   .terminal-container {
-    min-height: unset;
-    padding: 0;
+    display: block !important;
+    min-height: unset !important;
+    padding: 0 !important;
     background: #fff !important;
-    display: block;
   }
 
   .terminal-window {
-    max-width: 100%;
+    max-width: 100% !important;
     border: none !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
   }
 
-  .window-body {
-    padding: 0 !important;
-  }
+  .window-body { padding: 0 !important; }
 
-  /* Strip the ASCII box frame on print */
-  .ascii-box {
-    border: none !important;
+  /* Strip TUI panel frames: keep content, hide decorative bits */
+  .tui-panel {
+    margin: 0.5rem 0 !important;
+    border: 1px solid #ccc !important;
     background: transparent !important;
-    padding: 0 !important;
-    margin-bottom: 0 !important;
-
-    &::before,
-    &::after {
-      display: none !important;
-    }
-
-    .box-header {
-      display: none !important; /* hide "[CV]" label — h1 title takes over */
-    }
   }
 
-  /* Typography — clean academic style */
+  .tui-panel__head { display: none !important; }
+  .tui-panel__body { padding: 0 !important; }
+
+  /* Markdown typography — clean academic style */
   .markdown-content {
     margin-top: 0;
 
     h1, h2, h3, h4, h5, h6 {
       color: #000 !important;
-      text-shadow: none !important;
       page-break-after: avoid;
       margin-top: 1.4em;
       margin-bottom: 0.3em;
     }
 
-    /* Remove the ## prefix decorations on headings */
+    /* Remove the # prefix decorations on headings */
     h1::before, h2::before, h3::before,
     h4::before, h5::before, h6::before {
       content: "" !important;
@@ -93,11 +80,9 @@
     a {
       color: #000 !important;
       text-decoration: none;
-    }
 
-    /* Print links as text (no underline) — the URL is beside contact anyway */
-    a[href]::after {
-      content: none !important;
+      /* Print links as text (no underline) */
+      &[href]::after { content: none !important; }
     }
 
     ul {
@@ -116,41 +101,71 @@
       margin: 0.8em 0;
     }
 
-    code {
-      background: none !important;
-      border: none !important;
+    code, pre {
       color: #000 !important;
-      font-family: "Courier New", monospace;
-      font-size: 10pt;
+      background: none !important;
+      font-family: "Courier New", monospace !important;
     }
 
+    code { font-size: 10pt; border: none !important; padding: 0 !important; }
+
     pre {
-      border: 0.5pt solid #ccc !important;
-      padding: 0.5em !important;
       font-size: 9pt;
+      padding: 0.5em !important;
+      border: 0.5pt solid #ccc !important;
       page-break-inside: avoid;
     }
 
     table {
       white-space: normal !important;
-      border: 0.5pt solid #ccc !important;
       font-size: 10pt;
       page-break-inside: avoid;
+      border: 0.5pt solid #ccc !important;
 
       th, td {
-        border: 0.5pt solid #ccc !important;
-        padding: 3pt 6pt !important;
         color: #000 !important;
+        padding: 3pt 6pt !important;
+        border: 0.5pt solid #ccc !important;
       }
 
-      th {
-        background: #eee !important;
-        color: #000 !important;
-      }
+      th { background: #eee !important; }
+    }
+
+    blockquote {
+      padding-left: 1em;
+      margin: 1em 0;
+      color: #555 !important;
+      border-left: 2pt solid #999 !important;
     }
   }
 
-  /* Page margin setup */
+  /* Welcome panel */
+  .welcome-title    { color: #000 !important; font-size: 24pt !important; margin-bottom: 0.5em; }
+  .welcome-subtitle { color: #333 !important; }
+  .welcome-desc     { color: #333 !important; }
+
+  /* List items */
+  .list-item {
+    border-bottom: 1pt dashed #ccc !important;
+    padding: 0.5rem 0 !important;
+  }
+
+  .item-link    { color: #000 !important; text-decoration: none !important; }
+  .item-date    { color: #666 !important; }
+  .project-desc { color: #333 !important; }
+
+  /* Page meta */
+  .page-meta {
+    color: #666 !important;
+    font-size: 10pt !important;
+    margin-bottom: 1em;
+    border-bottom: 1pt solid #ccc;
+    padding-bottom: 0.5em;
+
+    a { color: #000 !important; }
+  }
+
+  /* Page margins */
   @page {
     margin: 2cm;
     size: A4;

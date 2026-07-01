@@ -1,7 +1,8 @@
 +++
 title = "Hello World"
 date = "2026-06-30"
-extra = { math = true }
+extra = { lang = "en", math = true }
+description = "Welcome to my personal terminal-styled site and blog."
 taxonomies = { tags = ["welcome", "programming"] }
 +++
 

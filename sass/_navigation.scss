@@ -1,121 +1,273 @@
-/* Navigation Navbar, Toggles & Paginations */
+/* ============================================================
+   Navigation, Buttons, Lists, Pagination
+   ------------------------------------------------------------
+   All shared chrome for clickable elements and lists.
+   TUI-style flat — no shadows, no rounded corners.
+   ============================================================ */
 
+/* ──────────────────────────────────────────────────────────────
+   Terminal button — bracketed, flat, mousedown-highlight
+   ────────────────────────────────────────────────────────────── */
+.terminal-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease;
+
+  &:hover {
+    background-color: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+
+  &:active {
+    background-color: var(--accent-dim);
+    border-color: var(--accent-dim);
+  }
+
+  &:focus-visible {
+    outline: 1px dashed var(--green);
+    outline-offset: 2px;
+  }
+
+  /* Disabled link (rendered as plain text) */
+  &.disabled,
+  &.terminal-btn-disabled {
+    color: var(--fg-dim);
+    background: transparent;
+    border-color: var(--border);
+    cursor: not-allowed;
+    opacity: 0.4;
+
+    &:hover {
+      color: var(--fg-dim);
+      background: transparent;
+      border-color: var(--border);
+      text-decoration: none;
+    }
+  }
+}
+
+/* Inline link within prose */
+.terminal-link {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover { color: var(--accent-dim); }
+}
+
+/* ──────────────────────────────────────────────────────────────
+    Tag filter (blog index)
+   ────────────────────────────────────────────────────────────── */
+.section-tag-filter { margin: 1rem 0; }
+
+.tag-filter-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 11px;
+  color: var(--fg-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tags-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Tag chip — dashed green, hover-fills
+   ────────────────────────────────────────────────────────────── */
+.item-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 1px dashed var(--border);
+  background: transparent;
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease;
+
+  &:hover {
+    background-color: var(--green);
+    color: var(--bg);
+    border-color: var(--green);
+    text-decoration: none;
+  }
+
+  &.item-tag-active {
+    border-style: solid;
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+}
+
+/* Per-page tag list — uses .terminal-btn under the hood */
+.page-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0 1.5rem;
+
+  .terminal-btn {
+    color: var(--green);
+    border-color: var(--border);
+
+    &:hover {
+      background-color: var(--green);
+      color: var(--bg);
+      border-color: var(--green);
+    }
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+    Print button row (CV pages)
+    ────────────────────────────────────────────────────────────── */
 .print-btn-row {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 1.5rem;
 }
 
-.vim-navbar {
-  background-color: var(--bg-status);
-  display: flex;
-  align-items: stretch;
-  justify-content: space-between;
-  font-size: 0.85rem;
-  font-weight: bold;
-  border-bottom: 1px solid var(--border-color);
-  overflow-x: auto;
-  flex-wrap: nowrap;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.nav-links {
-  display: flex;
-  gap: 0;
-  padding: 0;
-  flex-wrap: nowrap;
-}
-
-.nav-item {
-  color: var(--fg-main);
-  padding: 0.4rem 1.2rem;
-  border-right: 1px solid var(--border-color);
-  white-space: nowrap;
-  &:first-child {
-    border-left: 1px solid var(--border-color);
-  }
-  &:hover {
-    background-color: var(--bg-status-hover);
-    color: var(--fg-main);
-  }
-  &.active {
-    background-color: var(--bg-window);
-    color: var(--fg-accent);
-    border-bottom: 2px solid var(--fg-accent);
-  }
-}
-
-.nav-spacer {
-  flex-grow: 1;
-}
-
-.theme-toggle-btn {
-  background-color: transparent;
+/* ──────────────────────────────────────────────────────────────
+    Divider line — dashed separator
+   ────────────────────────────────────────────────────────────── */
+.terminal-divider {
   border: none;
-  border-left: 1px solid var(--border-color);
-  color: var(--fg-accent);
-  padding: 0.4rem 1.2rem;
-  cursor: pointer;
-  font-family: inherit;
-  font-weight: bold;
-  font-size: inherit;
-  white-space: nowrap;
-  transition: all 0.2s ease;
-  &:hover {
-    background-color: var(--bg-status-hover);
-    color: var(--fg-green);
-  }
-  &:focus {
-    outline: none;
-  }
+  border-top: 1px dashed var(--border);
+  margin: 1.5rem 0;
+
+  &--light { margin: 1rem 0; }
 }
 
-.terminal-btn {
-  display: inline-block;
-  color: var(--fg-accent);
-  font-family: monospace;
-  font-size: 0.85rem;  /* match navbar scale, not body scale */
-  font-weight: bold;
-  padding: 0.2rem 0.5rem;
-  border: 1px dashed var(--border-color);
-  background: transparent;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.1s ease;
-  
-  &:hover {
-    background-color: var(--fg-accent);
-    color: var(--bg-window);
-    border: 1px solid var(--fg-accent);
-    text-decoration: none;
-  }
+/* ──────────────────────────────────────────────────────────────
+    Lists — items rendered inside tui-panel__body
+   ────────────────────────────────────────────────────────────── */
+.terminal-list {
+  list-style: none;
+  padding: 0;
 }
 
-.pagination-nav {
+.list-item,
+.section-list-item {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px dashed var(--border);
+
+  &:last-child { border-bottom: none; }
+}
+
+.list-item-row {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.item-date {
+  color: var(--fg-dim);
+  font-size: 12px;
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.item-lang-badge {
+  display: inline-flex;
   align-items: center;
-  margin: 1.5rem 0 2rem 0;
-  font-size: 0.85rem;
-  font-weight: bold;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  background-color: var(--bg-darker);
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
-.pagination-status {
-  color: var(--fg-dim);
+.item-link {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
 }
 
-.terminal-btn-disabled {
-  display: inline-block;
-  color: var(--fg-dim);
-  font-family: monospace;
-  font-size: 0.85rem;  /* match .terminal-btn */
-  font-weight: bold;
-  padding: 0.2rem 0.5rem;
-  border: 1px dashed var(--border-color);
-  background: transparent;
-  cursor: not-allowed;
-  opacity: 0.5;
+.item-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
 }
+
+/* Project variant */
+.project-item {
+  align-items: flex-start;
+
+  .project-desc {
+    color: var(--fg-dim);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+}
+
+.empty-list {
+  padding: 2rem 0;
+  text-align: center;
+  color: var(--fg-dim);
+  font-style: italic;
+}
+
+/* ──────────────────────────────────────────────────────────────
+    Welcome panel content
+   ────────────────────────────────────────────────────────────── */
+.welcome-title {
+  margin-bottom: 0.5rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.welcome-subtitle {
+  margin-bottom: 1rem;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.welcome-desc {
+  color: var(--fg-dim);
+  line-height: 1.7;
+}
+
+.section-intro {
+  margin-bottom: 1.5rem;
+  color: var(--fg-dim);
+  line-height: 1.7;
+}
+
+/* ============================================================
+   Print overrides live in _print.scss (imported after this).
+   ============================================================ */
