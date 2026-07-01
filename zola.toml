@@ -22,7 +22,7 @@ taxonomies = [
 [markdown]
 
 [markdown.highlighting]
-theme = "monokai"
+theme = "tokyo-night"
 
 [languages]
 [languages.en]

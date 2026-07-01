@@ -17,7 +17,7 @@
   background: transparent;
   color: var(--accent);
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: var(--font-size-md);
   font-weight: 700;
   white-space: nowrap;
   cursor: pointer;
@@ -62,10 +62,9 @@
 /* Inline link within prose */
 .terminal-link {
   color: var(--accent);
-  text-decoration: underline;
-  text-underline-offset: 2px;
+  text-decoration: none;
 
-  &:hover { color: var(--accent-dim); }
+  &:hover { color: var(--green); }
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -95,12 +94,14 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 8px;
+  padding: 2px 8px;
   border: 1px dashed var(--border);
   background: transparent;
   color: var(--green);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  text-transform: uppercase;
   white-space: nowrap;
   text-decoration: none;
   transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease;
@@ -116,25 +117,6 @@
     border-style: solid;
     color: var(--accent);
     border-color: var(--accent);
-  }
-}
-
-/* Per-page tag list — uses .terminal-btn under the hood */
-.page-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 1rem 0 1.5rem;
-
-  .terminal-btn {
-    color: var(--green);
-    border-color: var(--border);
-
-    &:hover {
-      background-color: var(--green);
-      color: var(--bg);
-      border-color: var(--green);
-    }
   }
 }
 
@@ -164,17 +146,23 @@
 .terminal-list {
   list-style: none;
   padding: 0;
+  margin: -0.5rem -1.75rem -0.75rem;
 }
 
 .list-item,
 .section-list-item {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
-  padding: 0.75rem 0;
+  gap: 0.5rem;
+  padding: 1rem 1.75rem;
   border-bottom: 1px dashed var(--border);
+  transition: background-color 0.15s ease;
 
   &:last-child { border-bottom: none; }
+
+  &:hover {
+    background-color: var(--bg-highlight);
+  }
 }
 
 .list-item-row {
@@ -187,7 +175,7 @@
 
 .item-date {
   color: var(--fg-dim);
-  font-size: 12px;
+  font-size: var(--font-size-md);
   font-family: var(--font-mono);
   white-space: nowrap;
 }
@@ -200,7 +188,7 @@
   background-color: var(--bg-darker);
   color: var(--green);
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--font-size-sm);
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -211,7 +199,7 @@
   font-weight: 700;
   text-decoration: none;
 
-  &:hover { text-decoration: underline; }
+  &:hover { color: var(--green); }
 }
 
 .item-tags {
@@ -255,6 +243,19 @@
   font-size: 13px;
   font-weight: 700;
   color: var(--green);
+
+  &::after {
+    content: "\2588";
+    color: var(--accent);
+    font-weight: 400;
+    margin-left: 2px;
+    animation: blink 1s steps(1) infinite;
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
 }
 
 .welcome-desc {

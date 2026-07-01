@@ -76,18 +76,28 @@
   /* Typography */
   --font-mono: 'JetBrainsMono Nerd Font', 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
   --font-size-base: 14px;
+  --font-size-sm: 10px;
+  --font-size-md: 12px;
   --line-height-base: 1.6;
 
   /* Bar chrome — both statusline + winbar share the same dimensions */
   --bar-h: 28px;
-  --bar-font-size: 12px;
+  --bar-font-size: var(--font-size-md);
   --bar-pad-x: 12px;
   --bar-icon-size: 12px;
   --bar-text-size: 11px;
+
+  /* Atmospheric gradients */
+  --bg-page-grad: linear-gradient(180deg, #13141c 0%, #0f1017 100%);
+  --bg-win-grad: linear-gradient(180deg, #1a1b26 0%, #16161e 100%);
+  --accent-glow: rgba(122, 162, 247, 0.08);
 }
 
 /* --- Tokyo Night "day" (light) --- */
 [data-theme="light"] {
+  --bg-page-grad: linear-gradient(180deg, #cbccd1 0%, #c0c1c6 100%);
+  --bg-win-grad: linear-gradient(180deg, #d5d6db 0%, #e1e2e7 100%);
+  --accent-glow: rgba(46, 125, 233, 0.06);
   --bg: #d5d6db;
   --bg-page: #cbccd1;
   --bg-darker: #e1e2e7;

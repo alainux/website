@@ -141,7 +141,9 @@
 
   /* Welcome panel */
   .welcome-title    { color: #000 !important; font-size: 24pt !important; margin-bottom: 0.5em; }
-  .welcome-subtitle { color: #333 !important; }
+  .welcome-subtitle { color: #333 !important;
+    &::after { content: none !important; }
+  }
   .welcome-desc     { color: #333 !important; }
 
   /* List items */

@@ -23,7 +23,7 @@
    ============================================================ */
 
 :root {
-  --chip-h: 22px;
+  --chip-h: 24px;
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -31,17 +31,22 @@
    ────────────────────────────────────────────────────────────── */
 .tui-panel {
   position: relative;
-  margin: 2.25rem 0 2.25rem;            /* extra top/bottom room so chips
-                                           can sit outside the border */
-  background-color: transparent;        /* outline only — see-through */
+  margin: 2.25rem 0 2.25rem;
+  background-color: transparent;
   border: 1px solid var(--border-soft);
-  transition: border-color 0.2s ease;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent-glow);
+  }
 }
 
 /* Use horizontal flex/padding derived from terminal character widths
    so the box "feels" typographic, not widgety. */
 .tui-panel__body {
-  padding: 1.6rem 1.5rem 1.25rem;
+  padding: 2rem 1.75rem 1.5rem;
+  background-color: var(--bg);
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -102,7 +107,7 @@
   padding: 0 8px;
   background-color: var(--bg);
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: var(--font-size-md);
   font-weight: 700;
   color: var(--fg-dim);
   white-space: nowrap;
@@ -121,7 +126,7 @@
     height: 22px;
     padding: 0 8px;
     color: var(--fg-dim);
-    font-size: 12px;
+    font-size: inherit;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;

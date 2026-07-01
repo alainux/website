@@ -32,8 +32,7 @@ a {
   transition: color 0.15s ease;
 
   &:hover {
-    color: var(--accent-dim);
-    text-decoration: underline;
+    color: var(--green);
   }
 }
 
@@ -101,4 +100,13 @@ hr {
   border: none;
   border-top: 1px dashed var(--border);
   margin: 1.5rem 0;
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

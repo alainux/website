@@ -22,6 +22,7 @@
     font-weight: 700;
     line-height: 1.3;
     font-family: var(--font-mono);
+    transition: color 0.15s ease;
   }
 
   h1 { font-size: 1.5rem; }
@@ -166,14 +167,20 @@
     }
   }
 
-  /* --- Links --- */
+  /* --- Links — bracketed, TUI-style --- */
   a:not(.terminal-btn):not(.item-tag):not(.terminal-link):not(.nav-item):not(.status-segment) {
     color: var(--accent);
-    text-decoration: underline;
-    text-underline-offset: 2px;
+    text-decoration: none;
+    transition: color 0.15s ease;
+
+    &::before { content: "["; color: var(--fg-muted); }
+    &::after  { content: "]"; color: var(--fg-muted); }
 
     &:hover {
-      color: var(--accent-dim);
+      color: var(--green);
+
+      &::before,
+      &::after { color: var(--green); }
     }
   }
 
@@ -320,7 +327,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
-  font-size: 12px;
+  font-size: var(--font-size-md);
   font-family: var(--font-mono);
   color: var(--fg-dim);
   margin-bottom: 1rem;
@@ -329,7 +336,7 @@
     color: var(--accent);
     text-decoration: none;
 
-    &:hover { text-decoration: underline; }
+    &:hover { color: var(--green); }
   }
 }
 
