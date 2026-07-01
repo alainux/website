@@ -52,7 +52,7 @@ Strict adherence to the [tokyonight.nvim](https://github.com/folke/tokyonight.nv
 
 ### 1.5 Statusline Architecture
 
-The header (`.vim-statusline`) and footer (`.vim-winbar`) function as Vim `statusline` and `winbar` components. Each segment displays real, functional metadata rather than decoration.
+The header (`.vim-statusline`) and footer (`.vim-winbar`) function as Vim `statusline` and `winbar` components. Each segment displays real, functional metadata rather than decoration. Both bars share the same height (`--bar-h`), font-size (`--bar-font-size`), padding (`--bar-pad-x`), and icon-size (`--bar-icon-size`) for visual consistency.
 
 Statusline layout (left → right):
 
@@ -97,7 +97,7 @@ The user toggles between two distinct viewing modes via the `[▭ CENTERED] ↔ 
 - **Centered Mode:** A fixed-width, optimized column (`--max-width-centered: 920px`) for long-form reading.
 - **Full-Width Mode:** The full viewport (`--max-width-full: 100%`) for high-density data.
 
-Both states are persisted in `localStorage` under `layout` and applied pre-paint via inline `<head>` JavaScript to avoid FOUC.
+Both states are persisted in `localStorage` under `layout` and applied pre-paint via `static/js/prepaint.js` (synchronous `<head>` include) to avoid FOUC. The post-paint interactive logic (toggle handlers, scroll tracking, word count, tag filter) lives in `static/js/main.js` — loaded with a plain `<script src>` at the end of `<body>`. No inline JavaScript.
 
 ### 2.3 Localization (i18n)
 
@@ -113,9 +113,9 @@ Both states are persisted in `localStorage` under `layout` and applied pre-paint
 
 CSS partials (in `sass/`) are imported in this order by `style.scss`:
 
-1. **variables** — Tokyo Night tokens (including `--bg-page` for the outer page/desktop surface) + self-hosted `@font-face` for JetBrainsMono Nerd Font, scoped via `:root` / `[data-theme="light"]`.
-2. **base** — global reset, body typography (`background-color: var(--bg-page)`), links, selection, scrollbars.
-3. **window** — `.terminal-container` (uses `--bg-page`), `.terminal-window` (uses `--bg`), `.vim-statusline`, `.vim-winbar`, `<main class="window-body">`, layout modes, responsive breakpoints.
+1. **variables** — Tokyo Night tokens (including `--bg-page` for the outer page/desktop surface, `--bar-*` tokens for statusline/winbar dimensions) + self-hosted `@font-face` for JetBrainsMono Nerd Font, scoped via `:root` / `[data-theme="light"]`.
+2. **base** — global reset, body typography (`background-color: var(--bg-page)`), links, selection, scrollbars. No global transition wildcards.
+3. **window** — `.terminal-container` (uses `--bg-page`), `.terminal-window` (uses `--bg`), `.vim-statusline`, `.vim-winbar` (both use `--bar-*` tokens for unified sizing), `<main class="window-body">`, layout modes, responsive breakpoints.
 4. **boxes** — `.tui-panel`, `.tui-panel__head`, `.tui-panel__body`, `.tui-panel__foot` (centered) / `--right`, `.grid-two-cols`.
 5. **navigation** — `.terminal-btn`, `.terminal-link`, `.item-tag`, `.terminal-list`, `.list-item`, `.item-lang-badge`, tag filter, print-btn-row, welcome panel content, dividers.
 6. **markdown** — `.markdown-content`, `.page-meta`, heading decorations, code/pre styling, tables, blockquotes, KaTeX.
@@ -123,14 +123,14 @@ CSS partials (in `sass/`) are imported in this order by `style.scss`:
 
 Templates compile from `templates/`:
 
-- **base.html** — `<head>` (meta, inline pre-paint script, KaTeX on demand), `.vim-statusline`, `.window-body`, `.vim-winbar`, post-paint JS (theme/layout toggle, scroll, word count).
+- **base.html** — `<head>` (meta, pre-paint script, KaTeX on demand), `.vim-statusline`, `.window-body`, `.vim-winbar`, `main.js` (theme/layout toggle, scroll, word count, tag filter, print button).
 - **index.html**, **page.html**, **section.html**, **taxonomy_single.html**, **taxonomy_list.html** — call into `base.html` blocks.
 - **partials/tag_filter.html** — shared tag filter component.
 
 ### 3.2 Code Quality and Architecture
 
 - **Minimalism:** Implement the minimum amount of code necessary to achieve the desired effect. Avoid heavy JavaScript frameworks or unnecessary dependencies.
-- **Clean Code:** The codebase is modular, organized, and follows DRY principles for CSS and Zola templates. Print rules and live styles are kept in separate partials; partials for dead code (`.crt.scss`, `.lists.scss`) have been removed.
+- **Clean Code:** The codebase is modular, organized, and follows DRY principles for CSS and Zola templates. Print rules and live styles are kept in separate partials; partials for dead code (`.crt.scss`, `.lists.scss`) have been removed. No inline JavaScript — all logic lives in `static/js/prepaint.js` (FOUC prevention, synchronous `<head>`) and `static/js/main.js` (post-DOM interactive logic, end-of-body).
 - **Efficiency:** Prioritize minimal DOM depth and optimized CSS selectors for rapid rendering.
 
 ### 3.3 SEO and Performance

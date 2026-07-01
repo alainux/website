@@ -2,6 +2,10 @@
 
 {% block title %}{{ config.title }}{% endblock %}
 
+{% block head_extra %}
+<meta http-equiv="refresh" content="0;url={{ get_url(path='blog/') }}">
+{% endblock head_extra %}
+
 {% block content %}
 <div class="tui-panel">
   <div class="tui-panel__head">
@@ -12,5 +16,4 @@
     <p class="welcome-desc">Filter posts by tag on the <a href="{{ get_url(path="blog/") }}">blog page</a>.</p>
   </div>
 </div>
-<script>window.location.replace("{{ get_url(path="blog/") }}");</script>
 {% endblock content %}

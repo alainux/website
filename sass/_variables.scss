@@ -77,6 +77,13 @@
   --font-mono: 'JetBrainsMono Nerd Font', 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
   --font-size-base: 14px;
   --line-height-base: 1.6;
+
+  /* Bar chrome — both statusline + winbar share the same dimensions */
+  --bar-h: 28px;
+  --bar-font-size: 12px;
+  --bar-pad-x: 12px;
+  --bar-icon-size: 12px;
+  --bar-text-size: 11px;
 }
 
 /* --- Tokyo Night "day" (light) --- */

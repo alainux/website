@@ -59,13 +59,13 @@ html[data-layout="full"] .terminal-window {
 .vim-statusline {
   display: flex;
   align-items: stretch;
-  height: 30px;
+  height: var(--bar-h);
   flex-shrink: 0;
   background-color: var(--bg-darker);
   border-bottom: 1px solid var(--border);
   color: var(--status-fg);
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: var(--bar-font-size);
   user-select: none;
 }
 
@@ -77,7 +77,7 @@ html[data-layout="full"] .terminal-window {
   align-items: center;
   height: 100%;
   flex-shrink: 0;
-  padding: 0 12px;
+  padding: 0 var(--bar-pad-x);
   background-color: var(--accent);
   color: var(--bg);
   font-weight: 500;
@@ -114,7 +114,7 @@ html[data-layout="full"] .terminal-window {
   display: inline-flex;
   align-items: center;
   height: 100%;
-  padding: 0 12px;
+  padding: 0 var(--bar-pad-x);
   flex-shrink: 0;
   color: var(--fg-dim);
   font-weight: 500;
@@ -166,7 +166,7 @@ html[data-layout="full"] .terminal-window {
   display: inline-flex;
   align-items: center;
   height: 100%;
-  padding: 0 12px;
+  padding: 0 var(--bar-pad-x);
   flex-shrink: 0;
   color: var(--fg-dim);
   font-weight: 500;
@@ -179,13 +179,13 @@ html[data-layout="full"] .terminal-window {
 
   .control-icon {
     margin-right: 6px;
-    font-size: 12px;
+    font-size: var(--bar-icon-size);
     color: var(--accent);
   }
 
   .control-text {
     text-transform: uppercase;
-    font-size: 11px;
+    font-size: var(--bar-text-size);
     letter-spacing: 0.5px;
     font-weight: 700;
     color: var(--fg);
@@ -376,13 +376,13 @@ html[data-layout="full"] .terminal-window {
   display: flex;
   align-items: stretch;
   justify-content: space-between;
-  height: 26px;
+  height: var(--bar-h);
   flex-shrink: 0;
   background-color: var(--bg-darker);
   border-top: 1px solid var(--border);
   color: var(--fg-dim);
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--bar-font-size);
   user-select: none;
 
   .winbar-left,
@@ -396,13 +396,13 @@ html[data-layout="full"] .terminal-window {
     display: inline-flex;
     align-items: center;
     height: 100%;
-    padding: 0 12px;
+    padding: 0 var(--bar-pad-x);
     border-right: 1px solid var(--border);
 
     .control-icon {
       margin-right: 6px;
       color: var(--cyan);
-      font-size: 11px;
+      font-size: var(--bar-icon-size);
     }
 
     .winbar-text {
@@ -434,20 +434,17 @@ html[data-layout="full"] .terminal-window {
                 theme-toggle keeps icon + text on left.
    ============================================================ */
 @media (max-width: 900px) {
-  .vim-statusline { font-size: 11px; }
   .status-nav-item,
   .status-control { padding: 0 10px; }
   .status-nav-item .nav-label { display: none; }
 }
 
 @media (max-width: 720px) {
-  /* Hide mainland nav; show hamburger */
   .status-path       { max-width: 45%; }
   .status-nav        { display: none; }
   .nav-hamburger     { display: inline-flex; }
   .layout-toggle     { display: none; }
 
-  /* Lock summary width so opening hamburger never resizes the bar */
   .nav-hamburger > summary {
     width: auto;
     min-width: 0;
@@ -457,7 +454,7 @@ html[data-layout="full"] .terminal-window {
 }
 
 @media (max-width: 480px) {
-  .vim-statusline    { height: 28px; font-size: 10px; }
+  :root { --bar-h: 26px; --bar-font-size: 10px; }
   .status-path       { padding: 0 8px; max-width: 40%; }
   .status-control    { padding: 0 8px; }
   .status-control .control-text { display: none; }
@@ -465,6 +462,5 @@ html[data-layout="full"] .terminal-window {
 
 @media (max-width: 768px) {
   .window-body { padding: 1rem; }
-  .vim-winbar  { font-size: 10px; height: 22px; }
   .winbar-item { padding: 0 8px; }
 }

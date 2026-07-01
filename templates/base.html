@@ -30,6 +30,8 @@
   <meta property="og:locale" content="{{ page.extra.lang | default(value='en') }}">
   {% block og_article %}{% endblock og_article %}
 
+  {% block head_extra %}{% endblock head_extra %}
+
   <meta name="twitter:card" content="{% block twitter_card %}summary{% endblock twitter_card %}">
   <meta name="twitter:title" content="{% block twitter_title %}{{ config.title }}{% endblock twitter_title %}">
   <meta name="twitter:description" content="{% block twitter_description %}{{ config.description }}{% endblock twitter_description %}">
@@ -40,30 +42,7 @@
   <link rel="preload" as="font" type="font/ttf" crossorigin href="{{ get_url(path='fonts/JetBrainsMono-Regular.ttf') }}">
   <link rel="preload" as="font" type="font/ttf" crossorigin href="{{ get_url(path='fonts/JetBrainsMono-Bold.ttf') }}">
 
-  <!-- Inline pre-paint script: prevents theme/layout flash -->
-  <script>
-    (function () {
-      const storedTheme  = localStorage.getItem('theme');
-      const storedLayout = localStorage.getItem('layout');
-      const systemLight  = window.matchMedia('(prefers-color-scheme: light)').matches;
-      const theme  = storedTheme  || (systemLight ? 'light' : 'dark');
-      const layout = storedLayout || 'centered';
-      document.documentElement.setAttribute('data-theme',  theme);
-      document.documentElement.setAttribute('data-layout', layout);
-    })();
-  </script>
-
-  <script>
-    // Deep-link helper: ?menu=open (or ?nav=open) opens the mobile hamburger
-    (function () {
-      try {
-        const p = new URLSearchParams(location.search);
-        if (p.get('menu') === 'open' || p.get('nav') === 'open') {
-          document.documentElement.dataset.menuAutoOpen = '1';
-        }
-      } catch (_) {}
-    })();
-  </script>
+  <script src="{{ get_url(path='js/prepaint.js', trailing_slash=false) }}"></script>
 
   {% if page.extra.math or section.extra.math %}
   <!-- KaTeX: only loaded when a page actually uses math -->
@@ -205,127 +184,6 @@
     </div>
   </div>
 
-  <!-- ============================================================
-       Client interactivity
-       - Theme + layout persistence via localStorage
-       - Per-page word count / read time
-       - Scroll progress
-       ============================================================ -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const htmlEl     = document.documentElement;
-      const container  = document.querySelector('.terminal-container');
-      const windowBody = document.getElementById('window-body');
-
-      /* ── Theme ──────────────────────────────────────────── */
-      const themeToggle = document.getElementById('theme-toggle');
-      const themeIcon   = document.getElementById('theme-icon');
-      const themeText   = document.getElementById('theme-text');
-
-      const ALL_THEME_ICONS = document.querySelectorAll('.js-theme-icon');
-      const ALL_THEME_TEXT  = document.querySelectorAll('.js-theme-text');
-
-      const paintTheme = () => {
-        const isLight = htmlEl.getAttribute('data-theme') === 'light';
-        const ic      = isLight ? '☀' : '☾';
-        const tx      = isLight ? 'LIGHT' : 'DARK';
-        if (themeIcon) themeIcon.textContent = ic;
-        if (themeText) themeText.textContent = tx;
-        ALL_THEME_ICONS.forEach(n => n.textContent = ic);
-        ALL_THEME_TEXT .forEach(n => n.textContent = tx);
-      };
-
-      const toggleTheme = () => {
-        const isLight = htmlEl.getAttribute('data-theme') === 'light';
-        const next    = isLight ? 'dark' : 'light';
-        htmlEl.setAttribute('data-theme', next);
-        localStorage.setItem('theme', next);
-        paintTheme();
-      };
-
-      themeToggle?.addEventListener('click', toggleTheme);
-      themeToggle?.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); themeToggle.click(); }
-      });
-      document.querySelectorAll('.js-theme-toggle').forEach(el => {
-        el.addEventListener('click', e => { e.preventDefault(); toggleTheme(); });
-      });
-      paintTheme();
-
-      /* ── Layout ─────────────────────────────────────────── */
-      const layoutToggle = document.getElementById('layout-toggle');
-      const layoutIcon   = document.getElementById('layout-icon');
-      const layoutText   = document.getElementById('layout-text');
-
-      const ALL_LAYOUT_ICONS = document.querySelectorAll('.js-layout-icon');
-      const ALL_LAYOUT_TEXT  = document.querySelectorAll('.js-layout-text');
-
-      const paintLayout = () => {
-        const isFull = htmlEl.getAttribute('data-layout') === 'full';
-        const ic     = isFull ? '▬' : '▭';
-        const tx     = isFull ? 'FULL' : 'CENTERED';
-        if (layoutIcon) layoutIcon.textContent = ic;
-        if (layoutText) layoutText.textContent = tx;
-        ALL_LAYOUT_ICONS.forEach(n => n.textContent = ic);
-        ALL_LAYOUT_TEXT .forEach(n => n.textContent = tx);
-      };
-
-      const toggleLayout = () => {
-        const isFull = htmlEl.getAttribute('data-layout') === 'full';
-        const next   = isFull ? 'centered' : 'full';
-        htmlEl.setAttribute('data-layout', next);
-        localStorage.setItem('layout', next);
-        paintLayout();
-      };
-
-      layoutToggle?.addEventListener('click', toggleLayout);
-      layoutToggle?.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); layoutToggle.click(); }
-      });
-      document.querySelectorAll('.js-layout-toggle').forEach(el => {
-        el.addEventListener('click', e => { e.preventDefault(); toggleLayout(); });
-      });
-      paintLayout();
-
-      /* ── Word count + read time ─────────────────────────── */
-      const wordsEl    = document.getElementById('winbar-words');
-      const readTimeEl = document.getElementById('winbar-readtime');
-
-      const paintStats = () => {
-        const text  = windowBody?.textContent || '';
-        const words = text.trim().split(/\s+/).filter(Boolean).length;
-        const mins  = Math.max(1, Math.ceil(words / 220));
-        if (wordsEl)    wordsEl.querySelector('.winbar-text').textContent    = `${words.toLocaleString()} words`;
-        if (readTimeEl) readTimeEl.querySelector('.winbar-text').textContent = `${mins} min`;
-      };
-
-      /* ── Scroll progress ────────────────────────────────── */
-      const scrollEl = document.getElementById('winbar-scroll');
-
-      const paintScroll = () => {
-        if (!windowBody || !scrollEl) return;
-        const range   = windowBody.scrollHeight - windowBody.clientHeight;
-        const pct     = range > 0 ? Math.round((windowBody.scrollTop / range) * 100) : 0;
-        let label;
-        if (pct === 0)        label = 'Top';
-        else if (pct === 100) label = 'Bottom';
-        else if (pct < 25)    label = 'Start';
-        else if (pct > 75)    label = 'End';
-        else                  label = `${pct}%`;
-        scrollEl.querySelector('.winbar-text').textContent = label;
-      };
-
-      windowBody?.addEventListener('scroll', paintScroll, { passive: true });
-
-      paintStats();
-      paintScroll();
-
-      /* ── Deep-link: ?menu=open auto-opens hamburger ─────── */
-      if (document.documentElement.dataset.menuAutoOpen === '1') {
-        const det = document.getElementById('nav-hamburger');
-        if (det && !det.hasAttribute('open')) det.setAttribute('open', '');
-      }
-    });
-  </script>
+  <script src="{{ get_url(path='js/main.js', trailing_slash=false) }}"></script>
 </body>
 </html>
