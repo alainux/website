@@ -57,8 +57,8 @@ if (layoutToggle) {
   paintLayout();
 
   /* ── Word count + read time ──────────────────────────────── */
-  var wordsEl    = document.getElementById('winbar-words');
-  var readTimeEl = document.getElementById('winbar-readtime');
+var wordsEl = document.querySelector('#window-body ~ .vim-winbar #winbar-words');
+var readTimeEl = document.querySelector('#window-body ~ .vim-winbar #winbar-readtime');
 
   function paintStats() {
     var text  = windowBody ? windowBody.textContent || '' : '';
@@ -69,7 +69,7 @@ if (layoutToggle) {
   }
 
   /* ── Scroll progress ─────────────────────────────────────── */
-  var scrollEl = document.getElementById('winbar-scroll');
+  var scrollEl = document.querySelector('.vim-winbar .back-link[href="#window-body"]');
 
   function paintScroll() {
     if (!windowBody || !scrollEl) return;
@@ -117,7 +117,7 @@ if (layoutToggle) {
   }
 
   /* ── Scroll to top ────────────────────────────────────────── */
-var scrollTopBtn = document.getElementById('winbar-scroll');
+var scrollTopBtn = document.querySelector('#window-body ~ .vim-winbar #winbar-scroll');
 if (scrollTopBtn && windowBody) {
   scrollTopBtn.addEventListener('click', function () { windowBody.scrollTop = 0; });
 }
