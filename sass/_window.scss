@@ -41,7 +41,7 @@ Root + layout modes
   color: var(--bg);
   font-family: var(--font-mono);
   font-size: var(--font-size-md);
-  z-index: 10000;
+  z-index: 20;
   text-decoration: none;
   &:focus { top: 0; }
 }
@@ -317,7 +317,7 @@ a bordered TUI panel anchored to the statusline.
     position: absolute;
     top: 100%;
     left: 0;
-    z-index: 100;
+    z-index: 10;
     min-width: 200px;
     background-color: var(--bg-darker);
     border: 1px solid var(--border);
