@@ -25,12 +25,9 @@
     paintTheme();
   }
 
-  if (themeToggle) {
-    themeToggle.addEventListener('click', toggleTheme);
-    themeToggle.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); themeToggle.click(); }
-    });
-  }
+if (themeToggle) {
+  themeToggle.addEventListener('click', toggleTheme);
+}
   paintTheme();
 
   /* ── Layout ───────────────────────────────────────────────── */
@@ -54,12 +51,9 @@
     paintLayout();
   }
 
-  if (layoutToggle) {
-    layoutToggle.addEventListener('click', toggleLayout);
-    layoutToggle.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); layoutToggle.click(); }
-    });
-  }
+if (layoutToggle) {
+  layoutToggle.addEventListener('click', toggleLayout);
+}
   paintLayout();
 
   /* ── Word count + read time ──────────────────────────────── */
@@ -122,7 +116,13 @@
     }
   }
 
-  /* ── Print button (CV pages) ─────────────────────────────── */
+  /* ── Scroll to top ────────────────────────────────────────── */
+var scrollTopBtn = document.getElementById('winbar-scroll');
+if (scrollTopBtn && windowBody) {
+  scrollTopBtn.addEventListener('click', function () { windowBody.scrollTop = 0; });
+}
+
+/* ── Print button (CV pages) ─────────────────────────────── */
   var printBtn = document.querySelector('.print-btn');
   if (printBtn) printBtn.addEventListener('click', function () { window.print(); });
 

@@ -1,34 +1,49 @@
 /* ============================================================
-   Terminal Window Chrome
-   ------------------------------------------------------------
-   Vim-inspired statusline header + winbar footer around the
-   scrollable buffer area.
+Terminal Window Chrome
+------------------------------------------------------------
+Vim-inspired statusline header + winbar footer around the
+scrollable buffer area.
 
-   Statusline layout (left → right):
+Statusline layout (left → right):
 
-     ┌──────────┬──────────────────────────┬──────────────────┐
-     │  PATH    │     MENU (scrollable)    │     CONTROLS     │
-     └──────────┴──────────────────────────┴──────────────────┘
+┌──────────┬──────────────────────────┬──────────────────┐
+│ PATH │ MENU (scrollable) │ CONTROLS │
+└──────────┴──────────────────────────┴──────────────────┘
 
-   - PATH sits on the left, with an ACCENT background — the
-     "primary" foreground segment of Neovim's statusline. It
-     can never get clipped since it's first.
-   - MENU is horizontally scrollable on narrow viewports so
-     the tabs can wrap off-screen without overflowing the
-     statusline.
-   - CONTROLS are pinned to the right.
-   - On small screens the entire MENU collapses into a
-     CSS-only hamburger built on `<details>`.
-   ============================================================ */
+- PATH sits on the left, with an ACCENT background — the
+"primary" foreground segment of Neovim's statusline. It
+can never get clipped since it's first.
+- MENU is horizontally scrollable on narrow viewports so
+the tabs can wrap off-screen without overflowing the
+statusline.
+- CONTROLS are pinned to the right.
+- On small screens the entire MENU collapses into a
+CSS-only hamburger built on `<details>`.
+============================================================ */
 
 /* ──────────────────────────────────────────────────────────────
-   Root + layout modes
-   ────────────────────────────────────────────────────────────── */
+Root + layout modes
+────────────────────────────────────────────────────────────── */
 .terminal-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   background: var(--bg-page-grad);
+}
+
+/* Skip link — visible only on keyboard focus */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  padding: 6px 12px;
+  background: var(--accent);
+  color: var(--bg);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-md);
+  z-index: 10000;
+  text-decoration: none;
+  &:focus { top: 0; }
 }
 
 html[data-layout="centered"] .terminal-window {
@@ -54,8 +69,8 @@ html[data-layout="full"] .terminal-window {
 }
 
 /* ============================================================
-   Statusline container
-   ============================================================ */
+Statusline container
+============================================================ */
 .vim-statusline {
   display: flex;
   align-items: stretch;
@@ -70,8 +85,8 @@ html[data-layout="full"] .terminal-window {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   PATH segment — leftmost, primary/accent bg, never clipped
-   ────────────────────────────────────────────────────────────── */
+PATH segment — leftmost, primary/accent bg, never clipped
+────────────────────────────────────────────────────────────── */
 .status-path {
   display: inline-flex;
   align-items: center;
@@ -94,20 +109,39 @@ html[data-layout="full"] .terminal-window {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   MENU segment — horizontally scrollable, never wraps
-   ────────────────────────────────────────────────────────────── */
+MENU segment — horizontally scrollable, never wraps
+────────────────────────────────────────────────────────────── */
+/* Scroll happens on the inner <ul> */
 .status-nav {
   display: flex;
   align-items: stretch;
   flex: 1 1 auto;
-  min-width: 0;                       /* allow flex item to shrink */
+  min-width: 0;
+}
+
+.nav-list {
+  display: inline-flex;
+  align-items: stretch;
+  flex: 1 1 auto;
+  min-width: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
   overflow-x: auto;
   overflow-y: hidden;
-  scrollbar-width: none;              /* hide horizontal scrollbar */
-  -ms-overflow-style: none;
+  scrollbar-width: none;
   scroll-snap-type: x proximity;
-
   &::-webkit-scrollbar { display: none; }
+}
+
+.nav-list-item {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: stretch;
+  height: 100%;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  scroll-snap-align: start;
 }
 
 .status-nav-item {
@@ -115,21 +149,13 @@ html[data-layout="full"] .terminal-window {
   align-items: center;
   height: 100%;
   padding: 0 var(--bar-pad-x);
-  flex-shrink: 0;
   color: var(--fg-dim);
   font-weight: 500;
   text-decoration: none;
-  border-right: 1px solid var(--border);
-  scroll-snap-align: start;
   transition: background-color 0.12s ease, color 0.12s ease;
 
-  /* [ label ] bracket convention, brackets in dim text */
   &::before { content: "["; margin-right: 6px; color: var(--fg-muted); }
-  &::after  { content: "]"; margin-left: 6px;  color: var(--fg-muted); }
-
-  &:first-child { border-left: 1px solid var(--border); }
-
-  .nav-label { text-transform: lowercase; letter-spacing: 0.5px; }
+  &::after  { content: "]"; margin-left: 6px; color: var(--fg-muted); }
 
   &:hover {
     background-color: var(--bg-highlight);
@@ -139,10 +165,8 @@ html[data-layout="full"] .terminal-window {
   &.active {
     background-color: var(--bg);
     color: var(--accent);
-    border-right-color: var(--bg-highlight);
 
-    &::before,
-    &::after { color: var(--green); font-weight: 700; }
+    &::before, &::after { color: var(--green); font-weight: 700; }
   }
 
   &:focus-visible {
@@ -151,9 +175,14 @@ html[data-layout="full"] .terminal-window {
   }
 }
 
+.nav-label {
+  text-transform: lowercase;
+  letter-spacing: 0.5px;
+}
+
 /* ──────────────────────────────────────────────────────────────
-   CONTROLS segment — right-pinned, never shrinks
-   ────────────────────────────────────────────────────────────── */
+CONTROLS segment — right-pinned, never shrinks
+────────────────────────────────────────────────────────────── */
 .status-controls {
   display: inline-flex;
   align-items: stretch;
@@ -173,9 +202,13 @@ html[data-layout="full"] .terminal-window {
   cursor: pointer;
   user-select: none;
   transition: background-color 0.12s ease, color 0.12s ease;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
 
   &::before { content: "["; margin-right: 6px; color: var(--fg-muted); }
-  &::after  { content: "]"; margin-left: 6px;  color: var(--fg-muted); }
+  &::after  { content: "]"; margin-left: 6px; color: var(--fg-muted); }
 
   .control-icon {
     margin-right: 6px;
@@ -192,7 +225,10 @@ html[data-layout="full"] .terminal-window {
   }
 
   &:hover { background-color: var(--bg-highlight); color: var(--accent); }
-  &:focus-visible { outline: 1px dashed var(--green); outline-offset: -2px; }
+  &:focus-visible {
+    outline: 1px dashed var(--green);
+    outline-offset: -2px;
+  }
 
   /* Static language badge (no hover bg, no interaction) */
   &.lang-badge {
@@ -201,20 +237,19 @@ html[data-layout="full"] .terminal-window {
     .control-icon,
     .control-text { color: var(--cyan); }
 
-    &::before,
-    &::after { color: var(--cyan); font-weight: 700; }
+    &::before, &::after { color: var(--cyan); font-weight: 700; }
 
     &:hover { background-color: transparent; color: var(--cyan); }
   }
 }
 
 /* ──────────────────────────────────────────────────────────────
-   Hamburger nav (mobile only)
-   ------------------------------------------------------------
-   A `<details>` element. The `<summary>` is a single
-   statusline cell. When open, the inner <nav> drops down as
-   a bordered TUI panel anchored to the statusline.
-   ────────────────────────────────────────────────────────────── */
+Hamburger nav (mobile only)
+------------------------------------------------------------
+A `<details>` element. The `<summary>` is a single
+statusline cell. When open, the inner <nav> drops down as
+a bordered TUI panel anchored to the statusline.
+────────────────────────────────────────────────────────────── */
 .nav-hamburger {
   display: none;
   flex-shrink: 0;
@@ -240,7 +275,7 @@ html[data-layout="full"] .terminal-window {
     &::-webkit-details-marker { display: none; }
     &::marker { content: ""; }
     &::before { content: "["; margin-right: 6px; color: var(--fg-muted); }
-    &::after  { content: "]"; margin-left: 6px;  color: var(--fg-muted); }
+    &::after  { content: "]"; margin-left: 6px; color: var(--fg-muted); }
 
     .hamburger-icon {
       display: inline-block;
@@ -254,8 +289,7 @@ html[data-layout="full"] .terminal-window {
       border-radius: 0;
       transition: background-color 0.15s ease;
 
-      &::before,
-      &::after {
+      &::before, &::after {
         content: "";
         display: block;
         position: absolute;
@@ -270,8 +304,11 @@ html[data-layout="full"] .terminal-window {
       &::before { top: -5px; }
       &::after  { top: 5px; }
 
-      &::before,
-      &::after { transform-origin: 50% 50%; }
+      &::before, &::after { transform-origin: 50% 50%; }
+    }
+
+    .hamburger-label {
+      display: none;
     }
   }
 
@@ -285,7 +322,7 @@ html[data-layout="full"] .terminal-window {
     background-color: var(--bg-darker);
     border: 1px solid var(--border);
     border-top: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    box-shadow: rgba(0, 0, 0, 0.3) 0 4px 12px;
 
     > a {
       display: flex;
@@ -302,20 +339,10 @@ html[data-layout="full"] .terminal-window {
       &::before { content: "› "; margin-right: 6px; color: var(--fg-muted); }
 
       &:last-child { border-bottom: none; }
+
       &:hover { background-color: var(--bg-highlight); color: var(--fg); }
 
-      &.active {
-        color: var(--accent);
-        &::before { color: var(--accent); }
-      }
-
-      /* Static dividers and toggle actions inside the dropdown */
-      &.hamburger-action {
-        color: var(--accent);
-        cursor: pointer;
-
-        .control-icon { margin-right: 8px; font-size: 14px; }
-      }
+      &.active { color: var(--accent); &::before { color: var(--accent); } }
     }
 
     > .hamburger-divider {
@@ -346,8 +373,7 @@ html[data-layout="full"] .terminal-window {
       color: var(--accent);
       flex-shrink: 0;
 
-      &::before,
-      &::after { color: var(--accent); font-weight: 700; }
+      &::before, &::after { color: var(--accent); font-weight: 700; }
 
       .hamburger-icon {
         background-color: transparent;
@@ -360,18 +386,19 @@ html[data-layout="full"] .terminal-window {
 }
 
 /* ============================================================
-   Window Body (the buffer)
-   ============================================================ */
+Window Body (the buffer)
+============================================================ */
 .window-body {
   flex: 1;
   min-height: 0;
   padding: 1.5rem;
   overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
 /* ============================================================
-   Winbar (footer)
-   ============================================================ */
+Winbar (footer)
+============================================================ */
 .vim-winbar {
   display: flex;
   align-items: stretch;
@@ -415,52 +442,82 @@ html[data-layout="full"] .terminal-window {
     &:last-child  { border-right: none; }
   }
 
-  .back-link {
-    color: var(--accent);
+  .scroll-top-link {
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+    color: inherit;
     text-decoration: none;
-    font-weight: 600;
+    cursor: pointer;
+
     &:hover { color: var(--cyan); }
+    &:focus-visible {
+      outline: 1px dashed var(--green);
+      outline-offset: -2px;
+    }
+  }
+
+.back-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+
+  &:hover { color: var(--cyan); }
+
+  &:focus-visible {
+    outline: 1px dashed var(--green);
+    outline-offset: -2px;
+  }
+}
+
+.winbar-copyright {
+    border-right: none;
+
+    .winbar-text {
+      color: var(--fg-dim);
+      font-weight: 400;
+    }
   }
 }
 
 /* ============================================================
-   Responsive
-   ------------------------------------------------------------
-   Breakpoints:
-     ≤ 900px  — hide tab labels, keep path + theme text.
-                layout-toggle still visible.
-     ≤ 720px  — collapse menu to hamburger, hide layout-toggle
-                entirely (moved into hamburger dropdown).
-                theme-toggle keeps icon + text on left.
-   ============================================================ */
+Responsive
+------------------------------------------------------------
+Breakpoints:
+≤ 900px — hide tab labels, keep path + theme text.
+layout-toggle still visible.
+≤ 720px — collapse menu to hamburger, hide layout-toggle
+entirely (moved into hamburger dropdown).
+theme-toggle keeps icon + text on left.
+============================================================ */
 @media (max-width: 900px) {
-  .status-nav-item,
+  .nav-list-item { padding: 0 8px 0 0; }
+  .nav-label { display: none; }
   .status-control { padding: 0 10px; }
-  .status-nav-item .nav-label { display: none; }
 }
 
 @media (max-width: 720px) {
-  .status-path       { max-width: 45%; }
-  .status-nav        { display: none; }
-  .nav-hamburger     { display: inline-flex; }
-  .layout-toggle     { display: none; }
+  .status-path { max-width: 45%; }
+  .status-nav { display: none; }
+  .nav-hamburger { display: inline-flex; }
+  .layout-toggle { display: none; }
 
   .nav-hamburger > summary {
     width: auto;
     min-width: 0;
+
+    .hamburger-label { display: inline; }
   }
-
-  .hamburger-label { display: inline; }
-}
-
-@media (max-width: 480px) {
-  :root { --bar-h: 26px; --bar-font-size: 10px; }
-  .status-path       { padding: 0 8px; max-width: 40%; }
-  .status-control    { padding: 0 8px; }
-  .status-control .control-text { display: none; }
 }
 
 @media (max-width: 768px) {
   .window-body { padding: 1rem; }
   .winbar-item { padding: 0 8px; }
+}
+
+@media (max-width: 480px) {
+  :root { --bar-h: 26px; --bar-font-size: 10px; }
+  .status-path { padding: 0 8px; max-width: 40%; }
+  .status-control { padding: 0 8px; }
+  .status-control .control-text { display: none; }
 }

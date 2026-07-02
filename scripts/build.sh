@@ -15,7 +15,7 @@ cd "$ROOT_DIR"
 
 # Generate build timestamp
 build_iso="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-build_human="$(date -u +"%d %b %Y")"
+build_human="$(date -u +"%Y-%m-%d")"
 build_unix="$(date -u +"%s")"
 
 mkdir -p data

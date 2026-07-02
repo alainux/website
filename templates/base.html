@@ -54,7 +54,9 @@
   {% endif %}
 </head>
 <body>
-  <div class="terminal-container">
+  <a href="#window-body" class="skip-link">Skip to content</a>
+
+<div class="terminal-container">
     <div class="terminal-window">
 
       <!-- ============================================================
@@ -69,24 +71,16 @@
           <span class="path-text" id="status-path-text">~{{ current_path | default(value="/") }}</span>
         </div>
 
-        <!-- 2. Nav: horizontally scrollable, hides on mobile in favour of hamburger -->
-        <nav class="status-nav" aria-label="Main navigation">
-          <a href="{{ home_url }}" class="status-nav-item {% if current_path == "/" %}active{% endif %}">
-            <span class="nav-label">home</span>
-          </a>
-          <a href="{{ blog_url }}" class="status-nav-item {% if current_path is starting_with("/blog") or current_path is starting_with("/tags") %}active{% endif %}">
-            <span class="nav-label">blog</span>
-          </a>
-          <a href="{{ proj_url }}" class="status-nav-item {% if current_path is starting_with("/projects") %}active{% endif %}">
-            <span class="nav-label">projects</span>
-          </a>
-          <a href="{{ cv_url }}" class="status-nav-item {% if current_path is starting_with("/cv") %}active{% endif %}">
-            <span class="nav-label">cv</span>
-          </a>
-          <a href="{{ cont_url }}" class="status-nav-item {% if current_path is starting_with("/contact") %}active{% endif %}">
-            <span class="nav-label">contact</span>
-          </a>
-        </nav>
+<!-- 2. Nav: horizontally scrollable, hides on mobile in favour of hamburger -->
+<nav class="status-nav" aria-label="Main navigation">
+  <ul class="nav-list">
+  <li class="nav-list-item"><a href="{{ home_url }}" class="status-nav-item {% if current_path == "/" %}active{% endif %}"><span class="nav-label">home</span></a></li>
+  <li class="nav-list-item"><a href="{{ blog_url }}" class="status-nav-item {% if current_path is starting_with("/blog") or current_path is starting_with("/tags") %}active{% endif %}"><span class="nav-label">blog</span></a></li>
+  <li class="nav-list-item"><a href="{{ proj_url }}" class="status-nav-item {% if current_path is starting_with("/projects") %}active{% endif %}"><span class="nav-label">projects</span></a></li>
+  <li class="nav-list-item"><a href="{{ cv_url }}" class="status-nav-item {% if current_path is starting_with("/cv") %}active{% endif %}"><span class="nav-label">cv</span></a></li>
+  <li class="nav-list-item"><a href="{{ cont_url }}" class="status-nav-item {% if current_path is starting_with("/contact") %}active{% endif %}"><span class="nav-label">contact</span></a></li>
+  </ul>
+</nav>
 
         <!-- 3. Hamburger (mobile only): <details>-based dropdown.
              Only carries nav links on mobile — the layout & theme
@@ -122,21 +116,15 @@
           </div>
           {% endif %}
 
-          <div class="status-control layout-toggle" id="layout-toggle"
-               role="button" tabindex="0"
-               aria-label="Toggle centered vs full-width layout"
-               title="Toggle layout">
-            <span class="control-icon" id="layout-icon">▭</span>
-            <span class="control-text" id="layout-text">CENTERED</span>
-          </div>
+<button class="status-control layout-toggle" id="layout-toggle" aria-label="Toggle centered vs full-width layout" title="Toggle layout">
+  <span class="control-icon" id="layout-icon">▭</span>
+  <span class="control-text" id="layout-text">CENTERED</span>
+</button>
 
-          <div class="status-control theme-toggle" id="theme-toggle"
-               role="button" tabindex="0"
-               aria-label="Toggle dark / light theme"
-               title="Toggle theme">
-            <span class="control-icon" id="theme-icon">☾</span>
-            <span class="control-text" id="theme-text">DARK</span>
-          </div>
+<button class="status-control theme-toggle" id="theme-toggle" aria-label="Toggle dark / light theme" title="Toggle theme">
+  <span class="control-icon" id="theme-icon">☾</span>
+  <span class="control-text" id="theme-text">DARK</span>
+</button>
 
         </div>
       </header>
@@ -146,44 +134,7 @@
         {% block content %}{% endblock content %}
       </main>
 
-      <!-- ============================================================
-           Winbar (footer with functional metadata)
-           ============================================================ -->
-      <footer class="vim-winbar" role="contentinfo">
-        <div class="winbar-left">
-          <div class="winbar-item" id="winbar-words" title="Word count">
-            <span class="control-icon">≡</span>
-            <span class="winbar-text">— words</span>
-          </div>
-          <div class="winbar-item" id="winbar-readtime" title="Estimated reading time">
-            <span class="control-icon">⏱</span>
-            <span class="winbar-text">— min</span>
-          </div>
-          {% if page.date and not page.extra.print %}
-            {% set updated_label = page.date | date(format="%Y-%m-%d") %}
-            {% set updated_title = page.date | date(format="%Y-%m-%dT%H:%M%z") %}
-            {% set updated_attr  = "article" %}
-          {% else %}
-            {% set updated_label = site_updated_label %}
-            {% set updated_title = build_iso %}
-            {% set updated_attr  = "site" %}
-          {% endif %}
-          <div class="winbar-item" id="winbar-updated" title="{{ updated_title }} ({{ updated_attr }})">
-            <span class="control-icon">↻</span>
-            <span class="winbar-text">updated {{ updated_label }}</span>
-          </div>
-        </div>
-
-        <div class="winbar-right">
-          <div class="winbar-item" id="winbar-scroll" title="Reading progress">
-            <span class="control-icon">↓</span>
-            <span class="winbar-text">Top</span>
-          </div>
-          <div class="winbar-item">
-            <a href="{{ home_url }}" class="back-link">‹ home</a>
-          </div>
-        </div>
-      </footer>
+{% include "partials/winbar.html" %}
     </div>
   </div>
 

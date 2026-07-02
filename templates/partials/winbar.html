@@ -1,0 +1,39 @@
+{# Winbar partial — single source of truth for footer content.
+   Reads build timestamp from scripts/build.sh -> data/build.toml.
+   No per-page date branching: updated date always reflects the last build. #}
+
+{# Load build timestamp. Falls back to "unknown" so the winbar never breaks. #}
+{% set wb_build = load_data(path="data/build.toml", format="toml", required=false) %}
+{% set wb_updated_label = wb_build.human | default(value="unknown") %}
+{% set wb_updated_title = wb_build.iso   | default(value="unknown") %}
+
+{% set home_url = home_url | default(value=get_url(path="")) %}
+
+<footer class="vim-winbar" role="contentinfo">
+  <div class="winbar-left">
+    <div class="winbar-item" id="winbar-words" title="Word count">
+      <span class="control-icon">≡</span>
+      <span class="winbar-text">— words</span>
+    </div>
+    <div class="winbar-item" id="winbar-readtime" title="Estimated reading time">
+      <span class="control-icon">⏱</span>
+      <span class="winbar-text">— min</span>
+    </div>
+    <div class="winbar-item" id="winbar-updated" title="{{ wb_updated_title }}">
+      <span class="control-icon">↻</span>
+      <span class="winbar-text">updated {{ wb_updated_label }}</span>
+    </div>
+  </div>
+
+  <div class="winbar-right">
+    <div class="winbar-item">
+      <a href="#window-body" class="back-link" id="winbar-scroll" aria-label="Scroll to top of page">↑ top</a>
+    </div>
+    <div class="winbar-item">
+      <a href="{{ home_url }}" class="back-link">‹ home</a>
+    </div>
+    <div class="winbar-item winbar-copyright" id="winbar-copyright">
+      <span class="winbar-text">© 2026 {{ config.title }}</span>
+    </div>
+  </div>
+</footer>
