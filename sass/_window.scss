@@ -484,23 +484,17 @@ Winbar (footer)
 Responsive
 ------------------------------------------------------------
 Breakpoints:
-≤ 900px — hide tab labels, keep path + theme text.
-layout-toggle still visible.
-≤ 720px — collapse menu to hamburger, hide layout-toggle
-entirely (moved into hamburger dropdown).
-theme-toggle keeps icon + text on left.
+≤ 900px — nav collapses to hamburger, layout-toggle hidden
+  (theme toggle stays visible on the bar).
+≤ 768px — tighter window-body padding.
+≤ 480px — compact bar, control text labels hidden.
 ============================================================ */
 @media (max-width: 900px) {
-  .nav-list-item { padding: 0 8px 0 0; }
-  .nav-label { display: none; }
-  .status-control { padding: 0 10px; }
-}
-
-@media (max-width: 720px) {
-  .status-path { max-width: 45%; }
   .status-nav { display: none; }
   .nav-hamburger { display: inline-flex; }
   .layout-toggle { display: none; }
+  .status-path { max-width: 45%; }
+  .status-control { padding: 0 10px; }
 
   .nav-hamburger > summary {
     width: auto;
