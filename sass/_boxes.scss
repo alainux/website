@@ -94,6 +94,18 @@
   color: var(--green);
   white-space: nowrap;
   line-height: 1;
+
+  /* Neutralise the markdown h1–h6 decoration/props so the chip
+     looks flat when it wraps a real heading. */
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    text-transform: inherit;
+    line-height: 1;
+
+    &::before { content: none; }
+  }
 }
 
 .tui-panel__title {

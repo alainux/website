@@ -63,7 +63,7 @@
            Statusline (Neovim-inspired)
            Layout: PATH | NAV TABS (scrollable) | CONTROLS
            ============================================================ -->
-      <header class="vim-statusline" role="banner">
+      <header class="vim-statusline">
 
         <!-- 1. Path: leftmost, accent background, never clipped -->
         <div class="status-path" aria-label="Current location">
@@ -74,11 +74,11 @@
 <!-- 2. Nav: horizontally scrollable, hides on mobile in favour of hamburger -->
 <nav class="status-nav" aria-label="Main navigation">
   <ul class="nav-list">
-  <li class="nav-list-item"><a href="{{ home_url }}" class="status-nav-item {% if current_path == "/" %}active{% endif %}"><span class="nav-label">home</span></a></li>
-  <li class="nav-list-item"><a href="{{ blog_url }}" class="status-nav-item {% if current_path is starting_with("/blog") or current_path is starting_with("/tags") %}active{% endif %}"><span class="nav-label">blog</span></a></li>
-  <li class="nav-list-item"><a href="{{ proj_url }}" class="status-nav-item {% if current_path is starting_with("/projects") %}active{% endif %}"><span class="nav-label">projects</span></a></li>
-  <li class="nav-list-item"><a href="{{ cv_url }}" class="status-nav-item {% if current_path is starting_with("/cv") %}active{% endif %}"><span class="nav-label">cv</span></a></li>
-  <li class="nav-list-item"><a href="{{ cont_url }}" class="status-nav-item {% if current_path is starting_with("/contact") %}active{% endif %}"><span class="nav-label">contact</span></a></li>
+  <li class="nav-list-item"><a href="{{ home_url }}" class="status-nav-item {% if current_path == "/" %}active{% endif %}"{% if current_path == "/" %} aria-current="page"{% endif %}><span class="nav-label">home</span></a></li>
+  <li class="nav-list-item"><a href="{{ blog_url }}" class="status-nav-item {% if current_path is starting_with("/blog") or current_path is starting_with("/tags") %}active{% endif %}"{% if current_path is starting_with("/blog") or current_path is starting_with("/tags") %} aria-current="page"{% endif %}><span class="nav-label">blog</span></a></li>
+  <li class="nav-list-item"><a href="{{ proj_url }}" class="status-nav-item {% if current_path is starting_with("/projects") %}active{% endif %}"{% if current_path is starting_with("/projects") %} aria-current="page"{% endif %}><span class="nav-label">projects</span></a></li>
+  <li class="nav-list-item"><a href="{{ cv_url }}" class="status-nav-item {% if current_path is starting_with("/cv") %}active{% endif %}"{% if current_path is starting_with("/cv") %} aria-current="page"{% endif %}><span class="nav-label">cv</span></a></li>
+  <li class="nav-list-item"><a href="{{ cont_url }}" class="status-nav-item {% if current_path is starting_with("/contact") %}active{% endif %}"{% if current_path is starting_with("/contact") %} aria-current="page"{% endif %}><span class="nav-label">contact</span></a></li>
   </ul>
 </nav>
 
@@ -102,18 +102,18 @@
             <div class="hamburger-divider" aria-hidden="true"></div>
             <div class="hamburger-static" aria-hidden="true">
               <span class="control-icon">▰</span> ES
-            </div>
+</span>
             {% endif %}
           </div>
         </details>
 
         <!-- 4. Controls: right-pinned -->
-        <div class="status-controls" aria-label="Display controls">
+        <div class="status-controls">
 
           {% if lang_is_es %}
-          <div class="status-control lang-badge" aria-label="Content language">
-            <span class="control-icon">▰</span><span class="control-text">ES</span>
-          </div>
+ <span class="status-control lang-badge" aria-label="Content language">
+ <span class="control-icon">▰</span><span class="control-text">ES</span>
+ </span>
           {% endif %}
 
 <button class="status-control layout-toggle" id="layout-toggle" aria-label="Toggle centered vs full-width layout" title="Toggle layout">
