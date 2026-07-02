@@ -1,13 +1,13 @@
 (function () {
   'use strict';
 
-  var htmlEl     = document.documentElement;
+  var htmlEl = document.documentElement;
   var windowBody = document.getElementById('window-body');
 
   /* ── Theme ────────────────────────────────────────────────── */
   var themeToggle = document.getElementById('theme-toggle');
-  var themeIcon   = document.getElementById('theme-icon');
-  var themeText   = document.getElementById('theme-text');
+  var themeIcon = document.getElementById('theme-icon');
+  var themeText = document.getElementById('theme-text');
 
   function paintTheme() {
     var isLight = htmlEl.getAttribute('data-theme') === 'light';
@@ -25,15 +25,15 @@
     paintTheme();
   }
 
-if (themeToggle) {
-  themeToggle.addEventListener('click', toggleTheme);
-}
+  if (themeToggle) {
+    themeToggle.addEventListener('click', toggleTheme);
+  }
   paintTheme();
 
   /* ── Layout ───────────────────────────────────────────────── */
   var layoutToggle = document.getElementById('layout-toggle');
-  var layoutIcon   = document.getElementById('layout-icon');
-  var layoutText   = document.getElementById('layout-text');
+  var layoutIcon = document.getElementById('layout-icon');
+  var layoutText = document.getElementById('layout-text');
 
   function paintLayout() {
     var isFull = htmlEl.getAttribute('data-layout') === 'full';
@@ -51,43 +51,24 @@ if (themeToggle) {
     paintLayout();
   }
 
-if (layoutToggle) {
-  layoutToggle.addEventListener('click', toggleLayout);
-}
+  if (layoutToggle) {
+    layoutToggle.addEventListener('click', toggleLayout);
+  }
   paintLayout();
 
   /* ── Word count + read time ──────────────────────────────── */
-var wordsEl = document.querySelector('#window-body ~ .vim-winbar #winbar-words');
-var readTimeEl = document.querySelector('#window-body ~ .vim-winbar #winbar-readtime');
+  var wordsEl = document.querySelector('#window-body ~ .vim-winbar #winbar-words');
+  var readTimeEl = document.querySelector('#window-body ~ .vim-winbar #winbar-readtime');
 
   function paintStats() {
-    var text  = windowBody ? windowBody.textContent || '' : '';
+    var text = windowBody ? windowBody.textContent || '' : '';
     var words = text.trim().split(/\s+/).filter(Boolean).length;
-    var mins  = Math.max(1, Math.ceil(words / 220));
-    if (wordsEl)    wordsEl.querySelector('.winbar-text').textContent    = words.toLocaleString() + ' words';
-    if (readTimeEl) readTimeEl.querySelector('.winbar-text').textContent  = mins + ' min';
+    var mins = Math.max(1, Math.ceil(words / 220));
+    if (wordsEl) wordsEl.querySelector('.winbar-text').textContent = words.toLocaleString() + ' words';
+    if (readTimeEl) readTimeEl.querySelector('.winbar-text').textContent = mins + ' min';
   }
-
-  /* ── Scroll progress ─────────────────────────────────────── */
-  var scrollEl = document.querySelector('.vim-winbar .back-link[href="#window-body"]');
-
-  function paintScroll() {
-    if (!windowBody || !scrollEl) return;
-    var range = windowBody.scrollHeight - windowBody.clientHeight;
-    var pct   = range > 0 ? Math.round((windowBody.scrollTop / range) * 100) : 0;
-    var label;
-    if (pct === 0)        label = 'Top';
-    else if (pct === 100) label = 'Bottom';
-    else if (pct <  25)   label = 'Start';
-    else if (pct >  75)   label = 'End';
-    else                  label = pct + '%';
-    scrollEl.querySelector('.winbar-text').textContent = label;
-  }
-
-  if (windowBody) windowBody.addEventListener('scroll', paintScroll, { passive: true });
 
   paintStats();
-  paintScroll();
 
   /* ── Deep-link: ?menu=open auto-opens hamburger ──────────── */
   try {
@@ -116,23 +97,17 @@ var readTimeEl = document.querySelector('#window-body ~ .vim-winbar #winbar-read
     }
   }
 
-  /* ── Scroll to top ────────────────────────────────────────── */
-var scrollTopBtn = document.querySelector('#window-body ~ .vim-winbar #winbar-scroll');
-if (scrollTopBtn && windowBody) {
-  scrollTopBtn.addEventListener('click', function () { windowBody.scrollTop = 0; });
-}
-
-/* ── Print button (CV pages) ─────────────────────────────── */
+  /* ── Print button (CV pages) ─────────────────────────────── */
   var printBtn = document.querySelector('.print-btn');
   if (printBtn) printBtn.addEventListener('click', function () { window.print(); });
 
   /* ── Tag filter (blog index) ─────────────────────────────── */
   var tagFilter = document.querySelector('.section-tag-filter');
   if (tagFilter) {
-    var cloud    = tagFilter.querySelector('.tags-cloud');
-    var tags     = cloud ? cloud.querySelectorAll('.item-tag') : [];
-    var list     = document.querySelector('.terminal-list');
-    var items    = list ? list.querySelectorAll('.list-item') : [];
+    var cloud = tagFilter.querySelector('.tags-cloud');
+    var tags = cloud ? cloud.querySelectorAll('.item-tag') : [];
+    var list = document.querySelector('.terminal-list');
+    var items = list ? list.querySelectorAll('.list-item') : [];
 
     if (tags.length && items.length) {
       var activeTag = null;

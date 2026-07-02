@@ -25,7 +25,7 @@ Strict adherence to the [tokyonight.nvim](https://github.com/folke/tokyonight.nv
 ### 1.3 Typography and Glyphs
 
 - **Font Family:** All text, including UI elements and metadata, must use a **Nerd Font** (JetBrainsMono Nerd Font, self-hosted as TTF in `static/fonts/`).
-- **Iconography:** Unicode glyphs preferred over Nerd Font PUA symbols for clarity (`›`, `│`, `◆`, `▭`, `▬`, `☾`, `☀`, `▰`, `≡`, `⏱`, `↻`, `↓`, `‹`).
+- **Iconography:** Unicode glyphs preferred over Nerd Font PUA symbols for clarity (`›`, `│`, `◆`, `▭`, `▬`, `☾`, `☀`, `▰`, `≡`, `⏱`, `↻`, `↑`, `‹`).
 
 ### 1.4 Structural Elements
 
@@ -66,19 +66,18 @@ Three flex segments:
 2. **NAV TABS** — `.status-nav` is `display:flex` and horizontally scrollable (`overflow-x: auto, scrollbar-width: none`). Active tab uses solid bg + accent text + green brackets. No underlines.
 3. **CONTROLS** — `.status-controls` right-pinned. `[▭ CENTERED]` and `[☾ DARK]` always rendered, each bracket-wrapped; state persists in `localStorage`. May include `[▰ ES]` language badge for non-English pages.
 
-- On screens `≤720px`, the mainland `.status-nav` collapses into a CSS-only `<details class="nav-hamburger">`. The summary chip `[ ☰ menu ]` (× icon when open) takes its place in the bar. **The hamburger dropdown carries navigation links only** — neither the layout toggle nor the theme toggle appears inside it. The layout toggle is `display: none` at this breakpoint (full-width and centered are visually identical at single-column width, so the switch is meaningless on mobile). The theme toggle keeps its icon+text on the horizontal bar (rightmost cell) on every breakpoint. The hamburger `summary` and its `×` / `☰` icon are locked to fixed dimensions so opening/closing the menu never enlarges the bar.
+- On screens `≤900px`, the main `.status-nav` collapses into a CSS-only `<details class="nav-hamburger">`. The summary chip `[ ☰ menu ]` (× icon when open) takes its place in the bar. **The hamburger dropdown carries navigation links only** — neither the layout toggle nor the theme toggle appears inside it. The layout toggle is `display: none` at this breakpoint (full-width and centered are visually identical at single-column width, so the switch is meaningless on mobile). The theme toggle keeps its icon+text on the horizontal bar (rightmost cell) on every breakpoint. The hamburger `summary` and its `×` / `☰` icon are locked to fixed dimensions so opening/closing the menu never enlarges the bar.
 - A `?menu=open` (or `?nav=open`) URL flag auto-opens the hamburger on load — useful for deep-linking screenshots.
 
 Winbar layout (left → right):
 
 ```
-[≡ 320 words] [⏱ 2 min] [↻ updated 1 Jul 2026]  │  [↓ Top] [‹ home]
+[≡ 320 words] [⏱ 2 min] [↻ updated 2026-07-02] │ [↑ Top] [‹ home]
 ```
 
 - `≡` word count, `⏱` read time (220 wpm), `↻` last-updated date.
 - The `↻ updated …` value reflects either **the page's frontmatter `date`** (when present, e.g. blog posts — labelled "article") or **the site's last build time** (when the page has no `date` — labelled "site"). See §3.5.
-- `↓` scroll progress (Top / Start / N% / End / Bottom).
-- `‹ home` link always returns to root.
+- `↑ top` anchor (returns to page start). `‹ home` link always returns to root.
 
 ---
 
@@ -125,7 +124,7 @@ Templates compile from `templates/`:
 
 - **base.html** — `<head>` (meta, pre-paint script, KaTeX on demand), `.vim-statusline`, `.window-body`, `.vim-winbar`, `main.js` (theme/layout toggle, scroll, word count, tag filter, print button).
 - **index.html**, **page.html**, **section.html**, **taxonomy_single.html**, **taxonomy_list.html** — call into `base.html` blocks.
-- **partials/tag_filter.html** — shared tag filter component.
+- **partials/winbar.html** — single winbar component; updated date always from build timestamp (no per-page date branching). - **partials/tag_filter.html** — shared tag filter component.
 
 ### 3.2 Code Quality and Architecture
 
@@ -150,7 +149,7 @@ site's last-built timestamp is injected via a pre-build side-channel:
 - `scripts/build.sh` writes `data/build.toml` (re-generated on every
   invocation) containing three fields:
   - `iso`   — UTC ISO-8601 stamp (e.g. `2026-07-01T17:12:22Z`)
-  - `human` — human-friendly stamp (e.g. `01 Jul 2026`)
+  - `human` — ISO-8601 date stamp (e.g. `2026-07-02`)
   - `unix`  — unix epoch seconds
 - `templates/base.html` loads it via
   `{% set build_data = load_data(path="data/build.toml", format="toml") %}`
