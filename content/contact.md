@@ -8,7 +8,7 @@ You can reach me via any of the following channels:
 
 ```
 [EMAIL]     alain@ialan.eu
-[GITHUB]    https://github.com/jacomet
+[CODEBERG]  https://codeberg.org/ialan
 [LINKEDIN]  https://linkedin.com/in/alainjacomet
 ```
 
