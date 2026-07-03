@@ -1,3 +1,6 @@
 # Ignore the generated output inside public, but keep the source folder
 public/*
 !.gitkeep
+
+# Environment vars
+.env
