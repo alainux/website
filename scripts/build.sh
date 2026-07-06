@@ -31,5 +31,8 @@ EOF
 
 echo "[build.sh] build stamp -> ${build_iso}"
 
+# Fetch GitHub contributions at build time (soft-fail on missing token / network)
+node "$(dirname "${BASH_SOURCE[0]}")/fetch_github_contributions.mjs" || true
+
 # Run zola with whatever args were passed (typically: build / serve)
 exec zola "$@"

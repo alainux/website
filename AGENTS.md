@@ -162,12 +162,24 @@ Usage in the winbar: `{% if page.date and not page.extra.print %}{{ page.date | 
 
 ### 3.6 Visual Verification (headless screenshots)
 
-For visual regressions run a local server and use Chrome's headless mode:
+CRITICAL: Do not do this if you don't have vision capabilities on filesystem
+images. The agent in this repo currently has **no** image input support, so
+screenshot output cannot be inspected visually — fall back to a programmatic
+pixel check (e.g. count non-background pixels, dominant color buckets) to
+confirm the chart rendered, rather than "looking" at the PNG.
+
+The headless Chrome invocation below also tends to keep the parent shell
+command alive (hanging the 120 s tool timeout) because Chrome does not exit
+deterministically when `--screenshot` is combined with a live HTTP server
+child process. AlwaysBackground the server and **add `timeout` + an explicit
+`kill` of the server PID**, otherwise the bash tool has to abort the whole
+command. Run it as one self-contained block:
 
 ```bash
 ./scripts/build.sh build
-python3 -m http.server 1111 --directory public &
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
+SRV=$(python3 -m http.server 1111 --directory public &>/tmp/gh_http.log & echo $!)
+sleep 1
+timeout 30 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
   --headless=new --disable-gpu \
   --window-size=1280,800 --hide-scrollbars \
   --user-data-dir=/tmp/chrome-shot \
@@ -175,6 +187,7 @@ python3 -m http.server 1111 --directory public &
   --force-dark-mode --enable-features=WebContentsForceDark \
   --screenshot=./public/_shot_dark.png \
   "http://127.0.0.1:1111/?menu=open"
+kill "$SRV" 2>/dev/null
 ```
 
 Notes:
@@ -184,3 +197,68 @@ Notes:
 - `?menu=open` triggers the deep-link helper that opens the mobile
   hamburger automatically — useful for inspecting the dropdown layout
   without the need for click automation.
+- If you cannot view the image, do a programmatic sanity check instead,
+  e.g. `python3` reading the PNG's IDAT and bucket-counting pixels in
+  the chart band to confirm content rendered (see prior session for a
+  worked example). Avoid the temptation to "just look" — declare that
+  you cannot and pick a programmatic surrogate.
+
+### 3.6.1 Code Maintainability
+
+Whenever touching existing code, prefer leaving it **more** maintainable than
+you found it. Concretely:
+- Factor long inline blocks into named helpers; one responsibility each.
+- Delete dead/abandoned variable initializations and unreachable branches
+  (e.g. a half-finished GSAP timeline immediately followed by `.kill()` and
+  a restart — write the final version, not both).
+- Hoist duplicated magic numbers (cell gap, bar height, palette tokens,
+  durations) into a single named constant block at the top of the module.
+- Keep the IIFE/scope shape of each script consistent with its neighbours;
+  do not introduce a second IIFE in the same file unless it has a clearly
+  different lifecycle.
+- When a function accumulates more than ~3 levels of nesting, extract.
+- Comments only when they earn their keep — never restate code.
+
+### 3.7 GitHub Contributions Chart (homepage)
+
+A 3D isometric contribution graph rendered with **Three.js** (`InstancedMesh`
+of `BoxGeometry` + a `MeshStandardMaterial` extended via `onBeforeCompile`
+for per-instance emissive glow) and **GSAP** (staggered entrance wave +
+theme-switch pulse). Lives on the homepage inside a standard `.tui-panel`,
+sitting between the `[ WELCOME ]` banner and the two-column `grid-two-cols`.
+
+Build-time data path:
+
+- `scripts/fetch_github_contributions.mjs` queries the GitHub GraphQL API
+  (token read from `.env` `GITHUB_TOKEN`, user defaults to `alainux`) and
+  writes a compact `data/github_contributions.json` with the four
+  contribution levels (`level` ∈ 0..4) plus totals. It **soft-fails** (exit
+  0) on a missing token or network error so `zola build` never breaks.
+- `scripts/build.sh` invokes the fetcher *before* `zola build`/`serve`, so
+  every build refreshes the data alongside the timestamp in
+  `data/build.toml`.
+- `templates/partials/github_contributions.html` `load_data`s that JSON,
+  guards the whole section on its presence (`{% if gh %}`), emits a
+  `<script type="application/json" id="gh-contrib-data">` blob, then a
+  `<script type="module">` for `static/js/contrib-chart.js`.
+
+Runtime:
+
+- `static/js/contrib-chart.js` is loaded only on the homepage (no global
+  weight). It lazy-imports `three@0.169.0` + `gsap@3.12.5` from `esm.sh`
+  (same module-graph philosophy as the KaTeX CDN include — no
+  npm/bundler). The chart renders to `#gh-contrib-canvas` inside
+  `.gh-chart-stage`, exposes a legend swatch row, and supports
+  `OrbitControls` drag-to-rotate with auto-rotate that pauses 4s after
+  interaction.
+- Theme is honoured by reading Tokyo-Night CSS variables off `:root` via
+  `getComputedStyle`. A `MutationObserver` on `document.documentElement`
+  watches `data-theme` and recomputes every instance colour + the grid
+  helper, then replays the entrance animation so the bar高三 swaps
+  visibly.
+- A CSS partial `sass/_github_chart.scss` (imported between `boxes` and
+  `navigation` in `sass/style.scss`) styles the canvas + legend swatches
+  and includes light-theme overrides.
+- `prefers-reduced-motion` users get a shorter static-friendly canvas
+  height; `ResizeObserver` keeps the aspect correct across the centered /
+  full layout toggle.

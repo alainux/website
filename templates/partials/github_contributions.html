@@ -1,0 +1,73 @@
+{# GitHub contributions isometric 3D chart (Three.js + GSAP + custom shaders).
+   Data is fetched at build time by scripts/fetch_github_contributions.mjs
+   into data/github_contributions.json. Falls back gracefully if missing. #}
+{% set gh = load_data(path="data/github_contributions.json", format="json", required=false) %}
+{% if gh %}
+
+<section class="tui-panel gh-chart-panel" id="gh-chart-panel">
+  <div class="tui-panel__head">
+    <h2 class="tui-panel__title">[ ACTIVITY ]</h2>
+  </div>
+
+  <div class="tui-panel__body gh-chart-body">
+    {# ── Stage fills entire panel body. Canvas renders underneath
+       the right-side commit log so the 3D chart visually extends
+       behind it. ── #}
+    <div class="gh-chart-stage" id="gh-chart-stage">
+      <canvas id="gh-contrib-canvas" aria-label="Isometric 3D GitHub contribution chart"></canvas>
+      <div class="gh-tooltip" id="gh-tooltip" role="status" aria-live="polite"></div>
+
+      {# ── Right-side commit log overlay (HTML, not three.js) ── #}
+      <aside class="gh-log" id="gh-log" aria-label="Recent commits">
+        <div class="gh-log__section">
+          <h3 class="gh-log__title">[ LOG ]</h3>
+          <ul class="gh-log__list">
+            {% for c in gh.commits | slice(end=5) %}
+            <li class="gh-log__item">
+              <a href="{{ c.repoUrl }}/commit/{{ c.sha }}" target="_blank" rel="noopener noreferrer" class="gh-log__commit">
+                <span class="gh-log__sha">{{ c.sha }}</span>
+                <span class="gh-log__date">{{ c.date | date(format="%m-%d") }}</span>
+                <span class="gh-log__msg">{{ c.message }}</span>
+              </a>
+            </li>
+            {% else %}
+            <li class="gh-log__empty">› no recent commits</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% if gh.repos and gh.repos | length > 0 %}
+        <div class="gh-log__section">
+          <h3 class="gh-log__title">[ REPOSITORIES ]</h3>
+          <ul class="gh-log__list gh-log__list--repos">
+            {% for r in gh.repos %}
+            <li class="gh-log__item gh-log__repo-item">
+              {% if r.url %}
+              <a href="{{ r.url }}" target="_blank" rel="noopener noreferrer" class="gh-log__repo">
+                <span class="gh-log__repo-count">{{ r.count }}</span>
+                <span class="gh-log__repo-name">{{ r.name }}</span>
+              </a>
+              {% else %}
+              <span class="gh-log__repo gh-log__repo--masked">
+                <span class="gh-log__repo-count">{{ r.count }}</span>
+                <span class="gh-log__repo-name">{{ r.name }}</span>
+              </span>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+      </aside>
+    </div>
+  </div>
+
+  <nav class="tui-panel__foot tui-panel__foot--right" aria-label="GitHub profile">
+    <a href="https://github.com/{{ gh.user }}" target="_blank" rel="noopener noreferrer" class="terminal-btn">[ VIEW PROFILE ]</a>
+  </nav>
+</section>
+
+{# Embed contribution data for the chart script. JSON.stringify keeps it valid JS. #}
+<script id="gh-contrib-data" type="application/json">{{ gh | json_encode() | safe }}</script>
+
+<script type="module" src="{{ get_url(path='js/contrib-chart.js', trailing_slash=false) }}"></script>
+{% endif %}
