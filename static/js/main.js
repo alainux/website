@@ -57,8 +57,8 @@
   paintLayout();
 
   /* ── Word count + read time ──────────────────────────────── */
-  var wordsEl = document.querySelector('#window-body ~ .vim-winbar #winbar-words');
-  var readTimeEl = document.querySelector('#window-body ~ .vim-winbar #winbar-readtime');
+  var wordsEl = document.getElementById('winbar-words');
+  var readTimeEl = document.getElementById('winbar-readtime');
 
   function paintStats() {
     var text = windowBody ? windowBody.textContent || '' : '';

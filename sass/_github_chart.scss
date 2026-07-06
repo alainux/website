@@ -85,9 +85,9 @@
   top: 0;
   right: 0;
   bottom: 0;
-    width: clamp(240px, 30%, 360px);
-    padding: 1.1rem 0.8rem;
-    max-height: 380px;
+  width: clamp(240px, 30%, 360px);
+  padding: 1.1rem 0.8rem;
+  max-height: 380px;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;

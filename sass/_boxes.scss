@@ -34,11 +34,10 @@
   margin: 2.25rem 0 2.25rem;
   background-color: transparent;
   border: 1px solid var(--border-soft);
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: border-color 0.2s ease;
 
   &:hover {
     border-color: var(--accent);
-    box-shadow: 0 0 0 1px var(--accent-glow);
   }
 }
 
@@ -87,7 +86,7 @@
   padding: 0 8px;
   background-color: var(--chip-bg);
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: var(--chip-font-size);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -137,7 +136,7 @@
   padding: 0 8px;
   background-color: var(--chip-bg);
   font-family: var(--font-mono);
-  font-size: var(--font-size-md);
+  font-size: var(--chip-font-size);
   font-weight: 700;
   color: var(--fg-dim);
   white-space: nowrap;

@@ -50,7 +50,7 @@
       </ul>
     </div>
     <nav class="tui-panel__foot tui-panel__foot--right" aria-label="View all posts">
-      <a href="{{ get_url(path="blog/") }}" class="terminal-btn">[{{ config.extra.view_all_posts }}]</a>
+      <a href="{{ get_url(path="blog/") }}" class="terminal-btn">[ {{ config.extra.view_all_posts }} ]</a>
     </nav>
   </section>
 
@@ -76,7 +76,7 @@
     </div>
     {% if projects_section and projects_section.pages | length > 5 %}
     <nav class="tui-panel__foot tui-panel__foot--right" aria-label="View all projects">
-      <a href="{{ get_url(path="projects/") }}" class="terminal-btn">[{{ config.extra.view_all_projects }}]</a>
+      <a href="{{ get_url(path="projects/") }}" class="terminal-btn">[ {{ config.extra.view_all_projects }} ]</a>
     </nav>
     {% endif %}
   </section>

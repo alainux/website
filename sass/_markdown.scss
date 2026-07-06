@@ -70,22 +70,24 @@
       line-height: 1.6;
     }
 
-    /* Language label (if added by highlighter) */
+    /* Language label — sits outside `pre` at the top-right
+       corner, masking the pre's top-right border with the panel
+       background so it reads as a Vim ft= indicator. */
     &::before {
       content: attr(data-language);
       position: absolute;
-      top: -1px;
-      right: -1px;
-      padding: 2px 8px;
+      top: -9px;
+      right: 8px;
+      height: 16px;
+      padding: 0 8px;
       background: var(--bg);
       border: 1px solid var(--border);
-      border-bottom: none;
-      border-right: none;
       font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
       color: var(--fg-dim);
       font-family: var(--font-mono);
+      line-height: 14px;
     }
   }
 
@@ -167,8 +169,14 @@
     }
   }
 
-  /* --- Links — bracketed, TUI-style --- */
-  a:not(.terminal-btn):not(.item-tag):not(.terminal-link):not(.nav-item):not(.status-segment) {
+  /* --- Links — bracketed, TUI-style ---
+     Scoped to the .markdown-content wrapper so chrome
+     (statusline, winbar, hamburger, sidebar logs) keeps its
+     own visual conventions. Uses :where() so this rule stays
+     at specificity 0,0,0 and doesn't beat the explicit
+     overrides (e.g. .terminal-btn, .item-tag) on the same
+     element. */
+  & :where(a):not(.terminal-btn):not(.item-tag):not(.terminal-link) {
     color: var(--accent);
     text-decoration: none;
     transition: color 0.15s ease;

@@ -39,7 +39,7 @@ a {
 /* Focus visible - TUI style dashed outline */
 :focus-visible {
   outline: 1px dashed var(--green);
-  outline-offset: 2px;
+  outline-offset: -2px;
 }
 
 /* Selection colors */

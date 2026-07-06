@@ -381,20 +381,28 @@ import { gsap } from 'https://esm.sh/gsap@3.12.5';
 
   /* ── Entrance animation ───────────────────────────────────── */
   const hs = new Float32Array(TOTAL).fill(startH);
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const tlEnter = gsap.timeline({ delay: 0.12 });
-  for (let i = 0; i < TOTAL; i++) {
-    const c = cells[i];
-    const stagger = c.monthIdx * 0.06 + Math.abs(c.x) * 0.01 + Math.abs(c.z) * 0.005;
-    tlEnter.to(
-      hs,
-      { [i]: cells[i].targetH, duration: 0.7, ease: 'elastic.out(1, 0.7)' },
-      stagger
-    );
+  if (reduced) {
+    for (let i = 0; i < TOTAL; i++) hs[i] = cells[i].targetH;
+    writeInstances();
+  } else {
+    for (let i = 0; i < TOTAL; i++) {
+      const c = cells[i];
+      const stagger = c.monthIdx * 0.06 + Math.abs(c.x) * 0.01 + Math.abs(c.z) * 0.005;
+      tlEnter.to(
+        hs,
+        { [i]: cells[i].targetH, duration: 0.7, ease: 'elastic.out(1, 0.7)' },
+        stagger
+      );
+    }
+    tlEnter.eventCallback('onUpdate', writeInstances);
   }
-  tlEnter.eventCallback('onUpdate', () => {
+
+  function writeInstances() {
     for (let i = 0; i < TOTAL; i++) writeInstance(i, hs[i]);
     mesh.instanceMatrix.needsUpdate = true;
-  });
+  }
 
   /* ── Auto-fit camera ──────────────────────────────────────── */
   function fitCameraToChart() {
@@ -461,8 +469,9 @@ import { gsap } from 'https://esm.sh/gsap@3.12.5';
       }
     }
     if (tooltipEl && hoveredIdx >= 0) {
-      tooltipEl.style.left = (e.clientX - r.left + 14) + 'px';
-      tooltipEl.style.top  = (e.clientY - r.top  - 6) + 'px';
+      tooltipEl.style.transform =
+        'translate3d(' + (e.clientX - r.left + 14) + 'px,' +
+                      (e.clientY - r.top  - 6) + 'px, 0)';
     }
   });
 
@@ -543,7 +552,7 @@ import { gsap } from 'https://esm.sh/gsap@3.12.5';
   function applyTheme() {
     pal = paletteFromTheme();
     applyColors();
-    
+
     scene.background.set(pal.bg);
 
     scene.remove(grid);
@@ -555,6 +564,11 @@ import { gsap } from 'https://esm.sh/gsap@3.12.5';
     if (todayRing) todayRing.material.color.set(pal.accent);
 
     buildMonthLabels();
+
+    if (!reduced) {
+      for (let i = 0; i < TOTAL; i++) hs[i] = startH;
+      tlEnter.restart();
+    }
   }
   new MutationObserver(applyTheme).observe(document.documentElement, {
     attributes: true,
