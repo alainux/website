@@ -6,6 +6,8 @@
 {% set wb_build = load_data(path="data/build.toml", format="toml", required=false) %}
 {% set wb_updated_label = wb_build.human | default(value="unknown") %}
 {% set wb_updated_title = wb_build.iso   | default(value="unknown") %}
+{# Copyright year tracks the build year so it never goes stale. #}
+{% set wb_copyright_year = wb_build.human | default(value="2026") | split(pat="-") | first %}
 
 {% set home_url = home_url | default(value=get_url(path="")) %}
 
@@ -33,7 +35,7 @@
       <a href="{{ home_url }}" class="back-link">‹ home</a>
     </div>
     <div class="winbar-item winbar-copyright" id="winbar-copyright">
-      <span class="winbar-text">© 2026 {{ config.title }}</span>
+      <span class="winbar-text">© {{ wb_copyright_year }} {{ config.title }}</span>
     </div>
   </div>
 </footer>

@@ -1,19 +1,33 @@
 {% extends "base.html" %}
 
-{% block title %}{{ config.title }}{% endblock %}
-
-{% block head_extra %}
-<meta http-equiv="refresh" content="0;url={{ get_url(path='blog/') }}">
-{% endblock head_extra %}
+{% block title %}Tags | {{ config.title }}{% endblock %}
+{% block description %}All post tags on {{ config.title }}.{% endblock %}
+{% block og_title %}Tags{% endblock %}
+{% block og_description %}Browse all topics tagged on {{ config.title }}.{% endblock %}
 
 {% block content %}
 <div class="tui-panel">
   <div class="tui-panel__head">
-    <h2 class="tui-panel__title">[ REDIRECT ]</h2>
+    <h2 class="tui-panel__title">[ TAGS ]</h2>
   </div>
   <div class="tui-panel__body">
-    <p class="welcome-desc">> Redirecting to the blog…</p>
-    <p class="welcome-desc">Filter posts by tag on the <a href="{{ get_url(path="blog/") }}">blog page</a>.</p>
+    <p class="welcome-desc">> All topics used across the blog. Select one to filter posts:</p>
+
+    {% set tags_taxonomy = get_taxonomy(kind="tags") %}
+    {% if tags_taxonomy.items %}
+    <nav class="section-tag-filter" aria-label="All tags">
+      <div class="tags-cloud">
+        {% for term in tags_taxonomy.items %}
+          <a href="{{ term.permalink }}" class="item-tag">#{{ term.name }} ({{ term.pages | length }})</a>
+        {% endfor %}
+      </div>
+    </nav>
+    {% else %}
+    <p class="welcome-desc">No tags yet.</p>
+    {% endif %}
   </div>
+  <nav class="tui-panel__foot tui-panel__foot--right" aria-label="Tag navigation">
+    <a href="{{ get_url(path="blog/") }}" class="terminal-btn">[ BACK TO BLOG ]</a>
+  </nav>
 </div>
 {% endblock content %}

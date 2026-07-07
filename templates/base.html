@@ -6,13 +6,6 @@
 {% set cv_url    = get_url(path="cv") %}
 {% set cont_url  = get_url(path="contact") %}
 {% set lang_is_es = page.extra.lang is defined and page.extra.lang == "es" %}
-
-{# Last-built timestamp injected by scripts/build.sh -> data/build.toml.
-   Falls back to "unknown" so the winbar never breaks. #}
-{% set build_data = load_data(path="data/build.toml", format="toml", required=false) %}
-{% set build_iso  = build_data.iso   | default(value="unknown") %}
-{% set build_human = build_data.human | default(value="unknown") %}
-{% set site_updated_label = build_human %}
 <html lang="{% block html_lang %}{{ page.extra.lang | default(value='en') }}{% endblock %}" data-theme="dark" data-layout="centered">
 <head>
   <meta charset="UTF-8">
@@ -29,11 +22,15 @@
   <meta property="og:url" content="{{ current_url | safe }}">
   <meta property="og:type" content="{% block og_type %}website{% endblock og_type %}">
   <meta property="og:locale" content="{{ page.extra.lang | default(value='en') }}">
+  {% set og_image = page.extra.og_image | default(value=config.extra.og_image) %}
+  {% if og_image %}<meta property="og:image" content="{{ get_url(path=og_image) }}">
+  <meta property="og:image:alt" content="{{ config.title }}">
+  <meta name="twitter:image" content="{{ get_url(path=og_image) }}">{% endif %}
   {% block og_article %}{% endblock og_article %}
 
   {% block head_extra %}{% endblock head_extra %}
 
-  <meta name="twitter:card" content="{% block twitter_card %}summary{% endblock twitter_card %}">
+  <meta name="twitter:card" content="{% block twitter_card %}summary_large_image{% endblock twitter_card %}">
   <meta name="twitter:title" content="{% block twitter_title %}{{ config.title }}{% endblock twitter_title %}">
   <meta name="twitter:description" content="{% block twitter_description %}{{ config.description }}{% endblock twitter_description %}">
 
@@ -43,6 +40,7 @@
   <!-- Self-hosted Nerd Font preloads -->
   <link rel="preload" as="font" type="font/ttf" crossorigin href="{{ get_url(path='fonts/JetBrainsMono-Regular.ttf') }}">
   <link rel="preload" as="font" type="font/ttf" crossorigin href="{{ get_url(path='fonts/JetBrainsMono-Bold.ttf') }}">
+  <link rel="preload" as="font" type="font/ttf" crossorigin href="{{ get_url(path='fonts/JetBrainsMono-Italic.ttf') }}">
 
   <script src="{{ get_url(path='js/prepaint.js', trailing_slash=false) }}"></script>
 

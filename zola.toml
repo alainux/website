@@ -42,3 +42,7 @@ latest_projects = "LATEST PROJECTS"
 back_to_home = "BACK TO HOME"
 view_all_posts = "VIEW ALL POSTS"
 view_all_projects = "VIEW ALL PROJECTS"
+
+# Default social-share image (1200x630 PNG in static/). Per-page override
+# via frontmatter `extra.og_image`.
+og_image = "images/og.png"

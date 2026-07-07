@@ -60,13 +60,8 @@
   font-style: italic;
   font-display: swap;
 }
-@font-face {
-  font-family: 'JetBrainsMono Nerd Font';
-  src: url('/fonts/JetBrainsMono-BoldItalic.ttf') format('truetype');
-  font-weight: 700;
-  font-style: italic;
-  font-display: swap;
-}
+/* BoldItalic intentionally omitted: no token combines 700 + italic,
+   so the face would only trigger a wasted network request. */
 
 /* ============================================================
    THEME: Tokyo Night (dark, default)

@@ -210,7 +210,7 @@ export function initContribChart() {
       rebuildEdges();
     }
 
-    if (todayRing) {
+    if (todayRing && !reduced) {
       ringPulse.v += 0.04;
       const p = (Math.sin(ringPulse.v) + 1) / 2;
       todayRing.material.opacity = 0.55 + p * 0.45;

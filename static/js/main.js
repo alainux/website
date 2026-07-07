@@ -62,8 +62,14 @@
 
   function paintStats() {
     var prose = windowBody ? windowBody.querySelector('.markdown-content') : null;
-    var src = prose || windowBody;
-    var text = src ? (src.textContent || '') : '';
+    if (!prose) {
+      /* No article prose on this page (list/index/home) — the words /
+         read-time figures would only count chrome, so hide them. */
+      if (wordsEl) wordsEl.hidden = true;
+      if (readTimeEl) readTimeEl.hidden = true;
+      return;
+    }
+    var text = prose.textContent || '';
     var words = text.trim().split(/\s+/).filter(Boolean).length;
     var mins = Math.max(1, Math.ceil(words / 220));
     if (wordsEl) wordsEl.querySelector('.winbar-text').textContent = words.toLocaleString() + ' words';

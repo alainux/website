@@ -434,6 +434,8 @@ Winbar (footer)
     padding: 0 var(--bar-pad-x);
     border-right: 1px solid var(--border);
 
+    &[hidden] { display: none; }
+
     &::before { content: "["; margin-right: 6px; color: var(--text-faint); }
     &::after  { content: "]"; margin-left: 6px; color: var(--text-faint); }
 
