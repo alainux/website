@@ -88,28 +88,31 @@
 }
 
 /* ──────────────────────────────────────────────────────────────
-   Tag chip — dashed green, hover-fills
+   Tag chip — soft tinted pill.
+   Colour comes from per-chip custom props (--tag-fg / --tag-bg) set
+   by the rotation below, so the base + hover styles stay DRY and
+   every chip (filter cloud and inline post tags alike) is coloured.
    ────────────────────────────────────────────────────────────── */
 .item-tag {
   display: inline-flex;
   align-items: center;
   gap: 4px;
   padding: 2px 8px;
-  border: 1px dashed var(--border);
-  background: transparent;
-  color: var(--success);
+  border: 1px solid var(--tag-bg, var(--border));
+  background: var(--tag-bg, transparent);
+  color: var(--tag-fg, var(--success));
   font-family: var(--font-mono);
   font-size: var(--font-size-sm);
   font-weight: 700;
   text-transform: uppercase;
   white-space: nowrap;
   text-decoration: none;
-  transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease;
+  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
 
   &:hover {
-    background-color: var(--success);
     color: var(--surface);
-    border-color: var(--success);
+    background: var(--tag-fg, var(--success));
+    border-color: var(--tag-fg, var(--success));
     text-decoration: none;
   }
 
@@ -117,25 +120,24 @@
     border-style: solid;
     color: var(--primary);
     border-color: var(--primary);
+    background: transparent;
     cursor: default;
 
     &:hover {
-      background-color: transparent;
+      background: transparent;
       color: var(--primary);
       border-color: var(--primary);
     }
   }
 }
 
-/* Lightweight nth-child rotation for unordered tag clouds —
-   cycles through warm / cool / rose / violet / green / magenta so
-   adjacent chips never share a hue. Skip the first chip (#1) to
-   keep the most common tag (always green). */
-.tags-cloud > .item-tag:nth-child(6n + 2) { color: var(--tag-warm); border-color: var(--tag-warm-bg); &:hover { background-color: var(--tag-warm); border-color: var(--tag-warm); color: var(--surface); } }
-.tags-cloud > .item-tag:nth-child(6n + 3) { color: var(--tag-cool); border-color: var(--tag-cool-bg); &:hover { background-color: var(--tag-cool); border-color: var(--tag-cool); color: var(--surface); } }
-.tags-cloud > .item-tag:nth-child(6n + 4) { color: var(--tag-rose); border-color: var(--tag-rose-bg); &:hover { background-color: var(--tag-rose); border-color: var(--tag-rose); color: var(--surface); } }
-.tags-cloud > .item-tag:nth-child(6n + 5) { color: var(--tag-violet); border-color: var(--tag-violet-bg); &:hover { background-color: var(--tag-violet); border-color: var(--tag-violet); color: var(--surface); } }
-.tags-cloud > .item-tag:nth-child(6n + 6) { color: var(--violet); border-color: var(--tag-violet-bg); &:hover { background-color: var(--violet); border-color: var(--violet); color: var(--surface); } }
+/* Five-hue rotation so adjacent chips never share a colour. Applied to
+   every .item-tag (filter cloud and inline tags) via position only. */
+.item-tag:nth-child(5n + 1) { --tag-fg: var(--success);  --tag-bg: var(--tag-success-bg); }
+.item-tag:nth-child(5n + 2) { --tag-fg: var(--tag-cool);   --tag-bg: var(--tag-cool-bg); }
+.item-tag:nth-child(5n + 3) { --tag-fg: var(--tag-violet); --tag-bg: var(--tag-violet-bg); }
+.item-tag:nth-child(5n + 4) { --tag-fg: var(--tag-warm);   --tag-bg: var(--tag-warm-bg); }
+.item-tag:nth-child(5n + 5) { --tag-fg: var(--tag-rose);   --tag-bg: var(--tag-rose-bg); }
 
 /* ──────────────────────────────────────────────────────────────
     Print button row (CV pages)

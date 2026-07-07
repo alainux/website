@@ -144,8 +144,11 @@
   --pill-bg:    rgba(125, 207, 255, 0.10);
   --pill-border: rgba(125, 207, 255, 0.40);
 
-  /* Tag chips — diversify hue so tag lists read as colourful.
-     Green (--success) is the default; the rest rotate via nth-child. */
+  /* Tag chips — a soft, tinted pill that rotates through five harmonious
+     hues (green, cyan, violet, orange, rose) so adjacent chips never share
+     a colour. Each chip reads --tag-fg / --tag-bg; the rotation below sets
+     them per position. */
+  --tag-success-bg: rgba(158, 206, 106, 0.12);
   --tag-warm:      #ff9e64;
   --tag-warm-bg:   rgba(255, 158, 100, 0.12);
   --tag-cool:      #7dcfff;
@@ -218,6 +221,7 @@
   --pill-bg:    rgba(0, 113, 151, 0.08);
   --pill-border: rgba(0, 113, 151, 0.30);
 
+  --tag-success-bg: rgba(88, 117, 57, 0.12);
   --tag-warm:      #b1561f;
   --tag-warm-bg:   rgba(177, 86, 31, 0.10);
   --tag-cool:      #007197;
