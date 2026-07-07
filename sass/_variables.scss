@@ -3,10 +3,12 @@
    ------------------------------------------------------------
    Two layers live here:
 
-   1. THEME — raw colour values for the active theme (Tokyo Night
-      by default). To retheme the whole site, replace this block
-      (and the [data-theme="light"] override). Nothing else in the
-      codebase references raw colours.
+   1. THEME — raw colour values per color theme. The default
+      (Tokyo Night) lives on :root; every other theme is keyed by
+      :root[data-color-theme="…"], set from config.extra.theme in
+      zola.toml (owner-only — visitors can't switch it). Each theme
+      ships a dark + light palette via [data-theme="light"]. Nothing
+      else in the codebase references raw colours.
 
    2. ROLE — semantic tokens that components actually consume
       (--surface, --text, --primary, --success, …). They are bound
@@ -241,4 +243,417 @@
   --md-code-block-function: #2e7de9;
   --md-code-block-type:     #007197;
   --md-code-block-operator: #1a1b26;
+}
+/* ============================================================
+   THEME: Gruvbox (dark)
+   ── Provenance: gruvbox (morhetz/gruvbox), dark palette.
+   ============================================================ */
+:root[data-color-theme="gruvbox"] {
+  --page-bg:      #1d2021;
+  --surface:      #282828;
+  --surface-alt:  #32302f;
+  --surface-hover: rgba(80, 73, 69, 0.45);
+
+  --text:       #ebdbb2;
+  --text-muted: #a89984;
+  --text-faint: #7c6f64;
+
+  --primary:        #83a598;
+  --primary-strong: #458588;
+  --success:        #b8bb26;
+  --warning:        #fabd2f;
+  --danger:         #fb4934;
+  --violet:         #d3869b;
+  --info:           #8ec07c;
+  --orange:         #fe8019;
+
+  --border:        #504945;
+  --border-strong: #665c54;
+  --border-focus:  #83a598;
+
+  --status-bg:          var(--surface-alt);
+  --status-fg:          var(--text);
+  --status-active-bg:   var(--surface-hover);
+  --status-active-fg:   var(--primary);
+
+  --chip-bg: var(--surface);
+  --page-bg-grad: linear-gradient(180deg, #1d2021 0%, #16181a 100%);
+  --accent-glow: rgba(131, 165, 152, 0.08);
+  --head-fg: var(--violet);
+  --glare-strong: rgba(131, 165, 152, 0.12);
+  --glare-soft:   rgba(211, 134, 155, 0.05);
+  --panel-hover-border: rgba(131, 165, 152, 0.45);
+
+  --pill-fg:    #8ec07c;
+  --pill-bg:    rgba(142, 192, 124, 0.10);
+  --pill-border: rgba(142, 192, 124, 0.40);
+
+  --tag-success-bg: rgba(184, 187, 38, 0.12);
+  --tag-warm:      #fe8019;
+  --tag-warm-bg:   rgba(254, 128, 25, 0.12);
+  --tag-cool:      #8ec07c;
+  --tag-cool-bg:   rgba(142, 192, 124, 0.12);
+  --tag-rose:      #fb4934;
+  --tag-rose-bg:   rgba(251, 73, 52, 0.12);
+  --tag-violet:    #d3869b;
+  --tag-violet-bg: rgba(211, 134, 155, 0.12);
+
+  --md-code-inline-bg:   #32302f;
+  --md-code-inline-fg:   #b8bb26;
+  --md-code-inline-edge: #458588;
+  --md-code-block-bg:       #282828;
+  --md-code-block-fg:       #ebdbb2;
+  --md-code-block-edge:     #458588;
+  --md-code-block-comment:  #a89984;
+  --md-code-block-keyword:  #d3869b;
+  --md-code-block-string:   #b8bb26;
+  --md-code-block-number:   #fe8019;
+  --md-code-block-function: #83a598;
+  --md-code-block-type:     #8ec07c;
+  --md-code-block-operator: #ebdbb2;
+}
+
+/* ============================================================
+   THEME: Gruvbox (light)
+   ── Provenance: gruvbox (morhetz/gruvbox), light palette.
+   ============================================================ */
+:root[data-color-theme="gruvbox"][data-theme="light"] {
+  --page-bg:      #f2e5bc;
+  --surface:      #fbf1d5;
+  --surface-alt:  #ebdbb2;
+  --surface-hover: rgba(213, 196, 161, 0.5);
+
+  --text:       #282828;
+  --text-muted: #665c54;
+  --text-faint: #928374;
+
+  --primary:        #458588;
+  --primary-strong: #076678;
+  --success:        #98971a;
+  --warning:        #d79921;
+  --danger:         #cc241d;
+  --violet:         #b16286;
+  --info:           #689d6a;
+  --orange:         #d65d0e;
+
+  --border:        #d5c4a1;
+  --border-strong: #a89984;
+  --border-focus:  #458588;
+
+  --status-bg:          var(--surface-alt);
+  --status-fg:          var(--text);
+  --status-active-bg:   var(--surface-hover);
+  --status-active-fg:   var(--primary);
+
+  --chip-bg: var(--surface);
+  --page-bg-grad: linear-gradient(180deg, #fbf1d5 0%, #f2e5bc 100%);
+  --accent-glow: rgba(69, 133, 136, 0.14);
+  --head-fg: var(--violet);
+  --glare-strong: rgba(69, 133, 136, 0.10);
+  --glare-soft:   rgba(177, 98, 134, 0.05);
+  --panel-hover-border: rgba(69, 133, 136, 0.40);
+
+  --pill-fg:    #689d6a;
+  --pill-bg:    rgba(104, 157, 106, 0.10);
+  --pill-border: rgba(104, 157, 106, 0.40);
+
+  --tag-success-bg: rgba(152, 151, 26, 0.12);
+  --tag-warm:      #d65d0e;
+  --tag-warm-bg:   rgba(214, 93, 14, 0.12);
+  --tag-cool:      #689d6a;
+  --tag-cool-bg:   rgba(104, 157, 106, 0.12);
+  --tag-rose:      #cc241d;
+  --tag-rose-bg:   rgba(204, 36, 29, 0.12);
+  --tag-violet:    #b16286;
+  --tag-violet-bg: rgba(177, 98, 134, 0.12);
+
+  --md-code-inline-bg:   #ebdbb2;
+  --md-code-inline-fg:   #98971a;
+  --md-code-inline-edge: #a89984;
+  --md-code-block-bg:       #ebdbb2;
+  --md-code-block-fg:       #282828;
+  --md-code-block-edge:     #a89984;
+  --md-code-block-comment:  #928374;
+  --md-code-block-keyword:  #b16286;
+  --md-code-block-string:   #98971a;
+  --md-code-block-number:   #d65d0e;
+  --md-code-block-function: #458588;
+  --md-code-block-type:     #689d6a;
+  --md-code-block-operator: #282828;
+}
+
+/* ============================================================
+   THEME: Catppuccin (Mocha, dark)
+   ── Provenance: catppuccin/mocha.
+   ============================================================ */
+:root[data-color-theme="catppuccin"] {
+  --page-bg:      #11111b;
+  --surface:      #1e1e2e;
+  --surface-alt:  #181825;
+  --surface-hover: rgba(49, 50, 68, 0.5);
+
+  --text:       #cdd6f4;
+  --text-muted: #a6adc8;
+  --text-faint: #6c7086;
+
+  --primary:        #89b4fa;
+  --primary-strong: #587bc0;
+  --success:        #a6e3a1;
+  --warning:        #f9e2af;
+  --danger:         #f38ba8;
+  --violet:         #cba6f7;
+  --info:           #94e2d5;
+  --orange:         #fab387;
+
+  --border:        #313244;
+  --border-strong: #585b70;
+  --border-focus:  #89b4fa;
+
+  --status-bg:          var(--surface-alt);
+  --status-fg:          var(--text);
+  --status-active-bg:   var(--surface-hover);
+  --status-active-fg:   var(--primary);
+
+  --chip-bg: var(--surface);
+  --page-bg-grad: linear-gradient(180deg, #11111b 0%, #0c0c14 100%);
+  --accent-glow: rgba(137, 180, 250, 0.08);
+  --head-fg: var(--violet);
+  --glare-strong: rgba(137, 180, 250, 0.12);
+  --glare-soft:   rgba(203, 166, 247, 0.05);
+  --panel-hover-border: rgba(137, 180, 250, 0.45);
+
+  --pill-fg:    #94e2d5;
+  --pill-bg:    rgba(148, 226, 213, 0.10);
+  --pill-border: rgba(148, 226, 213, 0.40);
+
+  --tag-success-bg: rgba(166, 227, 161, 0.12);
+  --tag-warm:      #fab387;
+  --tag-warm-bg:   rgba(250, 179, 135, 0.12);
+  --tag-cool:      #94e2d5;
+  --tag-cool-bg:   rgba(148, 226, 213, 0.12);
+  --tag-rose:      #f38ba8;
+  --tag-rose-bg:   rgba(243, 139, 168, 0.12);
+  --tag-violet:    #cba6f7;
+  --tag-violet-bg: rgba(203, 166, 247, 0.12);
+
+  --md-code-inline-bg:   #181825;
+  --md-code-inline-fg:   #a6e3a1;
+  --md-code-inline-edge: #587bc0;
+  --md-code-block-bg:       #181825;
+  --md-code-block-fg:       #cdd6f4;
+  --md-code-block-edge:     #587bc0;
+  --md-code-block-comment:  #6c7086;
+  --md-code-block-keyword:  #cba6f7;
+  --md-code-block-string:   #a6e3a1;
+  --md-code-block-number:   #fab387;
+  --md-code-block-function: #89b4fa;
+  --md-code-block-type:     #94e2d5;
+  --md-code-block-operator: #cdd6f4;
+}
+
+/* ============================================================
+   THEME: Catppuccin (Latte, light)
+   ── Provenance: catppuccin/latte.
+   ============================================================ */
+:root[data-color-theme="catppuccin"][data-theme="light"] {
+  --page-bg:      #bcc0cc;
+  --surface:      #eff1f5;
+  --surface-alt:  #e6e9ef;
+  --surface-hover: rgba(204, 208, 218, 0.6);
+
+  --text:       #4c4f69;
+  --text-muted: #6c6f85;
+  --text-faint: #9ca0b0;
+
+  --primary:        #1e66f5;
+  --primary-strong: #1847c4;
+  --success:        #40a02b;
+  --warning:        #df8e1d;
+  --danger:         #d20f39;
+  --violet:         #8839ef;
+  --info:           #179299;
+  --orange:         #fe640b;
+
+  --border:        #ccd0da;
+  --border-strong: #aeb4c4;
+  --border-focus:  #1e66f5;
+
+  --status-bg:          var(--surface-alt);
+  --status-fg:          var(--text);
+  --status-active-bg:   var(--surface-hover);
+  --status-active-fg:   #1e66f5;
+
+  --chip-bg: var(--surface);
+  --page-bg-grad: linear-gradient(180deg, #c6cad6 0%, #bcc0cc 100%);
+  --accent-glow: rgba(30, 102, 245, 0.14);
+  --head-fg: var(--violet);
+  --glare-strong: rgba(30, 102, 245, 0.10);
+  --glare-soft:   rgba(136, 57, 239, 0.05);
+  --panel-hover-border: rgba(30, 102, 245, 0.40);
+
+  --pill-fg:    #179299;
+  --pill-bg:    rgba(23, 146, 153, 0.10);
+  --pill-border: rgba(23, 146, 153, 0.40);
+
+  --tag-success-bg: rgba(64, 160, 43, 0.12);
+  --tag-warm:      #fe640b;
+  --tag-warm-bg:   rgba(254, 100, 11, 0.12);
+  --tag-cool:      #179299;
+  --tag-cool-bg:   rgba(23, 146, 153, 0.12);
+  --tag-rose:      #d20f39;
+  --tag-rose-bg:   rgba(210, 15, 57, 0.12);
+  --tag-violet:    #8839ef;
+  --tag-violet-bg: rgba(136, 57, 239, 0.12);
+
+  --md-code-inline-bg:   #e6e9ef;
+  --md-code-inline-fg:   #40a02b;
+  --md-code-inline-edge: #aeb4c4;
+  --md-code-block-bg:       #e6e9ef;
+  --md-code-block-fg:       #4c4f69;
+  --md-code-block-edge:     #aeb4c4;
+  --md-code-block-comment:  #9ca0b0;
+  --md-code-block-keyword:  #8839ef;
+  --md-code-block-string:   #40a02b;
+  --md-code-block-number:   #fe640b;
+  --md-code-block-function: #1e66f5;
+  --md-code-block-type:     #179299;
+  --md-code-block-operator: #4c4f69;
+}
+
+/* ============================================================
+   THEME: Solarized (dark)
+   ── Provenance: solarized (altercation/solarized), dark palette.
+   ============================================================ */
+:root[data-color-theme="solarized"] {
+  --page-bg:      #002b36;
+  --surface:      #073642;
+  --surface-alt:  #002b36;
+  --surface-hover: rgba(88, 110, 117, 0.4);
+
+  --text:       #839496;
+  --text-muted: #657b83;
+  --text-faint: #586e75;
+
+  --primary:        #268bd2;
+  --primary-strong: #1a5f93;
+  --success:        #859900;
+  --warning:        #b58900;
+  --danger:         #dc322f;
+  --violet:         #6c71c4;
+  --info:           #2aa198;
+  --orange:         #cb4b16;
+
+  --border:        #586e75;
+  --border-strong: #657b83;
+  --border-focus:  #268bd2;
+
+  --status-bg:          var(--surface-alt);
+  --status-fg:          var(--text);
+  --status-active-bg:   var(--surface-hover);
+  --status-active-fg:   var(--primary);
+
+  --chip-bg: var(--surface);
+  --page-bg-grad: linear-gradient(180deg, #002b36 0%, #001f27 100%);
+  --accent-glow: rgba(38, 139, 210, 0.08);
+  --head-fg: var(--violet);
+  --glare-strong: rgba(38, 139, 210, 0.12);
+  --glare-soft:   rgba(211, 54, 130, 0.05);
+  --panel-hover-border: rgba(38, 139, 210, 0.45);
+
+  --pill-fg:    #2aa198;
+  --pill-bg:    rgba(42, 161, 152, 0.12);
+  --pill-border: rgba(42, 161, 152, 0.40);
+
+  --tag-success-bg: rgba(133, 153, 0, 0.14);
+  --tag-warm:      #cb4b16;
+  --tag-warm-bg:   rgba(203, 75, 22, 0.14);
+  --tag-cool:      #2aa198;
+  --tag-cool-bg:   rgba(42, 161, 152, 0.14);
+  --tag-rose:      #dc322f;
+  --tag-rose-bg:   rgba(220, 50, 47, 0.14);
+  --tag-violet:    #6c71c4;
+  --tag-violet-bg: rgba(108, 113, 196, 0.14);
+
+  --md-code-inline-bg:   #002b36;
+  --md-code-inline-fg:   #859900;
+  --md-code-inline-edge: #586e75;
+  --md-code-block-bg:       #002b36;
+  --md-code-block-fg:       #839496;
+  --md-code-block-edge:     #586e75;
+  --md-code-block-comment:  #586e75;
+  --md-code-block-keyword:  #6c71c4;
+  --md-code-block-string:   #859900;
+  --md-code-block-number:   #cb4b16;
+  --md-code-block-function: #268bd2;
+  --md-code-block-type:     #2aa198;
+  --md-code-block-operator: #839496;
+}
+
+/* ============================================================
+   THEME: Solarized (light)
+   ── Provenance: solarized (altercation/solarized), light palette.
+   ============================================================ */
+:root[data-color-theme="solarized"][data-theme="light"] {
+  --page-bg:      #eee8d5;
+  --surface:      #fdf6e3;
+  --surface-alt:  #eee8d5;
+  --surface-hover: rgba(147, 161, 161, 0.22);
+
+  --text:       #657b83;
+  --text-muted: #586e75;
+  --text-faint: #93a1a1;
+
+  --primary:        #268bd2;
+  --primary-strong: #1a5f93;
+  --success:        #859900;
+  --warning:        #b58900;
+  --danger:         #dc322f;
+  --violet:         #6c71c4;
+  --info:           #2aa198;
+  --orange:         #cb4b16;
+
+  --border:        #e0d9c4;
+  --border-strong: #c9bfa3;
+  --border-focus:  #268bd2;
+
+  --status-bg:          var(--surface-alt);
+  --status-fg:          var(--text);
+  --status-active-bg:   var(--surface-hover);
+  --status-active-fg:   #268bd2;
+
+  --chip-bg: var(--surface);
+  --page-bg-grad: linear-gradient(180deg, #fdf6e3 0%, #eee8d5 100%);
+  --accent-glow: rgba(38, 139, 210, 0.12);
+  --head-fg: var(--violet);
+  --glare-strong: rgba(38, 139, 210, 0.10);
+  --glare-soft:   rgba(211, 54, 130, 0.05);
+  --panel-hover-border: rgba(38, 139, 210, 0.40);
+
+  --pill-fg:    #2aa198;
+  --pill-bg:    rgba(42, 161, 152, 0.12);
+  --pill-border: rgba(42, 161, 152, 0.40);
+
+  --tag-success-bg: rgba(133, 153, 0, 0.14);
+  --tag-warm:      #cb4b16;
+  --tag-warm-bg:   rgba(203, 75, 22, 0.14);
+  --tag-cool:      #2aa198;
+  --tag-cool-bg:   rgba(42, 161, 152, 0.14);
+  --tag-rose:      #dc322f;
+  --tag-rose-bg:   rgba(220, 50, 47, 0.14);
+  --tag-violet:    #6c71c4;
+  --tag-violet-bg: rgba(108, 113, 196, 0.14);
+
+  --md-code-inline-bg:   #eee8d5;
+  --md-code-inline-fg:   #859900;
+  --md-code-inline-edge: #e0d9c4;
+  --md-code-block-bg:       #eee8d5;
+  --md-code-block-fg:       #657b83;
+  --md-code-block-edge:     #e0d9c4;
+  --md-code-block-comment:  #93a1a1;
+  --md-code-block-keyword:  #6c71c4;
+  --md-code-block-string:   #859900;
+  --md-code-block-number:   #cb4b16;
+  --md-code-block-function: #268bd2;
+  --md-code-block-type:     #2aa198;
+  --md-code-block-operator: #657b83;
 }

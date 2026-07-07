@@ -31,6 +31,13 @@ description = "Personal site and blog — software engineering, electronics, mus
 [extra]
 site_name = "L4TT1C3"
 
+# ── Color theme ──────────────────────────────────────────────
+# Active terminal color theme. Owner-configured only — visitors
+# cannot switch it (the [☾/☀] button toggles brightness within the
+# active theme, not the palette family).
+# Options: tokyo-night (default) | gruvbox | catppuccin | solarized
+theme = "tokyo-night"
+
 # Date & display
 date_format = "%Y-%m-%d"
 

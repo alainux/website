@@ -6,7 +6,7 @@
 {% set cv_url    = get_url(path="cv") %}
 {% set cont_url  = get_url(path="contact") %}
 {% set lang_is_es = page.extra.lang is defined and page.extra.lang == "es" %}
-<html lang="{% block html_lang %}{{ page.extra.lang | default(value='en') }}{% endblock %}" data-theme="dark" data-layout="centered">
+<html lang="{% block html_lang %}{{ page.extra.lang | default(value='en') }}{% endblock %}" data-color-theme="{{ config.extra.theme | default(value='tokyo-night') }}" data-theme="dark" data-layout="centered">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
