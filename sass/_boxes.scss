@@ -34,10 +34,10 @@
   margin: 2.25rem 0 2.25rem;
   background-color: transparent;
   border: 1px solid var(--border-soft);
-  transition: border-color 0.25s ease;
+  transition: border-color 0.35s ease;
 
   &:hover {
-    border-color: var(--head-accent);
+    border-color: var(--panel-hover-border);
   }
 }
 
@@ -56,17 +56,17 @@
   right: 1px;
   bottom: 1px;
   left: 1px;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.45s ease;
   background:
     radial-gradient(
-      220px circle at var(--glare-x, 50%) var(--glare-y, 50%),
-      var(--rule-strong),
-      transparent 70%
+      200px circle at var(--glare-x, 50%) var(--glare-y, 50%),
+      var(--glare-strong),
+      transparent 65%
     ),
     linear-gradient(
       135deg,
       transparent 0%,
-      var(--rule-soft) 50%,
+      var(--glare-soft) 50%,
       transparent 100%
     );
 
@@ -200,16 +200,5 @@
 }
 
 /* ============================================================
-   Print
+   Print overrides live in _print.scss (imported after this).
    ============================================================ */
-@media print {
-  .tui-panel {
-    margin: 0.5rem 0 !important;
-    background: transparent !important;
-    border: 1px solid #ccc !important;
-  }
-  .tui-panel__head,
-  .tui-panel__foot { display: none !important; }
-  .tui-panel__glare { display: none !important; }
-  .tui-panel__body { padding: 0 !important; }
-}

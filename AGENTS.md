@@ -219,3 +219,51 @@ Runtime:
 - `prefers-reduced-motion` users get a shorter static-friendly canvas
   height; `ResizeObserver` keeps the aspect correct across the centered /
   full layout toggle.
+
+### 3.8 Display, Print & Accessibility Principles
+
+The theme targets three distinct rendering contexts that must each be
+handled deliberately: the **live terminal** (screen), the **printed / PDF
+page**, and **browser Reading Mode / distilled views**. Follow these
+principles whenever touching styles or templates:
+
+- **One palette, scoped by context.** Every colour is a CSS custom
+  property on `:root`, with a `[data-theme="light"]` override block. Any
+  surface that paints must reference a token — never a literal hex. This
+  single rule is what makes theme switching *and* the print reset possible
+  (`sass/_variables.scss`).
+- **Hover / motion stay restrained.** Interactive panels use a single
+  `.tui-panel__glare` layer whose intensity is governed by
+  `--glare-strong` / `--glare-soft` (low alpha) with a slow `~0.4s` fade;
+  the hover border uses `--panel-hover-border` (a soft blue), not a loud
+  accent. Avoid bright full-opacity gradients or fast, jarring
+  transitions.
+- **Print is a token reset, not a rewrite.** `@media print` in
+  `sass/_print.scss` re-declares the palette tokens on `:root` to a light
+  scheme (`--bg:#fff`, `--md-code-*` to readable greys, etc.) so every
+  `var(...)` surface repaints light instead of leaking the dark terminal
+  colours. Do **not** hand-paint each element — when a new token is added,
+  extend the token reset rather than adding a one-off print override.
+- **Print chrome is structural, not decorative.** TUI borders are
+  `border:none` in print: a 1px frame repeats on every page fragment of a
+  long article and sits flush against the (zero-padded) body. Panel titles
+  are promoted to real `h2` headings; the 3D GitHub chart, footer actions
+  and glare layer are hidden. List bleed is neutralized
+  (`.terminal-list { margin: 0 }`) so Blog / Projects indexes don't shift
+  into the page margin.
+- **Chips & links print sober.** `.item-tag` / `.item-lang-badge` drop
+  their dashed colour border / uppercase and render as plain muted text.
+  Markdown links drop the `[ ]` TUI bracket `::before` / `::after`
+  decoration (`content:none`) so they read as plain text, never as a
+  dangling `[`.
+- **Reading Mode / a11y is separate from the screen.** Content meant only
+  for Reading Mode or assistive tech is marked `sr-only` (visually hidden
+  via `clip`, present in the a11y tree). Because Reading Mode strips author
+  CSS, an `sr-only` element re-emerges as plain text there. The math
+  warning (`.math-note`, gated on `page.extra.math`) uses exactly this:
+  hidden on the live site, announced to screen readers, visible in Reading
+  Mode, and `display:none` in print where KaTeX renders correctly.
+- **Print styles have a single owner.** All print rules live in
+  `_print.scss` (imported last). There must be no stray `@media print`
+  block in another partial (the old one in `_boxes.scss` was removed) —
+  keep print concerns in one place.

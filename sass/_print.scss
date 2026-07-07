@@ -5,6 +5,38 @@
    ============================================================ */
 
 @media print {
+  /* Reset palette tokens to a print-friendly light scheme. Every
+     surface that references var(--bg)/--border/--md-* then paints
+     light instead of leaking the dark terminal colours (e.g. the
+     code-block label, figure/table backgrounds, syntax tokens). */
+  :root {
+    --bg: #fff;
+    --bg-page: #fff;
+    --bg-darker: #fff;
+    --bg-highlight: transparent;
+    --bg-panel: #fff;
+    --border: #ccc;
+    --border-soft: #ccc;
+    --fg: #000;
+    --fg-dim: #444;
+    --fg-muted: #666;
+    --head-fg: #000;
+    --chip-bg: #fff;
+    --md-code-inline-bg: #f4f4f4;
+    --md-code-inline-fg: #000;
+    --md-code-inline-edge: #ccc;
+    --md-code-block-bg: #f4f4f4;
+    --md-code-block-fg: #000;
+    --md-code-block-edge: #ccc;
+    --md-code-block-comment:  #6a6a6a;
+    --md-code-block-keyword:  #333;
+    --md-code-block-string:   #000;
+    --md-code-block-number:   #000;
+    --md-code-block-function: #000;
+    --md-code-block-type:     #000;
+    --md-code-block-operator: #000;
+  }
+
   /* Hide all terminal chrome */
   .vim-statusline,
   .vim-winbar,
@@ -39,15 +71,46 @@
 
   .window-body { padding: 0 !important; }
 
-  /* Strip TUI panel frames: keep content, hide decorative bits */
+  /* Strip TUI panel frames: in print a 1px border sits flush against
+     the (zero-padded) body and repeats on every page fragment of a
+     long article, so we drop it. Structure is preserved by the visible
+     title, list separators and spacing instead. */
   .tui-panel {
-    margin: 0.5rem 0 !important;
-    border: 1px solid #ccc !important;
+    margin: 1.25rem 0 !important;
+    border: none !important;
     background: transparent !important;
   }
 
-  .tui-panel__head { display: none !important; }
+  /* Show panel titles as real headings instead of hiding them, so
+     articles and indexes print with a visible title. */
+  .tui-panel__head {
+    display: block !important;
+    position: static !important;
+    height: auto !important;
+    padding: 0 0 0.3rem 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+  }
+  .tui-panel__head .tui-panel__title {
+    font-size: 16pt !important;
+    color: #000 !important;
+    margin: 0 0 0.4rem !important;
+    border-bottom: 0.5pt solid #555 !important;
+    padding-bottom: 2pt !important;
+  }
   .tui-panel__body { padding: 0 !important; }
+
+  /* Hide footer actions and the (invisible-by-default) glare layer. */
+  .tui-panel__foot,
+  .tui-panel__glare { display: none !important; }
+
+  /* Hide the interactive 3D contribution chart and its overlay log. */
+  .gh-chart-panel,
+  .gh-chart-stage,
+  .gh-log { display: none !important; }
+
+  /* The Reading-Mode math warning is only useful on screen. */
+  .math-note { display: none !important; }
 
   /* Markdown typography — clean academic style */
   .markdown-content {
@@ -81,7 +144,8 @@
       color: #000 !important;
       text-decoration: none;
 
-      /* Print links as text (no underline) */
+      /* Drop the TUI [ ] bracket decoration around links. */
+      &::before,
       &[href]::after { content: none !important; }
     }
 
@@ -152,9 +216,37 @@
     padding: 0.5rem 0 !important;
   }
 
+  /* The on-screen list uses a full-bleed negative margin to sit
+     flush against the panel border. With the border/padding gone
+     in print that margin shoves the list into the page margin, so
+     reset it. */
+  .terminal-list {
+    margin: 0 !important;
+  }
+
   .item-link    { color: #000 !important; text-decoration: none !important; }
   .item-date    { color: #666 !important; }
   .project-desc { color: #333 !important; }
+
+  /* Sober tags in print: drop the dashed colour chip, render as
+     plain muted text so they read as metadata, not decoration. */
+  .item-tag {
+    color: #666 !important;
+    border: none !important;
+    background: transparent !important;
+    text-transform: none !important;
+    font-weight: normal !important;
+    padding: 0 !important;
+  }
+
+  .item-lang-badge {
+    color: #666 !important;
+    border: none !important;
+    background: transparent !important;
+    text-transform: none !important;
+    font-weight: normal !important;
+    padding: 0 !important;
+  }
 
   /* Page meta */
   .page-meta {

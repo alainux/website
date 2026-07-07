@@ -40,6 +40,13 @@
 
     <div class="terminal-divider"></div>
 
+    {% if page.extra.math %}
+    <div class="math-note" role="note">
+      <span class="math-note__icon" aria-hidden="true">⚠</span>
+      <span class="math-note__text">Equations are typeset with KaTeX and may not appear in browser Reading Mode or distilled views. Open the original page for the full math.</span>
+    </div>
+    {% endif %}
+
     <div class="markdown-content">
       {{ page.content | safe }}
     </div>

@@ -343,6 +343,25 @@
     overflow-x: auto;
     margin: 1.5rem 0 !important;
   }
+
+  /* Reading-Mode warning: KaTeX typesets into HTML+MathML, which
+     browser Reading Mode / distilled views often strip, leaving
+     broken equations. On the live site this is visually hidden
+     (sr-only) so it doesn't clutter reading, but it stays in the
+     accessibility tree for screen readers and — because Reading
+     Mode drops author CSS — re-emerges as plain text there.
+     Hidden entirely in print (where KaTeX renders correctly). */
+  .math-note {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
 }
 
 /* --- Page Meta Header --- */

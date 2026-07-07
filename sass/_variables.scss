@@ -108,6 +108,12 @@
   --rule-soft:  rgba(187, 154, 247, 0.18);   /* secondary divider (intentional purple-ish) */
   --rule-strong: rgba(122, 162, 247, 0.35);
 
+  /* Panel hover — deliberately restrained so the floating-window
+     feel stays elegant rather than noisy. */
+  --glare-strong: rgba(122, 162, 247, 0.12);
+  --glare-soft:   rgba(187, 154, 247, 0.05);
+  --panel-hover-border: rgba(122, 162, 247, 0.45);
+
   /* Pill / status accents (non-link) */
   --pill-fg:    #7dcfff;          /* static meta tags → cyan */
   --pill-bg:    rgba(125, 207, 255, 0.10);
@@ -196,6 +202,10 @@
   --head-accent: #b1561f;         /* warm hover — orange */
   --rule-soft:  rgba(136, 66, 211, 0.22);
   --rule-strong: rgba(46, 125, 233, 0.40);
+
+  --glare-strong: rgba(46, 125, 233, 0.10);
+  --glare-soft:   rgba(136, 66, 211, 0.05);
+  --panel-hover-border: rgba(46, 125, 233, 0.40);
 
   --pill-fg:    #007197;
   --pill-bg:    rgba(0, 113, 151, 0.08);
