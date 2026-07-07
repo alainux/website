@@ -92,19 +92,104 @@
     }
   }
 
-  /* Syntax-highlight token classes Zola emits from the
-     tokyonight syntax theme — re-map them so colors stay
-     consistent in dark AND light mode via the --md tokens. */
-  .z-code-comment      { color: var(--md-code-block-comment); }
-  .z-code-keyword,
-  .z-code-operator    { color: var(--md-code-block-keyword); }
-  .z-code-string      { color: var(--md-code-block-string); }
-  .z-code-number      { color: var(--md-code-block-number); }
-  .z-code-function    { color: var(--md-code-block-function); }
-  .z-code-type        { color: var(--md-code-block-type); }
-  .z-code-punctuation,
-  .z-code-operator    { color: var(--md-code-block-operator); }
-  .z-code-meta        { color: var(--md-code-block-comment); }
+  /* --- Syntax highlighting (giallo, style="class") ---
+     Zola emits semantic `.z-*` token classes (no inline colours). We
+     re-map them onto the `--md-code-block-*` role tokens — which already
+     vary per active color theme (`data-color-theme`) and brightness
+     (`[data-theme="light"]`) — so code highlighting tracks the site's
+     palette in every permutation. The base span inherits the block fg. */
+  .z-code { color: var(--md-code-block-fg); }
+
+  /* Highlighted lines (`hl_lines` annotation) */
+  .z-hl { background-color: var(--surface-hover); }
+
+  /* Comments / docs — muted */
+  .z-comment,
+  .z-documentation,
+  .z-jsdoc,
+  .z-quote            { color: var(--md-code-block-comment); font-style: italic; }
+
+  /* Strings / chars / regex — green */
+  .z-string,
+  .z-fstring,
+  .z-char,
+  .z-regexp,
+  .z-template-expression { color: var(--md-code-block-string); }
+
+  /* Numbers / units — orange */
+  .z-numeric,
+  .z-unit,
+  .z-constant        { color: var(--md-code-block-number); }
+
+  /* Keywords / storage / modifiers / flow — violet */
+  .z-keyword,
+  .z-storage,
+  .z-modifier,
+  .z-control,
+  .z-flow,
+  .z-logical,
+  .z-directive,
+  .z-preprocessor,
+  .z-import,
+  .z-export,
+  .z-return,
+  .z-declaration      { color: var(--md-code-block-keyword); }
+
+  /* Functions / calls — blue */
+  .z-function,
+  .z-function-call,
+  .z-constructor,
+  .z-special-method,
+  .z-method          { color: var(--md-code-block-function); }
+
+  /* Types / classes / namespaces — cyan */
+  .z-type,
+  .z-class,
+  .z-enummember,
+  .z-namespace,
+  .z-module,
+  .z-sys-types,
+  .z-inherited-class  { color: var(--md-code-block-type); }
+
+  /* Operators / punctuation / delimiters — fg */
+  .z-operator,
+  .z-punctuation,
+  .z-brace,
+  .z-bracket,
+  .z-separator,
+  .z-bitwise,
+  .z-relational,
+  .z-ternary,
+  .z-comparison,
+  .z-spread          { color: var(--md-code-block-operator); }
+
+  /* Tags / markup (HTML/XML/markdown) — green-ish to read as structure */
+  .z-tag,
+  .z-attribute-name,
+  .z-property-name,
+  .z-property        { color: var(--md-code-block-string); }
+
+  /* Invalid / illegal — danger */
+  .z-illegal,
+  .z-invalid,
+  .z-error-token     { color: var(--danger); }
+
+  /* --- giallo line-number gutter (linenos annotation) --- */
+  .giallo-l {
+    display: inline-block;
+    min-height: 1lh;
+    width: 100%;
+  }
+  .giallo-ln {
+    display: inline-block;
+    user-select: none;
+    margin-right: 0.4em;
+    padding: 0.4em;
+    min-width: 3ch;
+    text-align: right;
+    opacity: 0.8;
+    color: var(--text-faint);
+  }
 
   /* --- Lists --- */
   ul {

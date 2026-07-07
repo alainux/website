@@ -16,11 +16,12 @@ The UI must avoid modern web "widget" aesthetics (rounded corners, heavy drop sh
 
 ### 1.2 Chromatic Palette
 
-Strict adherence to the [tokyonight.nvim](https://github.com/folke/tokyonight.nvim) specification is required:
+Strict adherence to the [tokyonight.nvim](https://github.com/folke/tokyonight.nvim) specification is required for the **default** palette. The site supports several terminal color themes, but they are **owner-configured only** — visitors cannot switch the palette.
 
-- **Dark Mode (Default):** `night` variant.
-- **Light Mode:** `day` variant.
-- **Theme Switching:** Must support system-level preference detection and manual user toggles via a minimal statusline button.
+- **Color Themes:** The active palette family is selected in `zola.toml` via `config.extra.theme` (default `tokyo-night`; also `gruvbox`, `catppuccin`, `solarized`). It renders as `data-color-theme` on `<html>` and is never modified by client JavaScript, so readers cannot change it — only the site owner can, by editing the config and rebuilding.
+- **Dark Mode (Default):** `night` variant of the active theme.
+- **Light Mode:** `day` / light variant of the active theme.
+- **Brightness Toggle:** Must support system-level preference detection and manual user toggles via a minimal statusline button. This switches the *brightness* (`data-theme` dark/light) **within** the selected color theme, not the palette family.
 
 ### 1.3 Typography and Glyphs
 

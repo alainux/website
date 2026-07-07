@@ -22,7 +22,14 @@ taxonomies = [
 [markdown]
 
 [markdown.highlighting]
+# Emit semantic `.z-*` token classes (no inline colours) so the
+# highlight palette follows the site's active color theme + brightness
+# toggle. The actual colours are mapped to `--md-code-block-*` tokens in
+# sass/_markdown.scss, which already vary per `data-color-theme` and
+# `[data-theme="light"]`. Zola still generates giallo.css for reference but
+# it is intentionally NOT linked — our token mapping is the single source.
 theme = "tokyo-night"
+style = "class"
 
 [languages]
 [languages.en]
