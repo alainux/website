@@ -37,8 +37,8 @@ Root + layout modes
   top: -100%;
   left: 0;
   padding: 6px 12px;
-  background: var(--accent);
-  color: var(--bg);
+  background: var(--primary);
+  color: var(--surface);
   font-family: var(--font-mono);
   font-size: var(--font-size-md);
   z-index: 20;
@@ -64,7 +64,7 @@ html[data-layout="full"] .terminal-window {
   flex: 1;
   width: 100%;
   min-height: 100vh;
-  background: var(--bg);
+  background: var(--surface);
   border: 1px solid var(--border);
 }
 
@@ -76,7 +76,7 @@ Statusline container
   align-items: stretch;
   height: var(--bar-h);
   flex-shrink: 0;
-  background-color: var(--bg-darker);
+  background-color: var(--surface-alt);
   border-bottom: 1px solid var(--border);
   color: var(--status-fg);
   font-family: var(--font-mono);
@@ -93,8 +93,8 @@ PATH segment — leftmost, primary/accent bg, never clipped
   height: 100%;
   flex-shrink: 0;
   padding: 0 var(--bar-pad-x);
-  background-color: var(--accent);
-  color: var(--bg);
+  background-color: var(--primary);
+  color: var(--surface);
   font-weight: 500;
   letter-spacing: 0.3px;
   border-right: 1px solid var(--border);
@@ -149,28 +149,28 @@ MENU segment — horizontally scrollable, never wraps
   align-items: center;
   height: 100%;
   padding: 0 var(--bar-pad-x);
-  color: var(--fg-dim);
+  color: var(--text-muted);
   font-weight: 500;
   text-decoration: none;
   transition: background-color 0.12s ease, color 0.12s ease;
 
-  &::before { content: "["; margin-right: 6px; color: var(--fg-muted); }
-  &::after  { content: "]"; margin-left: 6px; color: var(--fg-muted); }
+  &::before { content: "["; margin-right: 6px; color: var(--text-faint); }
+  &::after  { content: "]"; margin-left: 6px; color: var(--text-faint); }
 
   &:hover {
-    background-color: var(--bg-highlight);
-    color: var(--fg);
+    background-color: var(--surface-hover);
+    color: var(--text);
   }
 
   &.active {
-    background-color: var(--bg);
-    color: var(--accent);
+    background-color: var(--surface);
+    color: var(--primary);
 
-    &::before, &::after { color: var(--green); font-weight: 700; }
+    &::before, &::after { color: var(--success); font-weight: 700; }
   }
 
   &:focus-visible {
-    outline: 1px dashed var(--green);
+    outline: 1px dashed var(--success);
     outline-offset: -2px;
   }
 }
@@ -197,7 +197,7 @@ CONTROLS segment — right-pinned, never shrinks
   height: 100%;
   padding: 0 var(--bar-pad-x);
   flex-shrink: 0;
-  color: var(--fg-dim);
+  color: var(--text-muted);
   font-weight: 500;
   cursor: pointer;
   user-select: none;
@@ -207,13 +207,13 @@ CONTROLS segment — right-pinned, never shrinks
   font-family: inherit;
   font-size: inherit;
 
-  &::before { content: "["; margin-right: 6px; color: var(--fg-muted); }
-  &::after  { content: "]"; margin-left: 6px; color: var(--fg-muted); }
+  &::before { content: "["; margin-right: 6px; color: var(--text-faint); }
+  &::after  { content: "]"; margin-left: 6px; color: var(--text-faint); }
 
   .control-icon {
     margin-right: 6px;
     font-size: var(--bar-icon-size);
-    color: var(--accent);
+    color: var(--primary);
   }
 
   .control-text {
@@ -221,12 +221,12 @@ CONTROLS segment — right-pinned, never shrinks
     font-size: var(--bar-text-size);
     letter-spacing: 0.5px;
     font-weight: 700;
-    color: var(--fg);
+    color: var(--text);
   }
 
-  &:hover { background-color: var(--bg-highlight); color: var(--accent); }
+  &:hover { background-color: var(--surface-hover); color: var(--primary); }
   &:focus-visible {
-    outline: 1px dashed var(--green);
+    outline: 1px dashed var(--success);
     outline-offset: -2px;
   }
 
@@ -235,20 +235,20 @@ CONTROLS segment — right-pinned, never shrinks
     cursor: default;
 
     .control-icon,
-    .control-text { color: var(--cyan); }
+    .control-text { color: var(--info); }
 
-    &::before, &::after { color: var(--cyan); font-weight: 700; }
+    &::before, &::after { color: var(--info); font-weight: 700; }
 
-    &:hover { background-color: transparent; color: var(--cyan); }
+    &:hover { background-color: transparent; color: var(--info); }
   }
 
   /* Per-control accent — instead of every status-control being the
      same blue, each one picks a different Tokyo Night role so the
      bar reads as a balanced terminal, not a one-hue strip. */
-  &.layout-toggle .control-icon { color: var(--magenta); }
-  &.theme-toggle  .control-icon { color: var(--yellow);  }
+  &.layout-toggle .control-icon { color: var(--violet); }
+  &.theme-toggle  .control-icon { color: var(--warning);  }
   &.scroll-top    .control-icon { color: var(--orange);  }
-  &.back-link     .control-icon { color: var(--cyan);    }
+  &.back-link     .control-icon { color: var(--info);    }
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -269,7 +269,7 @@ a bordered TUI panel anchored to the statusline.
     align-items: center;
     height: 100%;
     padding: 0 var(--bar-pad-x);
-    color: var(--fg-dim);
+    color: var(--text-muted);
     font-family: var(--font-mono);
     font-size: var(--font-size-md);
     font-weight: 700;
@@ -282,8 +282,8 @@ a bordered TUI panel anchored to the statusline.
 
     &::-webkit-details-marker { display: none; }
     &::marker { content: ""; }
-    &::before { content: "["; margin-right: 6px; color: var(--fg-muted); }
-    &::after  { content: "]"; margin-left: 6px; color: var(--fg-muted); }
+    &::before { content: "["; margin-right: 6px; color: var(--text-faint); }
+    &::after  { content: "]"; margin-left: 6px; color: var(--text-faint); }
 
     .hamburger-icon {
       display: inline-block;
@@ -327,7 +327,7 @@ a bordered TUI panel anchored to the statusline.
     left: 0;
     z-index: 10;
     min-width: 200px;
-    background-color: var(--bg-darker);
+    background-color: var(--surface-alt);
     border: 1px solid var(--border);
     border-top: none;
     box-shadow: rgba(0, 0, 0, 0.3) 0 4px 12px;
@@ -337,20 +337,20 @@ a bordered TUI panel anchored to the statusline.
       align-items: center;
       height: 32px;
       padding: 0 12px;
-      color: var(--fg-dim);
+      color: var(--text-muted);
       font-family: var(--font-mono);
       font-size: var(--font-size-md);
       font-weight: 600;
       text-decoration: none;
       border-bottom: 1px dashed var(--border);
 
-      &::before { content: "› "; margin-right: 6px; color: var(--fg-muted); }
+      &::before { content: "› "; margin-right: 6px; color: var(--text-faint); }
 
       &:last-child { border-bottom: none; }
 
-      &:hover { background-color: var(--bg-highlight); color: var(--fg); }
+      &:hover { background-color: var(--surface-hover); color: var(--text); }
 
-      &.active { color: var(--accent); &::before { color: var(--accent); } }
+      &.active { color: var(--primary); &::before { color: var(--primary); } }
     }
 
     > .hamburger-divider {
@@ -364,7 +364,7 @@ a bordered TUI panel anchored to the statusline.
       align-items: center;
       height: 28px;
       padding: 0 12px 0 24px;
-      color: var(--cyan);
+      color: var(--info);
       font-family: var(--font-mono);
       font-size: 11px;
       font-weight: 700;
@@ -377,11 +377,11 @@ a bordered TUI panel anchored to the statusline.
 
   &[open] {
     > summary {
-      background-color: var(--bg);
-      color: var(--accent);
+      background-color: var(--surface);
+      color: var(--primary);
       flex-shrink: 0;
 
-      &::before, &::after { color: var(--accent); font-weight: 700; }
+      &::before, &::after { color: var(--primary); font-weight: 700; }
 
       .hamburger-icon {
         background-color: transparent;
@@ -413,9 +413,9 @@ Winbar (footer)
   justify-content: space-between;
   height: var(--bar-h);
   flex-shrink: 0;
-  background-color: var(--bg-darker);
+  background-color: var(--surface-alt);
   border-top: 1px solid var(--border);
-  color: var(--fg-dim);
+  color: var(--text-muted);
   font-family: var(--font-mono);
   font-size: var(--bar-font-size);
   user-select: none;
@@ -434,17 +434,17 @@ Winbar (footer)
     padding: 0 var(--bar-pad-x);
     border-right: 1px solid var(--border);
 
-    &::before { content: "["; margin-right: 6px; color: var(--fg-muted); }
-    &::after  { content: "]"; margin-left: 6px; color: var(--fg-muted); }
+    &::before { content: "["; margin-right: 6px; color: var(--text-faint); }
+    &::after  { content: "]"; margin-left: 6px; color: var(--text-faint); }
 
     .control-icon {
       margin-right: 6px;
-      color: var(--cyan);
+      color: var(--info);
       font-size: var(--bar-icon-size);
     }
 
     .winbar-text {
-      color: var(--fg);
+      color: var(--text);
       font-weight: 500;
       font-variant-numeric: tabular-nums;
     }
@@ -456,10 +456,10 @@ Winbar (footer)
   /* Per-segment accent rotation — icons pick different Tokyo hues
      so the winbar reads as a multi-hue gauge rather than uniform
      cyan. */
-  .winbar-left > .winbar-item:nth-child(1) .control-icon { color: var(--cyan); }
-  .winbar-left > .winbar-item:nth-child(2) .control-icon { color: var(--yellow); }
+  .winbar-left > .winbar-item:nth-child(1) .control-icon { color: var(--info); }
+  .winbar-left > .winbar-item:nth-child(2) .control-icon { color: var(--warning); }
   .winbar-left > .winbar-item:nth-child(3) .control-icon { color: var(--orange); }
-  .winbar-right > .winbar-item:nth-child(1) .control-icon { color: var(--magenta); }
+  .winbar-right > .winbar-item:nth-child(1) .control-icon { color: var(--violet); }
 
   .scroll-top-link {
     display: inline-flex;
@@ -469,23 +469,23 @@ Winbar (footer)
     text-decoration: none;
     cursor: pointer;
 
-    &:hover { color: var(--cyan); }
+    &:hover { color: var(--info); }
     &:focus-visible {
-      outline: 1px dashed var(--green);
+      outline: 1px dashed var(--success);
       outline-offset: -2px;
     }
   }
 }
 
 .back-link {
-  color: var(--accent);
+  color: var(--primary);
   text-decoration: none;
   font-weight: 600;
 
-  &:hover { color: var(--cyan); }
+  &:hover { color: var(--info); }
 
   &:focus-visible {
-    outline: 1px dashed var(--green);
+    outline: 1px dashed var(--success);
     outline-offset: -2px;
   }
 }
@@ -494,7 +494,7 @@ Winbar (footer)
   border-right: none;
 
   .winbar-text {
-    color: var(--fg-dim);
+    color: var(--text-muted);
     font-weight: 400;
   }
 }

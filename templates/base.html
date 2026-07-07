@@ -1,3 +1,4 @@
+{% import "macros.html" as nav %}
 <!DOCTYPE html>
 {% set home_url  = get_url(path="") %}
 {% set blog_url  = get_url(path="blog/") %}
@@ -74,11 +75,16 @@
 <!-- 2. Nav: horizontally scrollable, hides on mobile in favour of hamburger -->
 <nav class="status-nav" aria-label="Main navigation">
   <ul class="nav-list">
-  <li class="nav-list-item"><a href="{{ home_url }}" class="status-nav-item {% if current_path == "/" %}active{% endif %}"{% if current_path == "/" %} aria-current="page"{% endif %}><span class="nav-label">home</span></a></li>
-  <li class="nav-list-item"><a href="{{ blog_url }}" class="status-nav-item {% if current_path is starting_with("/blog") or current_path is starting_with("/tags") %}active{% endif %}"{% if current_path is starting_with("/blog") or current_path is starting_with("/tags") %} aria-current="page"{% endif %}><span class="nav-label">blog</span></a></li>
-  <li class="nav-list-item"><a href="{{ proj_url }}" class="status-nav-item {% if current_path is starting_with("/projects") %}active{% endif %}"{% if current_path is starting_with("/projects") %} aria-current="page"{% endif %}><span class="nav-label">projects</span></a></li>
-  <li class="nav-list-item"><a href="{{ cv_url }}" class="status-nav-item {% if current_path is starting_with("/cv") %}active{% endif %}"{% if current_path is starting_with("/cv") %} aria-current="page"{% endif %}><span class="nav-label">cv</span></a></li>
-  <li class="nav-list-item"><a href="{{ cont_url }}" class="status-nav-item {% if current_path is starting_with("/contact") %}active{% endif %}"{% if current_path is starting_with("/contact") %} aria-current="page"{% endif %}><span class="nav-label">contact</span></a></li>
+    {% set nav_home_active  = current_path == "/" %}
+    {% set nav_blog_active  = current_path is starting_with("/blog") or current_path is starting_with("/tags") %}
+    {% set nav_proj_active  = current_path is starting_with("/projects") %}
+    {% set nav_cv_active    = current_path is starting_with("/cv") %}
+    {% set nav_cont_active  = current_path is starting_with("/contact") %}
+    <li class="nav-list-item">{{ nav::link(href=home_url, label="home", active=nav_home_active, variant="status") }}</li>
+    <li class="nav-list-item">{{ nav::link(href=blog_url, label="blog", active=nav_blog_active, variant="status") }}</li>
+    <li class="nav-list-item">{{ nav::link(href=proj_url, label="projects", active=nav_proj_active, variant="status") }}</li>
+    <li class="nav-list-item">{{ nav::link(href=cv_url, label="cv", active=nav_cv_active, variant="status") }}</li>
+    <li class="nav-list-item">{{ nav::link(href=cont_url, label="contact", active=nav_cont_active, variant="status") }}</li>
   </ul>
 </nav>
 
@@ -92,11 +98,11 @@
             <span class="hamburger-label">menu</span>
           </summary>
           <div class="hamburger-menu" role="menu">
-            <a href="{{ home_url  }}" class="nav-link {% if current_path == "/" %}active{% endif %}" role="menuitem">home</a>
-            <a href="{{ blog_url  }}" class="nav-link {% if current_path is starting_with("/blog") or current_path is starting_with("/tags") %}active{% endif %}" role="menuitem">blog</a>
-            <a href="{{ proj_url  }}" class="nav-link {% if current_path is starting_with("/projects") %}active{% endif %}" role="menuitem">projects</a>
-            <a href="{{ cv_url }}" class="nav-link {% if current_path is starting_with("/cv") %}active{% endif %}" role="menuitem">cv</a>
-            <a href="{{ cont_url }}" class="nav-link {% if current_path is starting_with("/contact") %}active{% endif %}" role="menuitem">contact</a>
+            {{ nav::link(href=home_url, label="home", active=nav_home_active, variant="menu") }}
+            {{ nav::link(href=blog_url, label="blog", active=nav_blog_active, variant="menu") }}
+            {{ nav::link(href=proj_url, label="projects", active=nav_proj_active, variant="menu") }}
+            {{ nav::link(href=cv_url, label="cv", active=nav_cv_active, variant="menu") }}
+            {{ nav::link(href=cont_url, label="contact", active=nav_cont_active, variant="menu") }}
 
             {% if lang_is_es %}
             <div class="hamburger-divider" aria-hidden="true"></div>

@@ -26,7 +26,7 @@
   position: relative;
   min-width: 0;
   height: 380px;
-  background: var(--bg);
+  background: var(--surface);
 }
 @media (max-width: 860px) {
   .gh-chart-stage {
@@ -60,10 +60,10 @@
   gap: 2px;
   padding: 6px 10px;
   background: var(--chip-bg);
-  border: 1px solid var(--border-soft);
+  border: 1px solid var(--border-strong);
   font-family: var(--font-mono);
   font-size: var(--font-size-sm);
-  color: var(--fg);
+  color: var(--text);
   white-space: nowrap;
   line-height: 1.35;
   transform: translateY(-100%);
@@ -71,8 +71,8 @@
 
   &.is-visible { display: flex; }
 
-  .gh-tip-date  { color: var(--fg-dim); }
-  .gh-tip-count b { color: var(--green); font-weight: 700; }
+  .gh-tip-date  { color: var(--text-muted); }
+  .gh-tip-count b { color: var(--success); font-weight: 700; }
 }
 
 /* ── Right-side commit log overlay (HTML) ─────────────────── */
@@ -117,7 +117,7 @@
   font-size: var(--font-size-sm);
   font-weight: 700;
   letter-spacing: 0.5px;
-  color: var(--green);
+  color: var(--success);
   text-transform: uppercase;
 }
 
@@ -138,29 +138,29 @@
   gap: 8px;
   align-items: baseline;
   padding: 3px 6px;
-  color: var(--fg);
+  color: var(--text);
   text-decoration: none;
   border: 1px solid transparent;
   transition: border-color 0.15s ease, background 0.15s ease;
 
   &:hover {
-    border-color: var(--border-soft);
-    background: var(--bg-highlight);
+    border-color: var(--border-strong);
+    background: var(--surface-hover);
   }
 }
 
 .gh-log__sha {
-  color: var(--cyan);
+  color: var(--info);
   font-weight: 700;
   letter-spacing: 0.5px;
   font-size: var(--font-size-sm);
 }
 .gh-log__date {
-  color: var(--fg-dim);
+  color: var(--text-muted);
   font-size: var(--font-size-sm);
 }
 .gh-log__msg {
-  color: var(--fg);
+  color: var(--text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -173,35 +173,35 @@
   gap: 8px;
   align-items: baseline;
   padding: 4px 6px;
-  color: var(--fg);
+  color: var(--text);
   text-decoration: none;
   border: 1px solid transparent;
   transition: border-color 0.15s ease, background 0.15s ease;
 
   &:hover {
-    border-color: var(--border-soft);
-    background: var(--bg-highlight);
+    border-color: var(--border-strong);
+    background: var(--surface-hover);
   }
 }
 .gh-log__repo--masked { cursor: default; }
 .gh-log__repo--masked:hover { background: transparent; border-color: transparent; }
 
 .gh-log__repo-count {
-  color: var(--green);
+  color: var(--success);
   font-weight: 700;
   font-size: var(--font-size-sm);
   min-width: 2.4em;
   text-align: right;
 }
 .gh-log__repo-name {
-  color: var(--accent);
+  color: var(--primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .gh-log__empty {
-  color: var(--fg-dim);
+  color: var(--text-muted);
   font-style: italic;
   padding: 6px 0;
 }

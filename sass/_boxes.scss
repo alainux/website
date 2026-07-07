@@ -15,7 +15,7 @@
      │                                                  │
      └──────────────────────────────[ ACTION ]──────────┘
 
-   The chip background is opaque (set to `var(--bg)`) so the
+   The chip background is opaque (set to `var(--surface)`) so the
    pierced border line is masked by the chip's text region.
    No connector pseudo-elements — the chip simply sits
    offset from the border edge, its background covering
@@ -33,7 +33,7 @@
   position: relative;
   margin: 2.25rem 0 2.25rem;
   background-color: transparent;
-  border: 1px solid var(--border-soft);
+  border: 1px solid var(--border-strong);
   transition: border-color 0.35s ease;
 
   &:hover {
@@ -77,7 +77,7 @@
    Title bar — punched through the top border
    ──────────────────────────────────────────────────────────────
    The chip's vertical centreline sits exactly on the panel's
-   1px top border. Its opaque `var(--bg)` background covers
+   1px top border. Its opaque `var(--surface)` background covers
    the border underneath, creating a clean punch-through.
    ────────────────────────────────────────────────────────────── */
 .tui-panel__head {
@@ -145,7 +145,7 @@
   font-family: var(--font-mono);
   font-size: var(--chip-font-size);
   font-weight: 700;
-  color: var(--fg-dim);
+  color: var(--text-muted);
   white-space: nowrap;
   line-height: 1;
 
@@ -159,9 +159,9 @@
   > span {
     display: inline-flex;
     align-items: center;
-    height: 22px;
+    height: var(--chip-h);
     padding: 0 8px;
-    color: var(--fg-dim);
+    color: var(--text-muted);
     font-size: inherit;
     font-weight: 700;
     text-transform: uppercase;
@@ -172,18 +172,18 @@
     transition: color 0.15s ease;
   }
 
-  > a:hover        { color: var(--green); }
-  > .is-disabled   { color: var(--fg-dim); cursor: not-allowed; opacity: 0.6; }
+  > a:hover        { color: var(--success); }
+  > .is-disabled   { color: var(--text-muted); cursor: not-allowed; opacity: 0.6; }
   > .is-page       { color: var(--orange); }
 
   > a.terminal-btn {
-    color: var(--cyan);
+    color: var(--info);
     border: none;
     padding: 0 8px;
   }
   > a.terminal-btn:hover {
     background-color: transparent;
-    color: var(--green);
+    color: var(--success);
   }
 }
 

@@ -61,7 +61,9 @@
   var readTimeEl = document.getElementById('winbar-readtime');
 
   function paintStats() {
-    var text = windowBody ? windowBody.textContent || '' : '';
+    var prose = windowBody ? windowBody.querySelector('.markdown-content') : null;
+    var src = prose || windowBody;
+    var text = src ? (src.textContent || '') : '';
     var words = text.trim().split(/\s+/).filter(Boolean).length;
     var mins = Math.max(1, Math.ceil(words / 220));
     if (wordsEl) wordsEl.querySelector('.winbar-text').textContent = words.toLocaleString() + ' words';

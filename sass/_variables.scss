@@ -1,10 +1,44 @@
 /* ============================================================
-   Tokyo Night Palette + Typography
+   Design tokens
+   ------------------------------------------------------------
+   Two layers live here:
+
+   1. THEME — raw colour values for the active theme (Tokyo Night
+      by default). To retheme the whole site, replace this block
+      (and the [data-theme="light"] override). Nothing else in the
+      codebase references raw colours.
+
+   2. ROLE — semantic tokens that components actually consume
+      (--surface, --text, --primary, --success, …). They are bound
+      to the theme above so a single edit recolours every surface.
+
+   Keep this file the single source of truth for colour.
+
+   ── Theme provenance: Tokyo Night ──────────────────────────────
+   The values below follow the Tokyo Night / Tokyo Day palettes
+   (folke/tokyonight.nvim). The canonical source sets, used when
+   retheming or auditing contrast, are:
+
+     Tokyo Night (night)      Tokyo Day (day)
+     #1a1b26  bg              #e1e2e7  bg
+     #16161e  bg-dark         #d5d6db  bg-dark
+     #292e42  bg-highlight    #c4c8da  bg-highlight
+     #c0caf5  fg              #3760bf  fg
+     #7982a9  fg-dark         #6172b0  fg-dark
+     #565f89  fg-gutter       #848cb5  fg-gutter
+     #7aa2f7  blue            #2e7de9  blue
+     #7dcfff  cyan            #007197  cyan
+     #bb9af7  magenta         #9854f1  magenta
+     #ff9e64  orange          #b15c00  orange
+     #e0af68  yellow          #8c6c3e  yellow
+     #9ece6a  green           #587539  green
+     #f7768e  red             #f52a65  red
+
+   A Tailwind v4 export of the full palette lives at
+   github.com/folke/tokyonight.nvim/tree/main/extras/tailwindv4.
    ============================================================ */
 
-/* --- JetBrainsMono Nerd Font (self-hosted) ---
-   Self-hosted TTF files include both ASCII characters and
-   Nerd Font icon glyphs (PUA range). */
+/* --- Self-hosted JetBrainsMono Nerd Font --- */
 @font-face {
   font-family: 'JetBrainsMono Nerd Font';
   src: url('/fonts/JetBrainsMono-Regular.ttf') format('truetype');
@@ -34,40 +68,41 @@
   font-display: swap;
 }
 
-/* --- Tokyo Night "night" (default dark) --- */
+/* ============================================================
+   THEME: Tokyo Night (dark, default)
+   ============================================================ */
 :root {
-  /* Base backgrounds */
-  --bg: #1a1b26;           /* editor background */
-  --bg-page: #13141c;      /* page/desktop behind the terminal window */
-  --bg-darker: #16161e;    /* statusline, header, panel chrome */
-  --bg-highlight: rgba(41, 46, 66, 0.45); /* visual selection, hovered rows */
-  --bg-panel: #1f2335;     /* panel/box background */
+  /* Surfaces */
+  --page-bg:      #13141c;   /* page/desktop behind the terminal window */
+  --surface:      #1a1b26;   /* editor / window interior */
+  --surface-alt:  #16161e;   /* statusline, header, panel chrome */
+  --surface-hover: rgba(41, 46, 66, 0.45); /* selection, hovered rows */
 
-  /* Foregrounds */
-  --fg: #c0caf5;           /* primary text */
-  --fg-dim: #7982a9;       /* comments, line numbers, dim text */
-  --fg-muted: #686e99;     /* very dim (borders when inactive) */
+  /* Text */
+  --text:       #c0caf5;     /* primary text */
+  --text-muted: #7982a9;     /* comments, dim text */
+  --text-faint: #686e99;     /* borders, inactive text */
 
-  /* Accent colors (Tokyo Night spec) */
-  --accent: #7aa2f7;       /* blue - links, active, focus */
-  --accent-dim: #3d59a1;   /* blue0 */
-  --green: #9ece6a;        /* green - success, strings, diff add */
-  --yellow: #e0af68;       /* yellow - warning, diff change */
-  --red: #f7768e;          /* red - error, close, diff delete */
-  --magenta: #bb9af7;      /* magenta - keywords */
-  --cyan: #7dcfff;         /* cyan - operators, types */
-  --orange: #ff9e64;       /* orange - numbers, constants */
+  /* Brand / semantic roles */
+  --primary:        #7aa2f7; /* links, active, focus */
+  --primary-strong: #3d59a1; /* pressed / dimmed primary */
+  --success:        #9ece6a; /* strings, diff add, hover fill */
+  --warning:        #e0af68; /* warnings, hover accent */
+  --danger:         #f7768e; /* errors, close */
+  --violet:         #bb9af7; /* keywords, magenta accents */
+  --info:           #7dcfff; /* operators, types, meta */
+  --orange:         #ff9e64; /* numbers, warm accent */
 
   /* Borders & focus */
-  --border:        #292e42;   /* default subtle divider */
-  --border-soft:   #565f89;   /* prominent ASCII-box border (panels only) */
-  --border-focus:  #7aa2f7;   /* focused border */
+  --border:        #292e42;  /* default subtle divider */
+  --border-strong: #565f89;  /* prominent box border (panels) */
+  --border-focus:  #7aa2f7;  /* focused border */
 
-  /* Statusline segments */
-  --status-bg: var(--bg-darker);
-  --status-fg: var(--fg);
-  --status-active-bg: var(--bg-highlight);
-  --status-active-fg: var(--accent);
+  /* Statusline / winbar segments */
+  --status-bg:          var(--surface-alt);
+  --status-fg:          var(--text);
+  --status-active-bg:   var(--surface-hover);
+  --status-active-fg:   var(--primary);
 
   /* Layout */
   --max-width-centered: 920px;
@@ -80,64 +115,55 @@
   --font-size-md: 12px;
   --line-height-base: 1.6;
 
-  /* Bar chrome — both statusline + winbar share the same dimensions */
+  /* Bar chrome — statusline + winbar share dimensions */
   --bar-h: 28px;
   --bar-font-size: var(--font-size-md);
   --bar-pad-x: 12px;
   --bar-icon-size: 12px;
   --bar-text-size: 11px;
 
-  /* Chip chrome — title/foot/page-tag pills */
+  /* Chip chrome — title/foot pills */
+  --chip-h: 24px;
   --chip-font-size: 12px;
+  --chip-bg: var(--surface);
 
   /* Atmospheric gradients */
-  --bg-page-grad: linear-gradient(180deg, #13141c 0%, #0f1017 100%);
-  --bg-win-grad: linear-gradient(180deg, #1a1b26 0%, #16161e 100%);
+  --page-bg-grad: linear-gradient(180deg, #13141c 0%, #0f1017 100%);
   --accent-glow: rgba(122, 162, 247, 0.08);
-  --chip-bg: var(--bg);
 
-  /* ──────────────────────────────────────────────────────────
-     Semantic accent tokens — many surfaces use a *role* colour
-     instead of just blue+green. Pick from the full Tokyo Night
-     palette so the page reads as a balanced terminal, not a
-     one-hue grid.
-     ────────────────────────────────────────────────────────── */
-  /* Panel/chip meta */
-  --head-fg:    #bb9af7;          /* [ WELCOME ] / [ ACTIVITY ] chip fg — magenta */
-  --head-accent: #e0af68;         /* hover accent on panels — warm yellow */
-  --rule-soft:  rgba(187, 154, 247, 0.18);   /* secondary divider (intentional purple-ish) */
-  --rule-strong: rgba(122, 162, 247, 0.35);
+  /* Panel title colour */
+  --head-fg: var(--violet);
 
-  /* Panel hover — deliberately restrained so the floating-window
-     feel stays elegant rather than noisy. */
+  /* Hover treatment — restrained so the floating-window feel stays elegant */
   --glare-strong: rgba(122, 162, 247, 0.12);
   --glare-soft:   rgba(187, 154, 247, 0.05);
   --panel-hover-border: rgba(122, 162, 247, 0.45);
 
-  /* Pill / status accents (non-link) */
-  --pill-fg:    #7dcfff;          /* static meta tags → cyan */
+  /* Static meta pills (non-link) */
+  --pill-fg:    var(--info);
   --pill-bg:    rgba(125, 207, 255, 0.10);
   --pill-border: rgba(125, 207, 255, 0.40);
 
-  /* Tag chips diversify: green by default; one out of every N tags
-     picks one of these alternates so tag lists read as colourful. */
-  --tag-warm:      #ff9e64;       /* warm orange */
+  /* Tag chips — diversify hue so tag lists read as colourful.
+     Green (--success) is the default; the rest rotate via nth-child. */
+  --tag-warm:      #ff9e64;
   --tag-warm-bg:   rgba(255, 158, 100, 0.12);
-  --tag-cool:      #7dcfff;       /* cyan */
+  --tag-cool:      #7dcfff;
   --tag-cool-bg:   rgba(125, 207, 255, 0.12);
-  --tag-rose:      #f7768e;       /* red/rose */
+  --tag-rose:      #f7768e;
   --tag-rose-bg:   rgba(247, 118, 142, 0.12);
-  --tag-violet:    #bb9af7;       /* magenta */
+  --tag-violet:    #bb9af7;
   --tag-violet-bg: rgba(187, 154, 247, 0.12);
 
-  /* Markdown inline-code — distinct from the prose fg so links and
-     code never visually collide. Light-theme override lives below. */
+  /* Markdown inline code */
   --md-code-inline-bg:   #16161e;
   --md-code-inline-fg:   #9ece6a;
   --md-code-inline-edge: #3d59a1;
-  --md-code-block-bg:    #16161e;
-  --md-code-block-fg:    #c0caf5;
-  --md-code-block-edge:  #3d59a1;
+
+  /* Markdown code blocks */
+  --md-code-block-bg:       #16161e;
+  --md-code-block-fg:       #c0caf5;
+  --md-code-block-edge:     #3d59a1;
   --md-code-block-comment:  #565f89;
   --md-code-block-keyword:  #bb9af7;
   --md-code-block-string:   #9ece6a;
@@ -145,63 +171,44 @@
   --md-code-block-function: #7aa2f7;
   --md-code-block-type:     #7dcfff;
   --md-code-block-operator: #c0caf5;
-
-  /* Chart palette — six neon levels so the prominent levels read
-     as Tron-tier colored bands instead of a blue ramp. */
-  --gauge-0: #3d59a1;             /* idle — deep blue */
-  --gauge-1: #2e7de9;             /* low  — bright blue */
-  --gauge-2: #41a6b6;             /* mid-low teal */
-  --gauge-3: #41c676;             /* mid-high green */
-  --gauge-4: #e0af68;             /* high — yellow */
-  --gauge-5: #f7768e;             /* peak — red */
-  --chart-grid-major: #7aa2f7;
-  --chart-grid-minor: #292e42;
-  --chart-scan:       rgba(125, 207, 255, 0.10);
-  --chart-today:      #f7768e;
-  --chart-emissive:   rgba(125, 207, 255, 0.45);
-  --bar-fill-opacity: 0.90;
-  --bar-shell-opacity: 0.55;
 }
 
-/* --- Tokyo Night "day" (light) --- */
+/* ============================================================
+   THEME: Tokyo Day (light)
+   ============================================================ */
 [data-theme="light"] {
-  --bg-page-grad: linear-gradient(180deg, #f4f4f8 0%, #ededf1 100%);
-  --bg-win-grad: linear-gradient(180deg, #e8e8ee 0%, #dddde4 100%);
+  --page-bg-grad: linear-gradient(180deg, #f4f4f8 0%, #ededf1 100%);
   --accent-glow: rgba(46, 125, 233, 0.14);
-  --chip-bg: var(--bg);
-  --bg: #e8e8ee;
-  --bg-page: #f4f4f8;
-  --bg-darker: #dddde4;
-  --bg-highlight: rgba(160, 163, 189, 0.2);
-  --bg-panel: #dddde4;
+  --chip-bg: var(--surface);
 
-  --fg: #1a1b26;
-  --fg-dim: #4b5076;
-  --fg-muted: #7a7fa5;
+  --page-bg:      #f4f4f8;
+  --surface:      #e8e8ee;
+  --surface-alt:  #dddde4;
+  --surface-hover: rgba(160, 163, 189, 0.2);
 
-  --accent: #2e7de9;
-  --accent-dim: #2663b5;
-  --green: #587539;
-  --yellow: #8c6c3e;
-  --red: #c64343;
-  --magenta: #8842d3;
-  --cyan: #007197;
-  --orange: #b1561f;
+  --text:       #1a1b26;
+  --text-muted: #4b5076;
+  --text-faint: #7a7fa5;
+
+  --primary:        #2e7de9;
+  --primary-strong: #2663b5;
+  --success:        #587539;
+  --warning:        #8c6c3e;
+  --danger:         #c64343;
+  --violet:         #8842d3;
+  --info:           #007197;
+  --orange:         #b1561f;
 
   --border:        #d8d8e0;
-  --border-soft:   #a8abbd;
+  --border-strong: #a8abbd;
   --border-focus:  #2e7de9;
 
-  --status-bg: var(--bg-darker);
-  --status-fg: var(--fg);
-  --status-active-bg: var(--bg-highlight);
-  --status-active-fg: var(--accent);
+  --status-bg:          var(--surface-alt);
+  --status-fg:          var(--text);
+  --status-active-bg:   var(--surface-hover);
+  --status-active-fg:   var(--primary);
 
-  /* Daylight alternate accents — same role mapping, lighter shades. */
-  --head-fg:    #8842d3;          /* magenta — still magenta in Tokyo Day */
-  --head-accent: #b1561f;         /* warm hover — orange */
-  --rule-soft:  rgba(136, 66, 211, 0.22);
-  --rule-strong: rgba(46, 125, 233, 0.40);
+  --head-fg: var(--violet);
 
   --glare-strong: rgba(46, 125, 233, 0.10);
   --glare-soft:   rgba(136, 66, 211, 0.05);
@@ -220,11 +227,8 @@
   --tag-violet:    #8842d3;
   --tag-violet-bg: rgba(136, 66, 211, 0.10);
 
-  /* Light-mode code blocks need a soft cream-tinted background and
-     a darker foreground so the prose contrast stays readable. The
-     previously shared values (var(--green), var(--bg-darker)) were
-     way too dark for a light page — hence the markdown code in
-     light mode looked identical to dark. */
+  /* Light-mode code blocks need a cream-tinted background and a darker
+     foreground so prose contrast stays readable. */
   --md-code-inline-bg:   #f0eef0;
   --md-code-inline-fg:   #587539;
   --md-code-inline-edge: #c5c0c5;
@@ -238,20 +242,4 @@
   --md-code-block-function: #2e7de9;
   --md-code-block-type:     #007197;
   --md-code-block-operator: #1a1b26;
-
-  --gauge-0: #b8c8db;             /* idle — desaturated */
-  --gauge-1: #6aa3e6;             /* low  — bright blue */
-  --gauge-2: #4ba6b8;             /* mid-low teal */
-  --gauge-3: #4ec56e;             /* mid-high green */
-  --gauge-4: #ce9746;             /* high — orange-yellow */
-  --gauge-5: #c64343;             /* peak — red */
-  --chart-grid-major: #2e7de9;
-  --chart-grid-minor: #c5c8d4;
-  --chart-scan:       rgba(46, 125, 233, 0.06);
-  --chart-today:      #c64343;
-  --chart-emissive:   rgba(46, 125, 233, 0.35);
-  --bar-fill-opacity: 0.92;
-  --bar-shell-opacity: 0.40;
 }
-
-/* --- Print overrides (handled in _print.scss) --- */

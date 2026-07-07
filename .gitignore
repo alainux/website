@@ -4,3 +4,6 @@ public/*
 
 # Environment vars
 .env
+
+# macOS artifacts
+.DS_Store

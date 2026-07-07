@@ -6,20 +6,19 @@
 
 @media print {
   /* Reset palette tokens to a print-friendly light scheme. Every
-     surface that references var(--bg)/--border/--md-* then paints
+     surface that references var(--surface)/--border/--md-* then paints
      light instead of leaking the dark terminal colours (e.g. the
      code-block label, figure/table backgrounds, syntax tokens). */
   :root {
-    --bg: #fff;
-    --bg-page: #fff;
-    --bg-darker: #fff;
-    --bg-highlight: transparent;
-    --bg-panel: #fff;
+    --surface: #fff;
+    --page-bg: #fff;
+    --surface-alt: #fff;
+    --surface-hover: transparent;
     --border: #ccc;
-    --border-soft: #ccc;
-    --fg: #000;
-    --fg-dim: #444;
-    --fg-muted: #666;
+    --border-strong: #ccc;
+    --text: #000;
+    --text-muted: #444;
+    --text-faint: #666;
     --head-fg: #000;
     --chip-bg: #fff;
     --md-code-inline-bg: #f4f4f4;

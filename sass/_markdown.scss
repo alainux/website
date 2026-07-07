@@ -7,7 +7,7 @@
   margin-top: 1rem;
   font-size: 14px;
   line-height: 1.7;
-  color: var(--fg);
+  color: var(--text);
 
   /* Paragraphs */
   p {
@@ -16,7 +16,7 @@
 
   /* --- Headings with Markdown Prefix Decoration --- */
   h1, h2, h3, h4, h5, h6 {
-    color: var(--accent);
+    color: var(--primary);
     margin-top: 2rem;
     margin-bottom: 0.75rem;
     font-weight: 700;
@@ -33,12 +33,12 @@
   h6 { font-size: 1rem; }
 
   /* Markdown-style prefix: # ## ### etc. */
-  h1::before { content: "# ";      color: var(--green); font-weight: 700; }
-  h2::before { content: "## ";     color: var(--green); font-weight: 700; }
-  h3::before { content: "### ";    color: var(--green); font-weight: 700; }
-  h4::before { content: "#### ";   color: var(--green); font-weight: 700; }
-  h5::before { content: "##### ";  color: var(--green); font-weight: 700; }
-  h6::before { content: "###### "; color: var(--green); font-weight: 700; }
+  h1::before { content: "# ";      color: var(--success); font-weight: 700; }
+  h2::before { content: "## ";     color: var(--success); font-weight: 700; }
+  h3::before { content: "### ";    color: var(--success); font-weight: 700; }
+  h4::before { content: "#### ";   color: var(--success); font-weight: 700; }
+  h5::before { content: "##### ";  color: var(--success); font-weight: 700; }
+  h6::before { content: "###### "; color: var(--success); font-weight: 700; }
 
   /* --- Inline Code --- */
   code {
@@ -81,9 +81,9 @@
       right: 8px;
       height: 16px;
       padding: 0 8px;
-      background: var(--bg);
+      background: var(--surface);
       border: 1px solid var(--border);
-      color: var(--cyan);
+      color: var(--info);
       font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
@@ -121,7 +121,7 @@
         content: "•";
         position: absolute;
         left: -1.25rem;
-        color: var(--green);
+        color: var(--success);
         font-weight: 700;
         font-family: var(--font-mono);
       }
@@ -144,7 +144,7 @@
         content: counter(ordered-list) ".";
         position: absolute;
         left: -1.5rem;
-        color: var(--green);
+        color: var(--success);
         font-weight: 700;
         font-family: var(--font-mono);
         text-align: right;
@@ -165,7 +165,7 @@
     border-left: 3px solid var(--border);
     padding-left: 1.25rem;
     margin: 1.5rem 0;
-    color: var(--fg-dim);
+    color: var(--text-muted);
     font-style: italic;
 
     p {
@@ -173,7 +173,7 @@
 
       &::before {
         content: "> ";
-        color: var(--green);
+        color: var(--success);
         font-weight: 700;
         font-family: var(--font-mono);
       }
@@ -192,18 +192,18 @@
      overrides (e.g. .terminal-btn, .item-tag) on the same
      element. */
   & :where(a):not(.terminal-btn):not(.item-tag):not(.terminal-link) {
-    color: var(--accent);
+    color: var(--primary);
     text-decoration: none;
     transition: color 0.15s ease;
 
-    &::before { content: "["; color: var(--fg-muted); }
-    &::after  { content: "]"; color: var(--fg-muted); }
+    &::before { content: "["; color: var(--text-faint); }
+    &::after  { content: "]"; color: var(--text-faint); }
 
     &:hover {
-      color: var(--green);
+      color: var(--success);
 
       &::before,
-      &::after { color: var(--green); }
+      &::after { color: var(--success); }
     }
   }
 
@@ -226,8 +226,8 @@
     }
 
     th {
-      background-color: var(--bg-darker);
-      color: var(--green);
+      background-color: var(--surface-alt);
+      color: var(--success);
       font-weight: 700;
       text-transform: uppercase;
       font-size: 0.75rem;
@@ -235,7 +235,7 @@
     }
 
     tr:nth-child(even) td {
-      background-color: var(--bg-highlight);
+      background-color: var(--surface-hover);
     }
   }
 
@@ -244,7 +244,7 @@
     margin: 1.5rem 0;
     padding: 1rem;
     border: 1px dashed var(--border);
-    background-color: var(--bg-darker);
+    background-color: var(--surface-alt);
     text-align: center;
 
     img {
@@ -257,12 +257,12 @@
     figcaption {
       margin-top: 0.75rem;
       font-size: 11px;
-      color: var(--fg-dim);
+      color: var(--text-muted);
       font-family: var(--font-mono);
 
       &::before {
         content: "[fig] ";
-        color: var(--green);
+        color: var(--success);
         font-weight: 700;
       }
     }
@@ -281,19 +281,19 @@
 
     dt {
       font-weight: 700;
-      color: var(--accent);
+      color: var(--primary);
       margin-top: 1rem;
 
       &::before {
         content: "$ ";
-        color: var(--green);
+        color: var(--success);
         font-family: var(--font-mono);
       }
     }
 
     dd {
       margin-left: 1.5rem;
-      color: var(--fg-dim);
+      color: var(--text-muted);
       margin-bottom: 0.5rem;
     }
   }
@@ -316,7 +316,7 @@
         position: absolute;
         left: 0;
         margin-top: 3px;
-        accent-color: var(--accent);
+        accent-color: var(--primary);
       }
     }
   }
@@ -327,7 +327,7 @@
     padding-top: 1rem;
     border-top: 1px dashed var(--border);
     font-size: 0.875rem;
-    color: var(--fg-dim);
+    color: var(--text-muted);
 
     li {
       margin-bottom: 0.5rem;
@@ -371,14 +371,14 @@
   gap: 1.5rem;
   font-size: var(--font-size-md);
   font-family: var(--font-mono);
-  color: var(--fg-dim);
+  color: var(--text-muted);
   margin-bottom: 1rem;
 
   a {
-    color: var(--accent);
+    color: var(--primary);
     text-decoration: none;
 
-    &:hover { color: var(--green); }
+    &:hover { color: var(--success); }
   }
 }
 

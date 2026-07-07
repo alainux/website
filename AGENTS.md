@@ -40,11 +40,11 @@ Strict adherence to the [tokyonight.nvim](https://github.com/folke/tokyonight.nv
   └──────────────────────────[ VIEW ALL POSTS ]──────┘
   ```
   - The **panel body** (`.tui-panel__body`) is fully transparent — panels read as "just borders", letting the page background show through.
-  - The **chip backgrounds** (`.tui-panel__head`, `.tui-panel__foot`) are painted with `var(--bg)` so the border line is masked by the chip's own text region. Without this opaque fill, the 1px border bleeds through the chip text as horizontal strikethrough lines.
+  - The **chip backgrounds** (`.tui-panel__head`, `.tui-panel__foot`) are painted with `var(--surface)` so the border line is masked by the chip's own text region. Without this opaque fill, the 1px border bleeds through the chip text as horizontal strikethrough lines.
   - Chip geometry lives on `:root`:
     - `--chip-h: 22px` — vertical chip height (controls `top` / `bottom` offset so the chip's centrelines land exactly on the panel's top/bottom 1px border).
   - Both `.tui-panel__head` and `.tui-panel__foot` are positioned `left: 16px` / `right: 16px` respectively (offset from the panel edge) with compact `padding: 0 8px`. No pseudo-element arms or connector characters — the chip simply masks the border underneath with its opaque background.
-  - Border colour uses `--border-soft` (a brighter `--fg-dim`) so panels feel more prominent than the muted dividers used inside lists.
+  - Border colour uses `--border-strong` (a brighter `--text-muted`) so panels feel more prominent than the muted dividers used inside lists.
   - The **bottom border** uses `.tui-panel__foot`, with two alignment variants sharing the same geometry:
     - `.tui-panel__foot` (default, centered) — general purpose centered chip
     - `.tui-panel__foot--right` — right-aligned (pagination, action buttons like `[ VIEW ALL POSTS ]`, `[ BACK ]`, …). All panels now consistently use `--right` for footer actions, including blog pagination. Buttons inside the foot chip are borderless (no `.terminal-btn` border) with green hover colour.
@@ -76,7 +76,7 @@ Winbar layout (left → right):
 ```
 
 - `≡` word count, `⏱` read time (220 wpm), `↻` last-updated date.
-- The `↻ updated …` value reflects either **the page's frontmatter `date`** (when present, e.g. blog posts — labelled "article") or **the site's last build time** (when the page has no `date` — labelled "site"). See §3.5.
+- The `↻ updated …` value is **always the site's last build time** (labelled "site"). It deliberately does not show a page's frontmatter `date` — see §3.5.
 - `↑ top` anchor (returns to page start). `‹ home` link always returns to root.
 
 ---
@@ -112,9 +112,9 @@ Both states are persisted in `localStorage` under `layout` and applied pre-paint
 
 CSS partials (in `sass/`) are imported in this order by `style.scss`:
 
-1. **variables** — Tokyo Night tokens (including `--bg-page` for the outer page/desktop surface, `--bar-*` tokens for statusline/winbar dimensions) + self-hosted `@font-face` for JetBrainsMono Nerd Font, scoped via `:root` / `[data-theme="light"]`.
-2. **base** — global reset, body typography (`background-color: var(--bg-page)`), links, selection, scrollbars. No global transition wildcards.
-3. **window** — `.terminal-container` (uses `--bg-page`), `.terminal-window` (uses `--bg`), `.vim-statusline`, `.vim-winbar` (both use `--bar-*` tokens for unified sizing), `<main class="window-body">`, layout modes, responsive breakpoints.
+1. **variables** — Tokyo Night tokens (including `--page-bg` for the outer page/desktop surface, `--bar-*` tokens for statusline/winbar dimensions) + self-hosted `@font-face` for JetBrainsMono Nerd Font, scoped via `:root` / `[data-theme="light"]`.
+2. **base** — global reset, body typography (`background-color: var(--page-bg)`), links, selection, scrollbars. No global transition wildcards.
+3. **window** — `.terminal-container` (uses `--page-bg`), `.terminal-window` (uses `--surface`), `.vim-statusline`, `.vim-winbar` (both use `--bar-*` tokens for unified sizing), `<main class="window-body">`, layout modes, responsive breakpoints.
 4. **boxes** — `.tui-panel`, `.tui-panel__head`, `.tui-panel__body`, `.tui-panel__foot` (centered) / `--right`, `.grid-two-cols`.
 5. **navigation** — `.terminal-btn`, `.terminal-link`, `.item-tag`, `.terminal-list`, `.list-item`, `.item-lang-badge`, tag filter, print-btn-row, welcome panel content, dividers.
 6. **markdown** — `.markdown-content`, `.page-meta`, heading decorations, code/pre styling, tables, blockquotes, KaTeX.
@@ -158,7 +158,13 @@ site's last-built timestamp is injected via a pre-build side-channel:
   rather than invoking `zola build` directly, so the timestamp stays in
   sync with each deploy.
 
-Usage in the winbar: `{% if page.date and not page.extra.print %}{{ page.date | date(format=…) }}{% else %}{{ site_updated_label }}{% endif %}`. CV pages and any other static page therefore get a meaningful "site-updated" reading instead of an empty slot.
+Usage in the winbar: the `↻ updated …` slot **always** shows the site's last
+build time (`site_updated_label`, = `human`). It intentionally does **not**
+fall back to a page's `date` — the winbar is a footer that describes the whole
+site's freshness, so per-page dates would be misleading on list/section/taxonomy
+pages. CV pages and any other static page therefore get a meaningful
+"site-updated" reading instead of an empty slot. (Per-post dates are shown in
+the article header via `page.html`'s `page-meta` block, not in the winbar.)
 
 ### 3.6.1 Code Maintainability
 
@@ -170,19 +176,20 @@ you found it. Concretely:
   a restart — write the final version, not both).
 - Hoist duplicated magic numbers (cell gap, bar height, palette tokens,
   durations) into a single named constant block at the top of the module.
-- Keep the IIFE/scope shape of each script consistent with its neighbours;
-  do not introduce a second IIFE in the same file unless it has a clearly
-  different lifecycle.
+- Keep the module shape of each script consistent with its neighbours. The
+  global scripts (`prepaint.js`, `main.js`) are plain scripts; the chart is a
+  set of native ES modules under `static/js/gh-chart/` (no bundler). Do not
+  mix the two styles.
 - When a function accumulates more than ~3 levels of nesting, extract.
 - Comments only when they earn their keep — never restate code.
 
 ### 3.7 GitHub Contributions Chart (homepage)
 
 A 3D isometric contribution graph rendered with **Three.js** (`InstancedMesh`
-of `BoxGeometry` + a `MeshStandardMaterial` extended via `onBeforeCompile`
-for per-instance emissive glow) and **GSAP** (staggered entrance wave +
-theme-switch pulse). Lives on the homepage inside a standard `.tui-panel`,
-sitting between the `[ WELCOME ]` banner and the two-column `grid-two-cols`.
+of `BoxGeometry` + a `MeshStandardMaterial` whose `emissive` is driven per
+theme) and **GSAP** (staggered entrance wave + theme-switch replay). Lives on
+the homepage inside a standard `.tui-panel`, sitting between the
+`[ WELCOME ]` banner and the two-column `grid-two-cols`.
 
 Build-time data path:
 
@@ -201,13 +208,24 @@ Build-time data path:
 
 Runtime:
 
-- `static/js/contrib-chart.js` is loaded only on the homepage (no global
-  weight). It lazy-imports `three@0.169.0` + `gsap@3.12.5` from `esm.sh`
-  (same module-graph philosophy as the KaTeX CDN include — no
-  npm/bundler). The chart renders to `#gh-contrib-canvas` inside
-  `.gh-chart-stage`, exposes a legend swatch row, and supports
-  `OrbitControls` drag-to-rotate with auto-rotate that pauses 4s after
-  interaction.
+- `static/js/contrib-chart.js` is a thin entrypoint that imports and runs
+  `initContribChart()` (it bails until `DOMContentLoaded` if needed). It is
+  loaded only on the homepage (no global weight). The implementation is split
+  into focused ES modules under `static/js/gh-chart/`:
+  - `config.js` — geometry + motion constants and tunables.
+  - `data.js` — normalises the raw `{ weeks: [...] }` payload into the flat
+    `cells` array + the count range used for colour mapping.
+  - `theme.js` — maps the site's semantic CSS custom properties to the
+    Three.js colour set (follows light/dark switching).
+  - `scene.js` — owns the Three.js scene graph (renderer, camera, lights,
+    floor grids, instanced bars + Tron edges, today marker, month labels).
+  - `chart.js` — the orchestrator: entrance + render loops, hover/tooltip,
+    resize, auto-rotate pausing, and live theme switching.
+  All modules lazy-import `three@0.169.0` + `gsap@3.12.5` from `esm.sh`
+  (same module-graph philosophy as the KaTeX CDN include — no npm/bundler).
+  The chart renders to `#gh-contrib-canvas` inside `.gh-chart-stage`, exposes
+  a legend swatch row, and supports `OrbitControls` drag-to-rotate with
+  auto-rotate that pauses 4s after interaction.
 - Theme is honoured by reading Tokyo-Night CSS variables off `:root` via
   `getComputedStyle`. A `MutationObserver` on `document.documentElement`
   watches `data-theme` and recomputes every instance colour + the grid

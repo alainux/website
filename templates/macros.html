@@ -1,0 +1,13 @@
+{# Shared UI macros.
+   Import with: {% import "macros.html" as nav %} #}
+
+{# One nav link, rendered for either the status bar (`variant="status"`)
+   or the mobile hamburger menu (`variant="menu"`). `active` drives the
+   highlight + aria-current. #}
+{% macro link(href, label, active, variant) %}
+{% if variant == "status" %}
+<a href="{{ href }}" class="status-nav-item{% if active %} active{% endif %}"{% if active %} aria-current="page"{% endif %}><span class="nav-label">{{ label }}</span></a>
+{% else %}
+<a href="{{ href }}" class="nav-link{% if active %} active{% endif %}"{% if active %} aria-current="page"{% endif %} role="menuitem"><span class="nav-label">{{ label }}</span></a>
+{% endif %}
+{% endmacro %}
