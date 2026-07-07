@@ -160,49 +160,6 @@ site's last-built timestamp is injected via a pre-build side-channel:
 
 Usage in the winbar: `{% if page.date and not page.extra.print %}{{ page.date | date(format=…) }}{% else %}{{ site_updated_label }}{% endif %}`. CV pages and any other static page therefore get a meaningful "site-updated" reading instead of an empty slot.
 
-### 3.6 Visual Verification (headless screenshots)
-
-CRITICAL: Do not do this if you don't have vision capabilities on filesystem
-images. The agent in this repo currently has **no** image input support, so
-screenshot output cannot be inspected visually — fall back to a programmatic
-pixel check (e.g. count non-background pixels, dominant color buckets) to
-confirm the chart rendered, rather than "looking" at the PNG.
-
-The headless Chrome invocation below also tends to keep the parent shell
-command alive (hanging the 120 s tool timeout) because Chrome does not exit
-deterministically when `--screenshot` is combined with a live HTTP server
-child process. AlwaysBackground the server and **add `timeout` + an explicit
-`kill` of the server PID**, otherwise the bash tool has to abort the whole
-command. Run it as one self-contained block:
-
-```bash
-./scripts/build.sh build
-SRV=$(python3 -m http.server 1111 --directory public &>/tmp/gh_http.log & echo $!)
-sleep 1
-timeout 30 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
-  --headless=new --disable-gpu \
-  --window-size=1280,800 --hide-scrollbars \
-  --user-data-dir=/tmp/chrome-shot \
-  --virtual-time-budget=5000 \
-  --force-dark-mode --enable-features=WebContentsForceDark \
-  --screenshot=./public/_shot_dark.png \
-  "http://127.0.0.1:1111/?menu=open"
-kill "$SRV" 2>/dev/null
-```
-
-Notes:
-- `--force-dark-mode` flips `prefers-color-scheme` so the Tokyo Night
-  night palette is rendered, otherwise Chrome's headless defaults to
-  light which produces a contrasting preview.
-- `?menu=open` triggers the deep-link helper that opens the mobile
-  hamburger automatically — useful for inspecting the dropdown layout
-  without the need for click automation.
-- If you cannot view the image, do a programmatic sanity check instead,
-  e.g. `python3` reading the PNG's IDAT and bucket-counting pixels in
-  the chart band to confirm content rendered (see prior session for a
-  worked example). Avoid the temptation to "just look" — declare that
-  you cannot and pick a programmatic surrogate.
-
 ### 3.6.1 Code Maintainability
 
 Whenever touching existing code, prefer leaving it **more** maintainable than

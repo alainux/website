@@ -85,7 +85,8 @@
   top: 0;
   right: 0;
   bottom: 0;
-  width: clamp(240px, 30%, 360px);
+  width: clamp(240px, 40%, 60%);
+  max-width: 60%;
   padding: 1.1rem 0.8rem;
   max-height: 380px;
   overflow-y: auto;
@@ -93,7 +94,10 @@
   scrollbar-color: var(--border) transparent;
   font-family: var(--font-mono);
   font-size: var(--font-size-md);
-  pointer-events: auto;
+  /* Let clicks/hovers fall through to the 3D canvas everywhere except
+     on the actual links, so the chart stays fully interactable. */
+  pointer-events: none;
+  & a, & .gh-log__commit, & .gh-log__repo { pointer-events: auto; }
 }
 @media (max-width: 860px) {
   .gh-log {

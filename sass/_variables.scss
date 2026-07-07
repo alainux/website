@@ -95,6 +95,66 @@
   --bg-win-grad: linear-gradient(180deg, #1a1b26 0%, #16161e 100%);
   --accent-glow: rgba(122, 162, 247, 0.08);
   --chip-bg: var(--bg);
+
+  /* ──────────────────────────────────────────────────────────
+     Semantic accent tokens — many surfaces use a *role* colour
+     instead of just blue+green. Pick from the full Tokyo Night
+     palette so the page reads as a balanced terminal, not a
+     one-hue grid.
+     ────────────────────────────────────────────────────────── */
+  /* Panel/chip meta */
+  --head-fg:    #bb9af7;          /* [ WELCOME ] / [ ACTIVITY ] chip fg — magenta */
+  --head-accent: #e0af68;         /* hover accent on panels — warm yellow */
+  --rule-soft:  rgba(187, 154, 247, 0.18);   /* secondary divider (intentional purple-ish) */
+  --rule-strong: rgba(122, 162, 247, 0.35);
+
+  /* Pill / status accents (non-link) */
+  --pill-fg:    #7dcfff;          /* static meta tags → cyan */
+  --pill-bg:    rgba(125, 207, 255, 0.10);
+  --pill-border: rgba(125, 207, 255, 0.40);
+
+  /* Tag chips diversify: green by default; one out of every N tags
+     picks one of these alternates so tag lists read as colourful. */
+  --tag-warm:      #ff9e64;       /* warm orange */
+  --tag-warm-bg:   rgba(255, 158, 100, 0.12);
+  --tag-cool:      #7dcfff;       /* cyan */
+  --tag-cool-bg:   rgba(125, 207, 255, 0.12);
+  --tag-rose:      #f7768e;       /* red/rose */
+  --tag-rose-bg:   rgba(247, 118, 142, 0.12);
+  --tag-violet:    #bb9af7;       /* magenta */
+  --tag-violet-bg: rgba(187, 154, 247, 0.12);
+
+  /* Markdown inline-code — distinct from the prose fg so links and
+     code never visually collide. Light-theme override lives below. */
+  --md-code-inline-bg:   #16161e;
+  --md-code-inline-fg:   #9ece6a;
+  --md-code-inline-edge: #3d59a1;
+  --md-code-block-bg:    #16161e;
+  --md-code-block-fg:    #c0caf5;
+  --md-code-block-edge:  #3d59a1;
+  --md-code-block-comment:  #565f89;
+  --md-code-block-keyword:  #bb9af7;
+  --md-code-block-string:   #9ece6a;
+  --md-code-block-number:   #ff9e64;
+  --md-code-block-function: #7aa2f7;
+  --md-code-block-type:     #7dcfff;
+  --md-code-block-operator: #c0caf5;
+
+  /* Chart palette — six neon levels so the prominent levels read
+     as Tron-tier colored bands instead of a blue ramp. */
+  --gauge-0: #3d59a1;             /* idle — deep blue */
+  --gauge-1: #2e7de9;             /* low  — bright blue */
+  --gauge-2: #41a6b6;             /* mid-low teal */
+  --gauge-3: #41c676;             /* mid-high green */
+  --gauge-4: #e0af68;             /* high — yellow */
+  --gauge-5: #f7768e;             /* peak — red */
+  --chart-grid-major: #7aa2f7;
+  --chart-grid-minor: #292e42;
+  --chart-scan:       rgba(125, 207, 255, 0.10);
+  --chart-today:      #f7768e;
+  --chart-emissive:   rgba(125, 207, 255, 0.45);
+  --bar-fill-opacity: 0.90;
+  --bar-shell-opacity: 0.55;
 }
 
 /* --- Tokyo Night "day" (light) --- */
@@ -130,6 +190,58 @@
   --status-fg: var(--fg);
   --status-active-bg: var(--bg-highlight);
   --status-active-fg: var(--accent);
+
+  /* Daylight alternate accents — same role mapping, lighter shades. */
+  --head-fg:    #8842d3;          /* magenta — still magenta in Tokyo Day */
+  --head-accent: #b1561f;         /* warm hover — orange */
+  --rule-soft:  rgba(136, 66, 211, 0.22);
+  --rule-strong: rgba(46, 125, 233, 0.40);
+
+  --pill-fg:    #007197;
+  --pill-bg:    rgba(0, 113, 151, 0.08);
+  --pill-border: rgba(0, 113, 151, 0.30);
+
+  --tag-warm:      #b1561f;
+  --tag-warm-bg:   rgba(177, 86, 31, 0.10);
+  --tag-cool:      #007197;
+  --tag-cool-bg:   rgba(0, 113, 151, 0.10);
+  --tag-rose:      #c64343;
+  --tag-rose-bg:   rgba(198, 67, 67, 0.10);
+  --tag-violet:    #8842d3;
+  --tag-violet-bg: rgba(136, 66, 211, 0.10);
+
+  /* Light-mode code blocks need a soft cream-tinted background and
+     a darker foreground so the prose contrast stays readable. The
+     previously shared values (var(--green), var(--bg-darker)) were
+     way too dark for a light page — hence the markdown code in
+     light mode looked identical to dark. */
+  --md-code-inline-bg:   #f0eef0;
+  --md-code-inline-fg:   #587539;
+  --md-code-inline-edge: #c5c0c5;
+  --md-code-block-bg:    #f0eef0;
+  --md-code-block-fg:    #1a1b26;
+  --md-code-block-edge:  #c5c0c5;
+  --md-code-block-comment:  #8a8a9a;
+  --md-code-block-keyword:  #8842d3;
+  --md-code-block-string:   #587539;
+  --md-code-block-number:   #b1561f;
+  --md-code-block-function: #2e7de9;
+  --md-code-block-type:     #007197;
+  --md-code-block-operator: #1a1b26;
+
+  --gauge-0: #b8c8db;             /* idle — desaturated */
+  --gauge-1: #6aa3e6;             /* low  — bright blue */
+  --gauge-2: #4ba6b8;             /* mid-low teal */
+  --gauge-3: #4ec56e;             /* mid-high green */
+  --gauge-4: #ce9746;             /* high — orange-yellow */
+  --gauge-5: #c64343;             /* peak — red */
+  --chart-grid-major: #2e7de9;
+  --chart-grid-minor: #c5c8d4;
+  --chart-scan:       rgba(46, 125, 233, 0.06);
+  --chart-today:      #c64343;
+  --chart-emissive:   rgba(46, 125, 233, 0.35);
+  --bar-fill-opacity: 0.92;
+  --bar-shell-opacity: 0.40;
 }
 
 /* --- Print overrides (handled in _print.scss) --- */

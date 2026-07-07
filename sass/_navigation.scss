@@ -127,6 +127,53 @@
   }
 }
 
+/* Tag palette variations — applied via a modifier class on the
+   .item-tag element when the template wants a tag from the full
+   Tokyo Night palette. div:nth-child classes in the tag-cloud
+   representative take care of the rest. */
+.item-tag--warm {
+  color: var(--tag-warm);
+  &:hover {
+    background-color: var(--tag-warm);
+    color: var(--bg);
+    border-color: var(--tag-warm);
+  }
+}
+.item-tag--cool {
+  color: var(--tag-cool);
+  &:hover {
+    background-color: var(--tag-cool);
+    color: var(--bg);
+    border-color: var(--tag-cool);
+  }
+}
+.item-tag--rose {
+  color: var(--tag-rose);
+  &:hover {
+    background-color: var(--tag-rose);
+    color: var(--bg);
+    border-color: var(--tag-rose);
+  }
+}
+.item-tag--violet {
+  color: var(--tag-violet);
+  &:hover {
+    background-color: var(--tag-violet);
+    color: var(--bg);
+    border-color: var(--tag-violet);
+  }
+}
+
+/* Lightweight nth-child rotation for unordered tag clouds —
+   cycles through warm / cool / rose / violet / green / magenta so
+   adjacent chips never share a hue. Skip the first chip (#1) to
+   keep the most common tag (always green). */
+.tags-cloud > .item-tag:nth-child(6n + 2) { color: var(--tag-warm); border-color: var(--tag-warm-bg); &:hover { background-color: var(--tag-warm); border-color: var(--tag-warm); color: var(--bg); } }
+.tags-cloud > .item-tag:nth-child(6n + 3) { color: var(--tag-cool); border-color: var(--tag-cool-bg); &:hover { background-color: var(--tag-cool); border-color: var(--tag-cool); color: var(--bg); } }
+.tags-cloud > .item-tag:nth-child(6n + 4) { color: var(--tag-rose); border-color: var(--tag-rose-bg); &:hover { background-color: var(--tag-rose); border-color: var(--tag-rose); color: var(--bg); } }
+.tags-cloud > .item-tag:nth-child(6n + 5) { color: var(--tag-violet); border-color: var(--tag-violet-bg); &:hover { background-color: var(--tag-violet); border-color: var(--tag-violet); color: var(--bg); } }
+.tags-cloud > .item-tag:nth-child(6n + 6) { color: var(--magenta); border-color: var(--tag-violet-bg); &:hover { background-color: var(--magenta); border-color: var(--magenta); color: var(--bg); } }
+
 /* ──────────────────────────────────────────────────────────────
     Print button row (CV pages)
     ────────────────────────────────────────────────────────────── */
@@ -190,9 +237,9 @@
   display: inline-flex;
   align-items: center;
   padding: 2px 8px;
-  border: 1px solid var(--border);
-  background-color: var(--bg-darker);
-  color: var(--green);
+  border: 1px solid var(--pill-border);
+  background-color: var(--pill-bg);
+  color: var(--pill-fg);
   font-family: var(--font-mono);
   font-size: var(--font-size-sm);
   font-weight: 700;

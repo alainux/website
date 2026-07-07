@@ -241,6 +241,14 @@ CONTROLS segment — right-pinned, never shrinks
 
     &:hover { background-color: transparent; color: var(--cyan); }
   }
+
+  /* Per-control accent — instead of every status-control being the
+     same blue, each one picks a different Tokyo Night role so the
+     bar reads as a balanced terminal, not a one-hue strip. */
+  &.layout-toggle .control-icon { color: var(--magenta); }
+  &.theme-toggle  .control-icon { color: var(--yellow);  }
+  &.scroll-top    .control-icon { color: var(--orange);  }
+  &.back-link     .control-icon { color: var(--cyan);    }
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -444,6 +452,14 @@ Winbar (footer)
     &:first-child { border-left: 1px solid var(--border); }
     &:last-child  { border-right: none; }
   }
+
+  /* Per-segment accent rotation — icons pick different Tokyo hues
+     so the winbar reads as a multi-hue gauge rather than uniform
+     cyan. */
+  .winbar-left > .winbar-item:nth-child(1) .control-icon { color: var(--cyan); }
+  .winbar-left > .winbar-item:nth-child(2) .control-icon { color: var(--yellow); }
+  .winbar-left > .winbar-item:nth-child(3) .control-icon { color: var(--orange); }
+  .winbar-right > .winbar-item:nth-child(1) .control-icon { color: var(--magenta); }
 
   .scroll-top-link {
     display: inline-flex;

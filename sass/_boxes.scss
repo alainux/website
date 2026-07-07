@@ -34,10 +34,10 @@
   margin: 2.25rem 0 2.25rem;
   background-color: transparent;
   border: 1px solid var(--border-soft);
-  transition: border-color 0.2s ease;
+  transition: border-color 0.25s ease;
 
   &:hover {
-    border-color: var(--accent);
+    border-color: var(--head-accent);
   }
 }
 
@@ -57,11 +57,18 @@
   bottom: 1px;
   left: 1px;
   transition: opacity 0.3s ease;
-  background: radial-gradient(
-    320px circle at var(--glare-x, 50%) var(--glare-y, 50%),
-    var(--accent-glow),
-    transparent 70%
-  );
+  background:
+    radial-gradient(
+      220px circle at var(--glare-x, 50%) var(--glare-y, 50%),
+      var(--rule-strong),
+      transparent 70%
+    ),
+    linear-gradient(
+      135deg,
+      transparent 0%,
+      var(--rule-soft) 50%,
+      transparent 100%
+    );
 
   .tui-panel:hover & { opacity: 1; }
 }
@@ -90,7 +97,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: var(--green);
+  color: var(--head-fg);
   white-space: nowrap;
   line-height: 1;
 
@@ -108,7 +115,7 @@
 }
 
 .tui-panel__title {
-  color: var(--green);
+  color: var(--head-fg);
   line-height: 1;
 }
 
@@ -165,12 +172,12 @@
     transition: color 0.15s ease;
   }
 
-  > a:hover        { color: var(--accent); }
+  > a:hover        { color: var(--green); }
   > .is-disabled   { color: var(--fg-dim); cursor: not-allowed; opacity: 0.6; }
-  > .is-page       { color: var(--green); }
+  > .is-page       { color: var(--orange); }
 
   > a.terminal-btn {
-    color: var(--accent);
+    color: var(--cyan);
     border: none;
     padding: 0 8px;
   }
