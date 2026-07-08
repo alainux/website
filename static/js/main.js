@@ -109,48 +109,4 @@
   var printBtn = document.querySelector('.print-btn');
   if (printBtn) printBtn.addEventListener('click', function () { window.print(); });
 
-  /* ── Tag filter (blog index) ─────────────────────────────── */
-  var tagFilter = document.querySelector('.section-tag-filter');
-  if (tagFilter) {
-    var cloud = tagFilter.querySelector('.tags-cloud');
-    var tags = cloud ? cloud.querySelectorAll('.item-tag') : [];
-    var list = document.querySelector('.terminal-list');
-    var items = list ? list.querySelectorAll('.list-item') : [];
-
-    if (tags.length && items.length) {
-      var activeTag = null;
-
-      function applyFilter() {
-        for (var i = 0; i < items.length; i++) {
-          var item = items[i];
-          if (!activeTag) { item.style.display = ''; continue; }
-          var itemTags = item.querySelectorAll('.item-tag');
-          var match = false;
-          for (var j = 0; j < itemTags.length; j++) {
-            var name = itemTags[j].textContent.trim().replace(/^\#/, '').split(' ')[0];
-            if (name === activeTag) { match = true; break; }
-          }
-          item.style.display = match ? '' : 'none';
-        }
-      }
-
-      for (var k = 0; k < tags.length; k++) {
-        (function (el) {
-          el.addEventListener('click', function (e) {
-            e.preventDefault();
-            var name = el.textContent.trim().replace(/^#/, '').split(' ')[0];
-            if (activeTag === name) {
-              activeTag = null;
-              el.classList.remove('item-tag-active');
-            } else {
-              for (var m = 0; m < tags.length; m++) tags[m].classList.remove('item-tag-active');
-              activeTag = name;
-              el.classList.add('item-tag-active');
-            }
-            applyFilter();
-          });
-        })(tags[k]);
-      }
-    }
-  }
 })();
