@@ -1,76 +1,36 @@
 {% extends "base.html" %}
-
+{% import "macros.html" as ui %}
 {% block title %}{{ section.title }} | {{ config.title }}{% endblock %}
+{% block description %}{{ section.description | default(value=config.description) }}{% endblock %}
 {% block og_title %}{{ section.title }}{% endblock %}
+{% block og_description %}{{ section.description | default(value=config.description) }}{% endblock %}
+{% block twitter_title %}{{ section.title }}{% endblock %}
+{% block twitter_description %}{{ section.description | default(value=config.description) }}{% endblock %}
 
 {% block content %}
-<div class="tui-panel">
-  <div class="tui-panel__head">
-    <h2 class="tui-panel__title">[ {{ section.title | upper }} ]</h2>
-  </div>
+<section class="tui-panel collection-panel">
+  <div class="tui-panel__head"><span>[ DIRECTORY ]</span></div>
   <div class="tui-panel__body">
-    {% if section.content %}
-      <div class="section-intro">
-        {{ section.content | safe }}
-      </div>
-    {% endif %}
-
-    {% if section.path == "/blog/" %}
-      {% include "partials/tag_filter.html" %}
-    {% endif %}
-
-    {# Select standard section pages or paginated pages if pagination is active #}
-    {% if paginator %}
-      {% set pages_to_render = paginator.pages %}
-    {% else %}
-      {% set pages_to_render = section.pages %}
-    {% endif %}
-
+    <header class="page-heading">
+      <p class="page-eyebrow">{{ current_path }}</p>
+      <h1>{{ section.title }}<span aria-hidden="true">_</span></h1>
+      {% if section.content %}<div class="section-intro">{{ section.content | safe }}</div>{% endif %}
+    </header>
+    {% if section.path == "/blog/" %}{% include "partials/tag_filter.html" %}{% endif %}
+    {% if paginator %}{% set pages_to_render = paginator.pages %}{% else %}{% set pages_to_render = section.pages %}{% endif %}
     <ul class="terminal-list">
-      {% for page in pages_to_render %}
-        <li class="list-item section-list-item">
-          <div class="list-item-row">
-            {% if page.date %}
-              <span class="item-date">{{ page.date | date(format=config.extra.date_format) }}</span>
-            {% endif %}
-            {% if page.extra.lang %}
-              <span class="item-lang-badge">[{{ page.extra.lang | upper }}]</span>
-            {% endif %}
-            <a href="{{ page.permalink }}" class="item-link">{{ page.title }}</a>
-          </div>
-          {% if page.description %}
-            <p class="project-desc">{{ page.description }}</p>
-          {% endif %}
-          {% if page.taxonomies.tags %}
-            <div class="item-tags">
-              {% for tag in page.taxonomies.tags %}
-                <a href="{{ get_taxonomy_url(kind="tags", name=tag) }}" class="item-tag">#{{ tag }}</a>
-              {% endfor %}
-            </div>
-          {% endif %}
-        </li>
-      {% else %}
-        <li class="list-item empty-list">No entries found.</li>
-      {% endfor %}
+      {% for page in pages_to_render %}{{ ui::entry(page=page) }}
+      {% else %}<li class="list-item empty-list">No entries yet. Check back soon.</li>{% endfor %}
     </ul>
   </div>
-
-  {% if paginator %}
+  {% if paginator and paginator.number_pagers > 1 %}
   <nav class="tui-panel__foot tui-panel__foot--right" aria-label="Pagination">
-      {% if paginator.previous %}
-        <a href="{{ paginator.previous }}">[ < PREV ]</a>
-      {% else %}
-        <span class="is-disabled">[ < PREV ]</span>
-      {% endif %}
-
-      <span class="is-page">PAGE {{ paginator.current_index }} / {{ paginator.number_pagers }}</span>
-
-      {% if paginator.next %}
-        <a href="{{ paginator.next }}">[ NEXT > ]</a>
-      {% else %}
-        <span class="is-disabled">[ NEXT > ]</span>
-      {% endif %}
+    {% if paginator.previous %}<a href="{{ paginator.previous }}">[ ‹ PREV ]</a>{% else %}<span class="is-disabled">[ ‹ PREV ]</span>{% endif %}
+    <span class="is-page">{{ paginator.current_index }} / {{ paginator.number_pagers }}</span>
+    {% if paginator.next %}<a href="{{ paginator.next }}">[ NEXT › ]</a>{% else %}<span class="is-disabled">[ NEXT › ]</span>{% endif %}
   </nav>
+  {% else %}
+  <nav class="tui-panel__foot tui-panel__foot--right" aria-label="Back to home"><a href="{{ get_url(path='') }}">[ ‹ HOME ]</a></nav>
   {% endif %}
-</div>
+</section>
 {% endblock content %}

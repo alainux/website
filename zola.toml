@@ -3,6 +3,8 @@ base_url = "https://www.ialan.eu"
 
 # The site title and description; used in feeds by default.
 title = "L4TT1C3"
+description = "Alain Jacomet-Forte — AI engineering lead in Berlin. Notes on software, experiments, and building useful things."
+author = "Alain Jacomet-Forte"
 default_language = "en"
 
 # Whether to automatically compile all Sass files in the sass directory
@@ -31,12 +33,18 @@ taxonomies = [
 theme = "tokyo-night"
 style = "class"
 
-[languages]
-[languages.en]
-description = "Personal site and blog — software engineering, electronics, music, and life."
-
 [extra]
 site_name = "L4TT1C3"
+author_name = "Alain Jacomet-Forte"
+author_first_name = "Alain"
+author_last_name = "Jacomet-Forte"
+author_role = "AI Engineering Lead & Software Engineer"
+author_location = "Berlin, Germany"
+author_intro = "I build AI-powered products and the teams behind them. This is where I share notes on engineering, explore ideas, and make things for the joy of it."
+author_focus = "LLMs, agents & the web"
+codeberg_url = "https://codeberg.org/ialan"
+github_url = "https://github.com/alainux"
+linkedin_url = "https://linkedin.com/in/alainux"
 
 # ── Color theme ──────────────────────────────────────────────
 # Active terminal color theme. Owner-configured only — visitors
@@ -49,8 +57,8 @@ theme = "tokyo-night"
 date_format = "%Y-%m-%d"
 
 # List labels
-latest_posts = "LATEST POSTS"
-latest_projects = "LATEST PROJECTS"
+latest_posts = "RECENT WRITING"
+latest_projects = "PROJECTS & EXPERIMENTS"
 
 # Button labels
 back_to_home = "BACK TO HOME"

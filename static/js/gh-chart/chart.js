@@ -33,11 +33,16 @@ export function initContribChart() {
   const { cells, minCount, maxCount, monthDescs } = buildCells(DATA);
   const TOTAL = cells.length;
   const startH = 0.0001;
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ROTATION_RESUME_MS = 4000;
+  const CAMERA_FILL = 0.74;
+  let rotationPaused = reduced;
+  const motionButton = document.getElementById('gh-motion-toggle');
 
   const s = createScene(canvas, pal, cells);
   const { renderer, scene, camera, controls, mesh, barMat, lineMat, tileMat,
-          edges, rebuildEdges, writeInstance, currentH, todayRing, monthsGroup,
-          buildMonthLabels, horizonGrid, buildHorizonGrid } = s;
+          rebuildEdges, writeInstance, currentH, todayRing,
+          buildMonthLabels } = s;
 
   function baseColorOf(i) { return colorForCount(THREE, pal, cells[i].count, minCount, maxCount); }
   function applyColors() {
@@ -52,7 +57,7 @@ export function initContribChart() {
 
   /* ── Entrance animation ── */
   const hs = new Float32Array(TOTAL).fill(startH);
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  controls.autoRotate = !rotationPaused;
   const tlEnter = gsap.timeline({ delay: 0.12 });
   function writeInstances() {
     for (let i = 0; i < TOTAL; i++) { writeInstance(i, hs[i]); currentH[i] = hs[i]; }
@@ -71,53 +76,34 @@ export function initContribChart() {
     tlEnter.eventCallback('onUpdate', writeInstances);
   }
 
-  /* ── Camera framing (desktop vs mobile) ── */
-  function frameConfig() {
-    const mobile = window.matchMedia('(max-width: 860px)').matches;
-    return mobile ? { ndcX: 0.42, ndcY: -0.42, occ: 0.92 } : { ndcX: -0.42, ndcY: 0.0, occ: 1.12 };
-  }
-  function applyViewShift() {
-    const fc = frameConfig();
-    camera.projectionMatrix.elements[8] = -fc.ndcX;
-    camera.projectionMatrix.elements[9] = -fc.ndcY;
-    camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();
-  }
+  /* Fit the calendar inside its own viewport, including on narrow screens. */
   function fitCameraToChart() {
-    const halfX = (s.extent.maxX - s.extent.minX) / 2;
-    const halfZ = (s.extent.maxZ - s.extent.minZ) / 2;
-    const halfY = H_MAX / 2;
-    const center = new THREE.Vector3(halfX * 0.10, -H_MAX * 0.6, 0);
-    const radius = Math.sqrt(halfX * halfX + halfZ * halfZ + halfY * halfY);
-    const fov = (camera.fov * Math.PI) / 180;
-    const fc = frameConfig();
-    const dist = (radius / Math.tan(fov / 2)) * (0.5 / fc.occ);
-    const dir = new THREE.Vector3(-0.85, 0.55, 0.7).normalize();
-    camera.position.copy(center).add(dir.multiplyScalar(dist));
+    const halfX = (s.extent.maxX - s.extent.minX) / 2 + 2;
+    const halfZ = (s.extent.maxZ - s.extent.minZ) / 2 + 2;
+    const center = new THREE.Vector3(0, H_MAX / 2, 0);
+    const direction = new THREE.Vector3(-0.65, 1.2, 1).normalize();
+    const verticalFov = THREE.MathUtils.degToRad(camera.fov);
+    const horizontalFov = 2 * Math.atan(Math.tan(verticalFov / 2) * camera.aspect);
+    const radius = Math.sqrt(halfX * halfX + halfZ * halfZ + H_MAX * H_MAX / 4);
+    const distance = CAMERA_FILL * radius / Math.sin(Math.min(verticalFov, horizontalFov) / 2);
+    camera.position.copy(center).add(direction.multiplyScalar(distance));
     controls.target.copy(center);
-    controls.minDistance = dist * 0.4;
-    controls.maxDistance = dist * 2.5;
-    camera.near = dist * 0.05;
-    camera.far = dist * 5;
+    camera.near = distance * 0.05;
+    camera.far = distance * 5;
     camera.updateProjectionMatrix();
-    scene.fog.near = dist * 1.15;
-    scene.fog.far = dist * 3.4;
-    applyViewShift();
+    scene.fog.near = distance * 1.5;
+    scene.fog.far = distance * 4;
     controls.update();
   }
-  fitCameraToChart();
 
-  /* ── Resize ── */
   function resize() {
-    const r = canvas.parentElement.getBoundingClientRect();
-    const w = Math.max(1, r.width);
-    const h = Math.max(1, r.height);
-    renderer.setSize(w, h, false);
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-    applyViewShift();
-    if (composer) composer.setSize(w, h);
+    const bounds = canvas.parentElement.getBoundingClientRect();
+    const width = Math.max(1, bounds.width);
+    const height = Math.max(1, bounds.height);
+    renderer.setSize(width, height, false);
+    camera.aspect = width / height;
+    fitCameraToChart();
+    if (composer) composer.setSize(width, height);
   }
   new ResizeObserver(resize).observe(canvas.parentElement);
 
@@ -141,7 +127,7 @@ export function initContribChart() {
         const c = cells[hoveredIdx];
         tooltipEl.innerHTML =
           `<span class="gh-tip-date">${c.date || '—'}</span>` +
-          `<span class="gh-tip-count"><b>${c.count}</b> commit${c.count === 1 ? '' : 's'}</span>`;
+          `<span class="gh-tip-count"><b>${c.count}</b> contribution${c.count === 1 ? '' : 's'}</span>`;
         tooltipEl.classList.add('is-visible');
       } else if (tooltipEl) {
         tooltipEl.classList.remove('is-visible');
@@ -149,7 +135,7 @@ export function initContribChart() {
     }
     if (tooltipEl && hoveredIdx >= 0) {
       tooltipEl.style.transform =
-        `translate3d(${e.clientX - r.left + 14}px, ${e.clientY - r.top - 6}px, 0)`;
+        `translate3d(${Math.max(0, Math.min(e.clientX - r.left + 14, r.width - tooltipEl.offsetWidth))}px, ${Math.max(0, e.clientY - r.top - tooltipEl.offsetHeight - 10)}px, 0)`;
     }
   });
   canvas.addEventListener('pointerleave', () => {
@@ -174,12 +160,13 @@ export function initContribChart() {
 
   /* ── Render loop ── */
   let isVisible = true;
-  document.addEventListener('visibilitychange', () => { isVisible = !document.hidden; });
+  new IntersectionObserver(([entry]) => { isVisible = entry.isIntersecting; }).observe(canvas);
+
   const ringPulse = { v: 0 };
 
   function render() {
     requestAnimationFrame(render);
-    if (!isVisible) return;
+    if (!isVisible || document.hidden) return;
     controls.update();
 
     let dirty = false;
@@ -210,7 +197,7 @@ export function initContribChart() {
       rebuildEdges();
     }
 
-    if (todayRing && !reduced) {
+    if (todayRing && !reduced && !rotationPaused) {
       ringPulse.v += 0.04;
       const p = (Math.sin(ringPulse.v) + 1) / 2;
       todayRing.material.opacity = 0.55 + p * 0.45;
@@ -227,8 +214,22 @@ export function initContribChart() {
   controls.addEventListener('start', () => { controls.autoRotate = false; clearTimeout(resumeTimer); });
   controls.addEventListener('end', () => {
     clearTimeout(resumeTimer);
-    resumeTimer = setTimeout(() => (controls.autoRotate = true), 4000);
+    if (!rotationPaused) resumeTimer = setTimeout(() => (controls.autoRotate = true), ROTATION_RESUME_MS);
   });
+
+  function paintMotionButton() {
+    if (!motionButton) return;
+    motionButton.hidden = false;
+    motionButton.setAttribute('aria-pressed', String(rotationPaused));
+    motionButton.textContent = rotationPaused ? '[ Resume rotation ]' : '[ Pause rotation ]';
+  }
+  if (motionButton) motionButton.addEventListener('click', () => {
+    rotationPaused = !rotationPaused;
+    controls.autoRotate = !rotationPaused;
+    clearTimeout(resumeTimer);
+    paintMotionButton();
+  });
+  paintMotionButton();
 
   /* ── Live theme switch ── */
   function applyTheme() {
@@ -240,11 +241,7 @@ export function initContribChart() {
     if (composer && composer._bloom) composer._bloom.threshold = bloomThreshold();
     scene.background.set(pal.bg);
     scene.fog.color.set(pal.bg);
-    scene.remove(horizonGrid);
-    horizonGrid.geometry.dispose();
-    horizonGrid.material.dispose();
-    horizonGrid = buildHorizonGrid();
-    scene.add(horizonGrid);
+    s.updatePalette(pal);
     if (todayRing) todayRing.material.color.set(pal.accent);
     buildMonthLabels(monthDescs);
     if (!reduced) {
@@ -255,4 +252,7 @@ export function initContribChart() {
   new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
   resize();
+  canvas.setAttribute('data-ready', '');
+  const fallback = document.getElementById('gh-chart-fallback');
+  if (fallback) fallback.hidden = true;
 }

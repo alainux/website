@@ -1,207 +1,66 @@
-/* ============================================================
-   GitHub contributions isometric chart
-   ------------------------------------------------------------
-   Houses the <canvas> rendered by static/js/contrib-chart.js
-   (Three.js + GSAP). Wrapped in a standard .tui-panel so the
-   visual language matches the rest of the homepage.
-
-   Layout: full-panel stage with the 3D canvas filling the body
-   and the HTML commit log overlaid on the right with a
-   translucent backdrop, so the chart visually extends behind
-   the log.
-   ============================================================ */
-
-.gh-chart-panel { margin-top: 0; }
-
-.gh-chart-body { padding: 0 !important; }
-
-/* ── Stage: full-panel-bleed 3D area. The canvas fills the
-   entire panel body and the commit log overlays on the right
-   with no background, no blur, no border — the 3D canvas is
-   fully visible through it. No inner border, no overflow
-   clipping. The stage itself uses the page background so the
-   chart reads as continuous with the outer desktop rather
-   than sitting on the (lighter) window interior. */
-.gh-chart-stage {
-  position: relative;
-  min-width: 0;
-  height: 380px;
-  background: var(--surface);
-}
-@media (max-width: 860px) {
-  .gh-chart-stage {
-    height: auto;
-    min-height: 420px;
-  }
-}
-
-#gh-contrib-canvas {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: transparent !important;
-  mix-blend-mode: normal;
-  touch-action: none;
-  cursor: crosshair;
-}
-@media (prefers-reduced-motion: reduce) {
-  .gh-chart-stage { min-height: 360px; }
-}
-
-/* ── Hover tooltip (per-day, HTML overlay) ────────────────── */
-.gh-tooltip {
-  position: absolute;
-  z-index: 4;
-  pointer-events: none;
-  display: none;
-  flex-direction: column;
-  gap: 2px;
-  padding: 6px 10px;
-  background: var(--chip-bg);
-  border: 1px solid var(--border-strong);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-sm);
-  color: var(--text);
-  white-space: nowrap;
-  line-height: 1.35;
-  transform: translateY(-100%);
-  box-shadow: 0 0 0 1px var(--accent-glow);
-
-  &.is-visible { display: flex; }
-
-  .gh-tip-date  { color: var(--text-muted); }
-  .gh-tip-count b { color: var(--success); font-weight: 700; }
-}
-
-/* ── Right-side commit log overlay (HTML) ─────────────────── */
-/* Absolutely positioned on the right of the stage; no
-   background, no blur, no border — the 3D canvas is fully
-   visible through it. A subtle top padding keeps the log
-   text clear of the panel's top border. */
-.gh-log {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: clamp(240px, 40%, 60%);
-  max-width: 60%;
-  padding: 1.1rem 0.8rem;
-  max-height: 380px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
-  font-family: var(--font-mono);
-  font-size: var(--font-size-md);
-  /* Let clicks/hovers fall through to the 3D canvas everywhere except
-     on the actual links, so the chart stays fully interactable. */
-  pointer-events: none;
-  & a, & .gh-log__commit, & .gh-log__repo { pointer-events: auto; }
-}
-@media (max-width: 860px) {
-  .gh-log {
-    position: relative;
-    width: 100%;
-    max-height: none;
-  }
-}
-
-.gh-log::-webkit-scrollbar { width: 6px; }
-.gh-log::-webkit-scrollbar-thumb { background: var(--border); }
-
-.gh-log__section + .gh-log__section { margin-top: 1.25rem; }
-
-.gh-log__title {
-  margin: 0 0 0.6rem;
-  font-size: var(--font-size-sm);
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  color: var(--success);
-  text-transform: uppercase;
-}
-
-.gh-log__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* The chart and commit log have their own space at every breakpoint. */
+.gh-chart-panel .tui-panel__head { color: var(--success); }
+.gh-chart-body { padding: 24px 0 18px; }
+.gh-chart-summary {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.gh-log__item { line-height: 1.35; }
-
-.gh-log__commit {
-  display: grid;
-  grid-template-columns: auto auto 1fr;
-  gap: 8px;
   align-items: baseline;
-  padding: 3px 6px;
-  color: var(--text);
-  text-decoration: none;
-  border: 1px solid transparent;
-  transition: border-color 0.15s ease, background 0.15s ease;
-
-  &:hover {
-    border-color: var(--border-strong);
-    background: var(--surface-hover);
-  }
-}
-
-.gh-log__sha {
-  color: var(--info);
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  font-size: var(--font-size-sm);
-}
-.gh-log__date {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 0 26px 18px;
   color: var(--text-muted);
-  font-size: var(--font-size-sm);
+  font-size: 11px;
+  p { display: flex; align-items: baseline; gap: 10px; }
+  strong { color: var(--text); font-size: 26px; letter-spacing: -1px; font-weight: 400; }
 }
-.gh-log__msg {
-  color: var(--text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+.gh-snapshot { color: var(--text-muted); font-size: 10px; }
+.gh-chart-layout { display: grid; grid-template-columns: minmax(0, 1fr) 250px; }
+.gh-chart-visual { min-width: 0; }
+.gh-chart-stage { position: relative; min-width: 0; height: 280px; overflow: hidden; background: var(--surface); }
+#gh-contrib-canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; opacity: 0; cursor: grab; }
+#gh-contrib-canvas[data-ready] { opacity: 1; }
+#gh-contrib-canvas:active { cursor: grabbing; }
+.gh-chart-fallback { position: absolute; inset: 0; display: grid; align-content: center; padding: 26px; color: var(--primary); font-size: 15px; }
+.gh-chart-fallback[hidden] { display: none; }
+.gh-chart-fallback span { color: var(--text-muted); font-size: 12px; margin-top: 12px; }
+.gh-chart-caption { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding: 8px 26px 0; font-size: 10px; color: var(--text-muted); }
+.gh-legend { display: inline-flex; align-items: center; gap: 4px; }
+.gh-legend > span { margin: 0 4px; }
+.gh-swatch { width: 9px; height: 9px; background: var(--success); }
+.gh-swatch--0 { background: var(--border); }
+.gh-swatch--1 { opacity: 0.3; }
+.gh-swatch--2 { opacity: 0.5; }
+.gh-swatch--3 { opacity: 0.75; }
+[data-theme="light"] .gh-swatch { background: var(--primary); }
+[data-theme="light"] .gh-swatch--0 { background: var(--border); }
+.gh-motion-toggle { padding: 6px 0; color: var(--text-muted); font-size: inherit; &:hover { color: var(--success); } }
+.gh-motion-toggle[hidden] { display: none; }
+.gh-tooltip { display: none; position: absolute; z-index: 4; pointer-events: none; padding: 8px 10px; background: var(--surface-alt); border: 1px solid var(--border-strong); font-size: 11px; white-space: nowrap; }
+.gh-tooltip.is-visible { display: flex; flex-direction: column; }
+.gh-tip-date { color: var(--text-muted); }
+.gh-tip-count b { color: var(--success); }
+.gh-log { min-width: 0; padding: 8px 24px 8px 20px; border-left: 1px solid var(--border); font-size: 11px; }
+.gh-log__title { color: var(--violet); font-size: 10px; font-weight: 400; margin-bottom: 10px; }
+.gh-log__list { list-style: none; }
+.gh-log__item { border-bottom: 1px solid var(--border); &:last-child { border: none; } }
+.gh-log__commit { display: grid; grid-template-columns: 1fr auto; gap: 3px 8px; padding: 8px 0; }
+.gh-log__sha { color: var(--primary); font-size: 10px; }
+.gh-log__date { color: var(--text-muted); font-size: 10px; }
+.gh-log__msg { grid-column: 1 / -1; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gh-log__commit:hover .gh-log__sha, .gh-log__commit:hover .gh-log__msg { color: var(--success); }
+.gh-log__section { margin-top: 18px; }
+.gh-log__repo { display: flex; justify-content: space-between; gap: 10px; padding-block: 4px; color: var(--text-muted); font-size: 10px; }
+.gh-log__repo a { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gh-log__repo-count { color: var(--success); }
+.gh-log__empty { color: var(--text-muted); padding: 12px 0; }
 
-.gh-log__repo-item { padding: 3px 0; }
-.gh-log__repo {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 8px;
-  align-items: baseline;
-  padding: 4px 6px;
-  color: var(--text);
-  text-decoration: none;
-  border: 1px solid transparent;
-  transition: border-color 0.15s ease, background 0.15s ease;
-
-  &:hover {
-    border-color: var(--border-strong);
-    background: var(--surface-hover);
-  }
+@media (max-width: 700px) {
+  .gh-chart-layout { grid-template-columns: 1fr; }
+  .gh-log { margin: 20px 24px 0; padding: 20px 0 0; border-left: none; border-top: 1px solid var(--border); }
+  .gh-log__list { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 20px; }
+  .gh-log__section { margin-top: 16px; }
+  .gh-chart-body { padding: 24px 0 18px; }
+  .gh-chart-stage { height: 260px; }
+  .gh-chart-summary { padding-inline: 24px; }
 }
-.gh-log__repo--masked { cursor: default; }
-.gh-log__repo--masked:hover { background: transparent; border-color: transparent; }
-
-.gh-log__repo-count {
-  color: var(--success);
-  font-weight: 700;
-  font-size: var(--font-size-sm);
-  min-width: 2.4em;
-  text-align: right;
-}
-.gh-log__repo-name {
-  color: var(--primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.gh-log__empty {
-  color: var(--text-muted);
-  font-style: italic;
-  padding: 6px 0;
-}
+@media (prefers-reduced-motion: reduce) { .gh-chart-stage { height: 230px; } }

@@ -1,53 +1,22 @@
 {% extends "base.html" %}
-
+{% import "macros.html" as ui %}
 {% block title %}Tag: #{{ term.name }} | {{ config.title }}{% endblock %}
 {% block description %}Posts tagged #{{ term.name }} on {{ config.title }}.{% endblock %}
 {% block og_title %}#{{ term.name }}{% endblock %}
 {% block og_description %}Posts tagged #{{ term.name }}.{% endblock %}
-
+{% block twitter_title %}#{{ term.name }}{% endblock %}
+{% block twitter_description %}Posts tagged #{{ term.name }}.{% endblock %}
 {% block content %}
-<div class="tui-panel">
-  <div class="tui-panel__head">
-    <h2 class="tui-panel__title">[ TAG: #{{ term.name | upper }} ]</h2>
-  </div>
+<section class="tui-panel collection-panel">
+  <div class="tui-panel__head"><span>[ FILTERED NOTES ]</span></div>
   <div class="tui-panel__body">
-
-    <p class="welcome-desc">> Showing all posts matching the topic term #{{ term.name }}:</p>
-
+    <header class="page-heading"><p class="page-eyebrow">/tags/</p><h1>#{{ term.name }}</h1><p class="section-intro">{{ term.pages | length }} {% if term.pages | length == 1 %}entry{% else %}entries{% endif %} in this corner of the notebook.</p></header>
     {% set active_tag = term.name %}
     {% include "partials/tag_filter.html" %}
-
     <ul class="terminal-list">
-      {% for page in term.pages %}
-        <li class="list-item section-list-item">
-          <div class="list-item-row">
-            {% if page.date %}
-              <span class="item-date">{{ page.date | date(format=config.extra.date_format) }}</span>
-            {% endif %}
-            {% if page.extra.lang %}
-              <span class="item-lang-badge">[{{ page.extra.lang | upper }}]</span>
-            {% endif %}
-            <a href="{{ page.permalink }}" class="item-link">{{ page.title }}</a>
-          </div>
-          {% if page.description %}
-            <p class="project-desc">{{ page.description }}</p>
-          {% endif %}
-          {% if page.taxonomies.tags %}
-            <div class="item-tags">
-              {% for tag in page.taxonomies.tags %}
-                <a href="{{ get_taxonomy_url(kind="tags", name=tag) }}" class="item-tag">#{{ tag }}</a>
-              {% endfor %}
-            </div>
-          {% endif %}
-        </li>
-      {% else %}
-        <li class="list-item empty-list">No posts found with this tag.</li>
-      {% endfor %}
+      {% for page in term.pages %}{{ ui::entry(page=page) }}{% endfor %}
     </ul>
   </div>
-  <nav class="tui-panel__foot tui-panel__foot--right" aria-label="Tag navigation">
-    <a href="{{ get_url(path="blog/") }}" class="terminal-btn">[ BACK TO BLOG ]</a>
-    <a href="{{ get_url(path="") }}" class="terminal-btn">[{{ config.extra.back_to_home }}]</a>
-  </nav>
-</div>
+  <nav class="tui-panel__foot tui-panel__foot--right" aria-label="Tag navigation"><a href="{{ get_url(path='blog/') }}">[ ‹ ALL WRITING ]</a></nav>
+</section>
 {% endblock content %}

@@ -1,538 +1,226 @@
-/* ============================================================
-Terminal Window Chrome
-------------------------------------------------------------
-Vim-inspired statusline header + winbar footer around the
-scrollable buffer area.
-
-Statusline layout (left → right):
-
-┌──────────┬──────────────────────────┬──────────────────┐
-│ PATH │ MENU (scrollable) │ CONTROLS │
-└──────────┴──────────────────────────┴──────────────────┘
-
-- PATH sits on the left, with an ACCENT background — the
-"primary" foreground segment of Neovim's statusline. It
-can never get clipped since it's first.
-- MENU is horizontally scrollable on narrow viewports so
-the tabs can wrap off-screen without overflowing the
-statusline.
-- CONTROLS are pinned to the right.
-- On small screens the entire MENU collapses into a
-CSS-only hamburger built on `<details>`.
-============================================================ */
-
-/* ──────────────────────────────────────────────────────────────
-Root + layout modes
-────────────────────────────────────────────────────────────── */
+/* Shared terminal chrome. Content uses the document's natural scroll. */
 .terminal-container {
   display: flex;
-  flex-direction: column;
   min-height: 100vh;
-  background: var(--bg-page-grad);
-}
-
-/* Skip link — visible only on keyboard focus */
-.skip-link {
-  position: absolute;
-  top: -100%;
-  left: 0;
-  padding: 6px 12px;
-  background: var(--primary);
-  color: var(--surface);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-md);
-  z-index: 20;
-  text-decoration: none;
-  &:focus { top: 0; }
-}
-
-html[data-layout="centered"] .terminal-window {
-  width: 100%;
-  max-width: var(--max-width-centered);
-  margin: 0 auto;
-}
-
-html[data-layout="full"] .terminal-window {
-  width: 100%;
-  max-width: var(--max-width-full);
-  margin: 0;
+  background: var(--page-bg);
 }
 
 .terminal-window {
   display: flex;
   flex-direction: column;
-  flex: 1;
   width: 100%;
+  min-width: 0;
   min-height: 100vh;
+  margin: 0 auto;
   background: var(--surface);
-  border: 1px solid var(--border);
+  border-inline: 1px solid var(--border);
 }
 
-/* ============================================================
-Statusline container
-============================================================ */
-.vim-statusline {
-  display: flex;
-  align-items: stretch;
-  height: var(--bar-h);
-  flex-shrink: 0;
-  background-color: var(--surface-alt);
-  border-bottom: 1px solid var(--border);
-  color: var(--status-fg);
-  font-family: var(--font-mono);
-  font-size: var(--bar-font-size);
-  user-select: none;
-}
+html[data-layout="centered"] .terminal-window { max-width: var(--max-width-centered); }
+html[data-layout="full"] .terminal-window { max-width: var(--max-width-full); }
 
-/* ──────────────────────────────────────────────────────────────
-PATH segment — leftmost, primary/accent bg, never clipped
-────────────────────────────────────────────────────────────── */
-.status-path {
-  display: inline-flex;
-  align-items: center;
-  height: 100%;
-  flex-shrink: 0;
-  padding: 0 var(--bar-pad-x);
-  background-color: var(--primary);
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 12px;
+  z-index: 30;
+  padding: 8px 14px;
+  background: var(--primary);
   color: var(--surface);
-  font-weight: 500;
-  letter-spacing: 0.3px;
-  border-right: 1px solid var(--border);
-  min-width: 0;
-  max-width: 45%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-
-  .path-icon { margin-right: 6px; font-weight: 700; }
-  .path-text { overflow: hidden; text-overflow: ellipsis; }
+  &:focus { top: 8px; }
 }
 
-/* ──────────────────────────────────────────────────────────────
-MENU segment — horizontally scrollable, never wraps
-────────────────────────────────────────────────────────────── */
-/* Scroll happens on the inner <ul> */
-.status-nav {
-  display: flex;
-  align-items: stretch;
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.nav-list {
-  display: inline-flex;
-  align-items: stretch;
-  flex: 1 1 auto;
-  min-width: 0;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: none;
-  scroll-snap-type: x proximity;
-  &::-webkit-scrollbar { display: none; }
-}
-
-.nav-list-item {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: stretch;
-  height: 100%;
-  border-left: 1px solid var(--border);
-  border-right: 1px solid var(--border);
-  scroll-snap-align: start;
-}
-
-.status-nav-item {
-  display: inline-flex;
-  align-items: center;
-  height: 100%;
-  padding: 0 var(--bar-pad-x);
-  color: var(--text-muted);
-  font-weight: 500;
-  text-decoration: none;
-  transition: background-color 0.12s ease, color 0.12s ease;
-
-  &::before { content: "["; margin-right: 6px; color: var(--text-faint); }
-  &::after  { content: "]"; margin-left: 6px; color: var(--text-faint); }
-
-  &:hover {
-    background-color: var(--surface-hover);
-    color: var(--text);
-  }
-
-  &.active {
-    background-color: var(--surface);
-    color: var(--primary);
-
-    &::before, &::after { color: var(--success); font-weight: 700; }
-  }
-
-  &:focus-visible {
-    outline: 1px dashed var(--success);
-    outline-offset: -2px;
-  }
-}
-
-.nav-label {
-  text-transform: lowercase;
-  letter-spacing: 0.5px;
-}
-
-/* ──────────────────────────────────────────────────────────────
-CONTROLS segment — right-pinned, never shrinks
-────────────────────────────────────────────────────────────── */
-.status-controls {
-  display: inline-flex;
-  align-items: stretch;
-  flex-shrink: 0;
-  height: 100%;
-  border-left: 1px solid var(--border);
-}
-
-.status-control {
-  display: inline-flex;
-  align-items: center;
-  height: 100%;
-  padding: 0 var(--bar-pad-x);
-  flex-shrink: 0;
-  color: var(--text-muted);
-  font-weight: 500;
-  cursor: pointer;
-  user-select: none;
-  transition: background-color 0.12s ease, color 0.12s ease;
-  border: none;
-  background: none;
-  font-family: inherit;
-  font-size: inherit;
-
-  &::before { content: "["; margin-right: 6px; color: var(--text-faint); }
-  &::after  { content: "]"; margin-left: 6px; color: var(--text-faint); }
-
-  .control-icon {
-    margin-right: 6px;
-    font-size: var(--bar-icon-size);
-    color: var(--primary);
-  }
-
-  .control-text {
-    text-transform: uppercase;
-    font-size: var(--bar-text-size);
-    letter-spacing: 0.5px;
-    font-weight: 700;
-    color: var(--text);
-  }
-
-  &:hover { background-color: var(--surface-hover); color: var(--primary); }
-  &:focus-visible {
-    outline: 1px dashed var(--success);
-    outline-offset: -2px;
-  }
-
-  /* Static language badge (no hover bg, no interaction) */
-  &.lang-badge {
-    cursor: default;
-
-    .control-icon,
-    .control-text { color: var(--info); }
-
-    &::before, &::after { color: var(--info); font-weight: 700; }
-
-    &:hover { background-color: transparent; color: var(--info); }
-  }
-
-  /* Per-control accent — instead of every status-control being the
-     same blue, each one picks a different Tokyo Night role so the
-     bar reads as a balanced terminal, not a one-hue strip. */
-  &.layout-toggle .control-icon { color: var(--violet); }
-  &.theme-toggle  .control-icon { color: var(--warning);  }
-  &.scroll-top    .control-icon { color: var(--orange);  }
-  &.back-link     .control-icon { color: var(--info);    }
-}
-
-/* ──────────────────────────────────────────────────────────────
-Hamburger nav (mobile only)
-------------------------------------------------------------
-A `<details>` element. The `<summary>` is a single
-statusline cell. When open, the inner <nav> drops down as
-a bordered TUI panel anchored to the statusline.
-────────────────────────────────────────────────────────────── */
-.nav-hamburger {
-  display: none;
-  flex-shrink: 0;
-  position: relative;
-  height: 100%;
-
-  > summary {
-    display: inline-flex;
-    align-items: center;
-    height: 100%;
-    padding: 0 var(--bar-pad-x);
-    color: var(--text-muted);
-    font-family: var(--font-mono);
-    font-size: var(--font-size-md);
-    font-weight: 700;
-    cursor: pointer;
-    list-style: none;
-    border-right: 1px solid var(--border);
-    border-left: 1px solid var(--border);
-    user-select: none;
-    white-space: nowrap;
-
-    &::-webkit-details-marker { display: none; }
-    &::marker { content: ""; }
-    &::before { content: "["; margin-right: 6px; color: var(--text-faint); }
-    &::after  { content: "]"; margin-left: 6px; color: var(--text-faint); }
-
-    .hamburger-icon {
-      display: inline-block;
-      width: 14px;
-      height: 2px;
-      position: relative;
-      vertical-align: middle;
-      margin-right: 8px;
-      flex-shrink: 0;
-      background-color: currentColor;
-      border-radius: 0;
-      transition: background-color 0.15s ease;
-
-      &::before, &::after {
-        content: "";
-        display: block;
-        position: absolute;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background-color: currentColor;
-        border-radius: 0;
-        transition: transform 0.15s ease;
-      }
-
-      &::before { top: -5px; }
-      &::after  { top: 5px; }
-
-      &::before, &::after { transform-origin: 50% 50%; }
-    }
-
-    .hamburger-label {
-      display: none;
-    }
-  }
-
-  /* The dropdown panel that appears when open. */
-  > .hamburger-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    z-index: 10;
-    min-width: 200px;
-    background-color: var(--surface-alt);
-    border: 1px solid var(--border);
-    border-top: none;
-    box-shadow: rgba(0, 0, 0, 0.3) 0 4px 12px;
-
-    > a {
-      display: flex;
-      align-items: center;
-      height: 32px;
-      padding: 0 12px;
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-      font-size: var(--font-size-md);
-      font-weight: 600;
-      text-decoration: none;
-      border-bottom: 1px dashed var(--border);
-
-      &::before { content: "› "; margin-right: 6px; color: var(--text-faint); }
-
-      &:last-child { border-bottom: none; }
-
-      &:hover { background-color: var(--surface-hover); color: var(--text); }
-
-      &.active { color: var(--primary); &::before { color: var(--primary); } }
-    }
-
-    > .hamburger-divider {
-      height: 1px;
-      margin: 4px 12px;
-      background-color: var(--border);
-    }
-
-    > .hamburger-static {
-      display: flex;
-      align-items: center;
-      height: 28px;
-      padding: 0 12px 0 24px;
-      color: var(--info);
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-
-      .control-icon { margin-right: 8px; }
-    }
-  }
-
-  &[open] {
-    > summary {
-      background-color: var(--surface);
-      color: var(--primary);
-      flex-shrink: 0;
-
-      &::before, &::after { color: var(--primary); font-weight: 700; }
-
-      .hamburger-icon {
-        background-color: transparent;
-
-        &::before { transform: translateY(5px) rotate(45deg); }
-        &::after  { transform: translateY(-5px) rotate(-45deg); }
-      }
-    }
-  }
-}
-
-/* ============================================================
-Window Body (the buffer)
-============================================================ */
-.window-body {
-  flex: 1;
-  min-height: 0;
-  padding: 1.5rem;
-  overflow-y: auto;
-  scroll-behavior: smooth;
-}
-
-/* ============================================================
-Winbar (footer)
-============================================================ */
+.vim-statusline,
 .vim-winbar {
   display: flex;
   align-items: stretch;
-  justify-content: space-between;
-  height: var(--bar-h);
   flex-shrink: 0;
-  background-color: var(--surface-alt);
+  min-height: var(--bar-h);
+  background: var(--status-bg);
+  color: var(--status-fg);
+  font-size: var(--bar-font-size);
+}
+
+.vim-statusline {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: var(--bar-h);
+  border-bottom: 1px solid var(--border);
+}
+
+.status-path {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 6px;
+  max-width: 40%;
+  padding: 0 var(--bar-pad-x);
+  background: var(--action-bg);
+  color: var(--action-fg);
+  font-weight: 700;
+  line-height: 1.2;
+  .path-text { overflow-wrap: anywhere; }
+}
+
+.status-nav {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.nav-list {
+  display: flex;
+  align-items: stretch;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-list-item { display: flex; flex-shrink: 0; }
+
+.status-nav-item,
+.status-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 5px;
+  padding: 0 var(--bar-pad-x);
+  color: var(--text-muted);
+  font-size: inherit;
+  white-space: nowrap;
+  text-decoration: none;
+  &::before { content: "["; color: var(--text-faint); }
+  &::after { content: "]"; color: var(--text-faint); }
+  &:hover { color: var(--text); background: var(--surface-hover); }
+  &:hover::before, &:hover::after { color: var(--success); }
+}
+
+.status-nav-item.active {
+  color: var(--primary);
+  background: var(--surface);
+  &::before, &::after { color: var(--success); }
+}
+
+.status-controls {
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  margin-left: auto;
+  border-left: 1px solid var(--border);
+}
+
+.control-icon { font-size: var(--bar-icon-size); }
+.layout-toggle .control-icon { color: var(--violet); }
+.theme-toggle .control-icon { color: var(--warning); }
+.lang-badge { color: var(--info); }
+
+.nav-hamburger {
+  display: none;
+  position: relative;
+  flex-shrink: 0;
+  height: 100%;
+  > summary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 94px;
+    height: 100%;
+    font-size: inherit;
+    color: var(--text-muted);
+    list-style: none;
+    cursor: pointer;
+    &::-webkit-details-marker { display: none; }
+    &::marker { content: ""; }
+    &::before { content: "["; color: var(--text-faint); }
+    &::after { content: "]"; color: var(--text-faint); }
+  }
+  .hamburger-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 14px;
+    height: 16px;
+    &::before { content: "☰"; }
+  }
+  &[open] > summary {
+    background: var(--surface);
+    color: var(--primary);
+    &::before, &::after { color: var(--success); }
+    .hamburger-icon::before { content: "×"; }
+  }
+}
+
+.hamburger-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 200px;
+  padding: 6px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border-strong);
+  > a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 42px;
+    padding: 0 12px;
+    color: var(--text-muted);
+    &::before { content: "["; color: var(--text-faint); }
+    &::after { content: "]"; color: var(--text-faint); }
+    &:hover { color: var(--text); background: var(--surface-hover); }
+    &.active { color: var(--primary); background: var(--surface); }
+    &.active::before, &.active::after { color: var(--success); }
+  }
+}
+
+.window-body {
+  flex: 1;
+  min-width: 0;
+  padding: 32px;
+  scroll-margin-top: calc(var(--bar-h) + 20px);
+  &:focus { outline: none; }
+}
+
+.vim-winbar {
+  flex-wrap: wrap;
+  justify-content: space-between;
   border-top: 1px solid var(--border);
   color: var(--text-muted);
-  font-family: var(--font-mono);
-  font-size: var(--bar-font-size);
-  user-select: none;
-
-  .winbar-left,
-  .winbar-right {
-    display: flex;
-    align-items: stretch;
-    height: 100%;
-  }
-
+  .winbar-left, .winbar-right { display: flex; flex-wrap: wrap; }
   .winbar-item {
     display: inline-flex;
     align-items: center;
-    height: 100%;
+    gap: 6px;
+    min-height: var(--bar-h);
     padding: 0 var(--bar-pad-x);
-    border-right: 1px solid var(--border);
-
+    font-variant-numeric: tabular-nums;
     &[hidden] { display: none; }
-
-    &::before { content: "["; margin-right: 6px; color: var(--text-faint); }
-    &::after  { content: "]"; margin-left: 6px; color: var(--text-faint); }
-
-    .control-icon {
-      margin-right: 6px;
-      color: var(--info);
-      font-size: var(--bar-icon-size);
-    }
-
-    .winbar-text {
-      color: var(--text);
-      font-weight: 500;
-      font-variant-numeric: tabular-nums;
-    }
-
-    &:first-child { border-left: 1px solid var(--border); }
-    &:last-child  { border-right: none; }
+    &::before { content: "["; color: var(--text-faint); }
+    &::after { content: "]"; color: var(--text-faint); }
+    .control-icon { color: var(--info); }
   }
-
-  /* Per-segment accent rotation — icons pick different Tokyo hues
-     so the winbar reads as a multi-hue gauge rather than uniform
-     cyan. */
-  .winbar-left > .winbar-item:nth-child(1) .control-icon { color: var(--info); }
-  .winbar-left > .winbar-item:nth-child(2) .control-icon { color: var(--warning); }
-  .winbar-left > .winbar-item:nth-child(3) .control-icon { color: var(--orange); }
-  .winbar-right > .winbar-item:nth-child(1) .control-icon { color: var(--violet); }
-
-  .scroll-top-link {
-    display: inline-flex;
-    align-items: center;
-    height: 100%;
-    color: inherit;
-    text-decoration: none;
-    cursor: pointer;
-
-    &:hover { color: var(--info); }
-    &:focus-visible {
-      outline: 1px dashed var(--success);
-      outline-offset: -2px;
-    }
-  }
+  .back-link { color: var(--text-muted); &:hover { color: var(--success); } }
 }
 
-.back-link {
-  color: var(--primary);
-  text-decoration: none;
-  font-weight: 600;
-
-  &:hover { color: var(--info); }
-
-  &:focus-visible {
-    outline: 1px dashed var(--success);
-    outline-offset: -2px;
-  }
-}
-
-.winbar-copyright {
-  border-right: none;
-
-  .winbar-text {
-    color: var(--text-muted);
-    font-weight: 400;
-  }
-}
-
-/* ============================================================
-Responsive
-------------------------------------------------------------
-Breakpoints:
-≤ 900px — nav collapses to hamburger, layout-toggle hidden
-  (theme toggle stays visible on the bar).
-≤ 768px — tighter window-body padding.
-≤ 480px — compact bar, control text labels hidden.
-============================================================ */
 @media (max-width: 900px) {
-  .status-nav { display: none; }
-  .nav-hamburger { display: inline-flex; }
-  .layout-toggle { display: none; }
-  .status-path { max-width: 45%; }
-  .status-control { padding: 0 10px; }
-
-  .nav-hamburger > summary {
-    width: auto;
-    min-width: 0;
-
-    .hamburger-label { display: inline; }
-  }
+  .status-nav, .layout-toggle { display: none; }
+  .nav-hamburger { display: block; }
+  .status-path { max-width: calc(100% - 190px); }
+  html[lang="es"] .status-path { max-width: calc(100% - 240px); }
 }
 
-@media (max-width: 768px) {
-  .window-body { padding: 1rem; }
-  .winbar-item { padding: 0 8px; }
-}
-
-@media (max-width: 480px) {
-  :root { --bar-h: 26px; --bar-font-size: 10px; }
-  .status-path { padding: 0 8px; max-width: 40%; }
-  .status-control { padding: 0 8px; }
-  .status-control .control-text { display: none; }
+@media (max-width: 600px) {
+  :root { --bar-h: 42px; --bar-pad-x: 8px; --bar-font-size: 10px; }
+  .terminal-window { border: none; }
+  .window-body { padding: 22px 16px; }
+  .status-path { font-size: 10px; }
+  .winbar-copyright { display: none !important; }
+  .vim-winbar { padding: 4px 0; }
+  .vim-winbar .winbar-item { min-height: 30px; }
 }

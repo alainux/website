@@ -22,16 +22,13 @@
    the border underneath.
    ============================================================ */
 
-:root {
-  --chip-h: 24px;
-}
-
 /* ──────────────────────────────────────────────────────────────
    The bordered box
    ────────────────────────────────────────────────────────────── */
 .tui-panel {
   position: relative;
-  margin: 2.25rem 0 2.25rem;
+  min-width: 0;
+  margin: 0 0 32px;
   background-color: transparent;
   border: 1px solid var(--border-strong);
   transition: border-color 0.35s ease;
@@ -44,7 +41,7 @@
 .tui-panel__body {
   position: relative;
   z-index: 2;
-  padding: 2rem 1.75rem 1.5rem;
+  padding: 28px 26px;
 }
 
 .tui-panel__glare {
@@ -91,13 +88,14 @@
   align-items: center;
   height: var(--chip-h);
   padding: 0 8px;
-  background-color: var(--chip-bg);
+  max-width: calc(100% - 32px);
+  background-color: var(--surface);
   font-family: var(--font-mono);
   font-size: var(--chip-font-size);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: var(--head-fg);
+  color: inherit;
   white-space: nowrap;
   line-height: 1;
 
@@ -115,7 +113,7 @@
 }
 
 .tui-panel__title {
-  color: var(--head-fg);
+  color: inherit;
   line-height: 1;
 }
 
@@ -141,7 +139,7 @@
   gap: 8px;
   height: var(--chip-h);
   padding: 0 8px;
-  background-color: var(--chip-bg);
+  background-color: var(--surface);
   font-family: var(--font-mono);
   font-size: var(--chip-font-size);
   font-weight: 700;
@@ -192,11 +190,20 @@
    ============================================================ */
 .grid-two-cols {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
 }
-@media (max-width: 900px) {
+@media (max-width: 700px) {
   .grid-two-cols { grid-template-columns: 1fr; }
+}
+
+.tui-panel__head { color: var(--head-fg); }
+
+@media (max-width: 600px) {
+  .tui-panel__body { padding: 26px 20px; }
+  .grid-two-cols { gap: 0; }
+  .tui-panel__foot { gap: 4px; font-size: 9px; }
+  .tui-panel__foot > a, .tui-panel__foot > span { padding-inline: 4px; }
 }
 
 /* ============================================================

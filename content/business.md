@@ -18,3 +18,7 @@ Independent software development and IT consulting by Alain François Jacomet-Fo
 Based in Berlin, Germany; services are provided online.
 
 Digital products and services are delivered online. Customer support information and applicable purchase terms will be provided before checkout.
+
+### Get in touch
+
+Tell me what you’re building via [LinkedIn](https://linkedin.com/in/alainux), or explore the other ways to [connect](@/contact.md).

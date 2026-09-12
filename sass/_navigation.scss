@@ -1,292 +1,84 @@
-/* ============================================================
-   Navigation, Buttons, Lists, Pagination
-   ------------------------------------------------------------
-   All shared chrome for clickable elements and lists.
-   TUI-style flat — no shadows, no rounded corners.
-   ============================================================ */
-
-/* ──────────────────────────────────────────────────────────────
-   Terminal button — bracketed, flat, mousedown-highlight
-   ────────────────────────────────────────────────────────────── */
+/* Bracketed actions, restrained topic filters, and shared content lists. */
 .terminal-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  padding: 6px 12px;
-  border: 1px solid var(--border);
-  background: transparent;
+  min-height: 40px;
+  padding: 9px 14px;
+  border: 1px solid var(--border-strong);
   color: var(--primary);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-md);
-  font-weight: 700;
-  white-space: nowrap;
+  font: 700 var(--font-size-md) var(--font-mono);
+  text-decoration: none;
   cursor: pointer;
-  text-decoration: none;
-  transition: background-color 0.1s ease, color 0.1s ease, border-color 0.1s ease;
-
-  &:hover {
-    background-color: var(--primary);
-    color: var(--surface);
-    border-color: var(--primary);
-    text-decoration: none;
-  }
-
-  &:active {
-    background-color: var(--primary-strong);
-    border-color: var(--primary-strong);
-  }
-
-  &:focus-visible {
-    outline: 1px dashed var(--success);
-    outline-offset: 2px;
-  }
-
-  /* Disabled link (rendered as plain text) */
-  &.disabled,
-  &.terminal-btn-disabled {
-    color: var(--text-muted);
-    background: transparent;
-    border-color: var(--border);
-    cursor: not-allowed;
-    opacity: 0.4;
-
-    &:hover {
-      color: var(--text-muted);
-      background: transparent;
-      border-color: var(--border);
-      text-decoration: none;
-    }
-  }
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  &:hover { color: var(--success); border-color: var(--success); background: var(--surface-hover); }
+  &--primary { color: var(--action-fg); background: var(--action-bg); border-color: var(--action-bg); }
+  &--primary:hover { color: var(--action-fg); background: var(--action-bg); border-color: var(--success); }
+  &.disabled, &.terminal-btn-disabled { opacity: 0.5; pointer-events: none; }
 }
 
-/* Inline link within prose */
-.terminal-link {
-  color: var(--primary);
-  text-decoration: none;
+.terminal-link { color: var(--primary); font-size: var(--font-size-md); &:hover { color: var(--success); } }
 
-  &:hover { color: var(--success); }
-}
+.section-tag-filter { margin: 1.5rem 0; }
+.tag-filter-label { display: block; margin-bottom: 10px; font-size: var(--font-size-md); color: var(--text-muted); }
+.tags-cloud, .item-tags { display: flex; flex-wrap: wrap; gap: 6px 10px; }
+.item-tags { margin-top: 4px; }
 
-/* ──────────────────────────────────────────────────────────────
-    Tag filter (blog index)
-   ────────────────────────────────────────────────────────────── */
-.section-tag-filter { margin: 1rem 0; }
-
-.tag-filter-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: 11px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.tags-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-/* ──────────────────────────────────────────────────────────────
-   Tag chip — soft tinted pill.
-   Colour comes from per-chip custom props (--tag-fg / --tag-bg) set
-   by the rotation below, so the base + hover styles stay DRY and
-   every chip (filter cloud and inline post tags alike) is coloured.
-   ────────────────────────────────────────────────────────────── */
 .item-tag {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 2px 8px;
-  border: 1px solid var(--tag-bg, var(--border));
-  background: var(--tag-bg, transparent);
-  color: var(--tag-fg, var(--success));
-  font-family: var(--font-mono);
+  gap: 3px;
+  min-height: 26px;
+  padding: 2px 0;
+  color: var(--text-muted);
   font-size: var(--font-size-sm);
-  font-weight: 700;
-  text-transform: uppercase;
-  white-space: nowrap;
+  line-height: 1.5;
   text-decoration: none;
-  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
-
-  &:hover {
-    color: var(--surface);
-    background: var(--tag-fg, var(--success));
-    border-color: var(--tag-fg, var(--success));
-    text-decoration: none;
-  }
-
-  &.item-tag-active {
-    border-style: solid;
-    color: var(--primary);
-    border-color: var(--primary);
-    background: transparent;
-    cursor: default;
-
-    &:hover {
-      background: transparent;
-      color: var(--primary);
-      border-color: var(--primary);
-    }
-  }
+  overflow-wrap: anywhere;
+  &::before { content: "["; color: var(--text-faint); }
+  &::after { content: "]"; color: var(--text-faint); }
+  &:hover, &.item-tag-active { color: var(--success); }
+  &:hover::before, &:hover::after, &.item-tag-active::before, &.item-tag-active::after { color: var(--success); }
 }
+.tags-cloud .item-tag { padding: 5px 8px; border: 1px solid var(--border); }
+.tags-cloud .item-tag-active { border-color: var(--success); background: var(--surface-hover); }
 
-/* Five-hue rotation so adjacent chips never share a colour. Applied to
-   every .item-tag (filter cloud and inline tags) via position only. */
-.item-tag:nth-child(5n + 1) { --tag-fg: var(--success);  --tag-bg: var(--tag-success-bg); }
-.item-tag:nth-child(5n + 2) { --tag-fg: var(--tag-cool);   --tag-bg: var(--tag-cool-bg); }
-.item-tag:nth-child(5n + 3) { --tag-fg: var(--tag-violet); --tag-bg: var(--tag-violet-bg); }
-.item-tag:nth-child(5n + 4) { --tag-fg: var(--tag-warm);   --tag-bg: var(--tag-warm-bg); }
-.item-tag:nth-child(5n + 5) { --tag-fg: var(--tag-rose);   --tag-bg: var(--tag-rose-bg); }
+.terminal-divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+.terminal-divider--light { margin: 1.25rem 0; }
 
-/* ──────────────────────────────────────────────────────────────
-    Print button row (CV pages)
-    ────────────────────────────────────────────────────────────── */
-.print-btn-row {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 1.5rem;
-}
-
-/* ──────────────────────────────────────────────────────────────
-    Divider line — dashed separator
-   ────────────────────────────────────────────────────────────── */
-.terminal-divider {
-  border: none;
-  border-top: 1px dashed var(--border);
-  margin: 1.5rem 0;
-
-  &--light { margin: 1rem 0; }
-}
-
-/* ──────────────────────────────────────────────────────────────
-    Lists — items rendered inside tui-panel__body
-   ────────────────────────────────────────────────────────────── */
-.terminal-list {
-  list-style: none;
-  padding: 0;
-  margin: -0.5rem -1.75rem -0.75rem;
-}
-
-.list-item,
-.section-list-item {
+.terminal-list { list-style: none; padding: 0; margin: 0; }
+.list-item {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 1rem 1.75rem;
-  border-bottom: 1px dashed var(--border);
-  transition: background-color 0.15s ease;
-
-  &:last-child { border-bottom: none; }
-
-  &:hover {
-    background-color: var(--surface-hover);
-  }}
-
-.list-item-row {
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.item-date {
-  color: var(--text-muted);
-  font-size: var(--font-size-md);
-  font-family: var(--font-mono);
-  white-space: nowrap;
-}
-
-.item-lang-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 8px;
-  border: 1px solid var(--pill-border);
-  background-color: var(--pill-bg);
-  color: var(--pill-fg);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-sm);
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.item-link {
-  color: var(--primary);
-  font-family: var(--font-mono);
-  font-weight: 700;
-  text-decoration: none;
-
-  &:hover { color: var(--success); }
-}
-
-.item-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 0.3rem;
-}
-
-/* Project variant */
-.project-item {
   align-items: flex-start;
-
-  .project-desc {
-    color: var(--text-muted);
-    font-size: 13px;
-    line-height: 1.5;
-  }
+  gap: 8px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--border);
+  min-width: 0;
+  &:last-child { border-bottom: none; padding-bottom: 6px; }
 }
-
-.empty-list {
-  padding: 2rem 0;
-  text-align: center;
-  color: var(--text-muted);
-  font-style: italic;
-}
-
-/* ──────────────────────────────────────────────────────────────
-    Welcome panel content
-   ────────────────────────────────────────────────────────────── */
-.welcome-title {
-  margin-bottom: 0.5rem;
-  font-size: 1.75rem;
+.entry-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; min-height: 18px; }
+.item-date { color: var(--text-muted); font-size: var(--font-size-sm); font-variant-numeric: tabular-nums; }
+.item-lang-badge { color: var(--info); font-size: var(--font-size-sm); }
+.item-link {
+  color: var(--text);
+  font-size: 15px;
   font-weight: 700;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  &::before { content: "[ "; color: var(--text-faint); font-weight: 400; }
+  &:hover, &:hover::before, &:hover .entry-arrow::after { color: var(--success); }
+}
+.entry-arrow {
+  display: inline-block;
+  margin-left: 0.25em;
   color: var(--primary);
+  white-space: nowrap;
+  &::after { content: " ]"; color: var(--text-faint); font-weight: 400; }
 }
-
-.welcome-subtitle {
-  margin-bottom: 1rem;
-  font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--success);
-
-  &::after {
-    content: "\2588";
-    color: var(--primary);
-    font-weight: 400;
-    margin-left: 2px;
-    animation: blink 1s steps(1) infinite;
-  }
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0; }
-}
-
-.welcome-desc {
-  color: var(--text-muted);
-  line-height: 1.7;
-}
-
-.section-intro {
-  margin-bottom: 1.5rem;
-  color: var(--text-muted);
-  line-height: 1.7;
-}
-
-/* ============================================================
-   Print overrides live in _print.scss (imported after this).
-   ============================================================ */
+.project-desc { color: var(--text-muted); font-size: 13px; line-height: 1.8; }
+.empty-list { padding: 24px 0; color: var(--text-muted); font-style: italic; }
+.panel-intro { color: var(--text-muted); font-size: var(--font-size-md); padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.section-intro { color: var(--text-muted); max-width: 64ch; line-height: 1.8; margin: 16px 0 24px; }
+.print-btn-row { display: flex; justify-content: flex-end; margin: 24px 0 8px; }

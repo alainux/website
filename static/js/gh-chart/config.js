@@ -6,8 +6,8 @@
 /* Geometry of the isometric calendar grid. */
 export const DAYS = 7;
 export const WEEKS_PER_MONTH = 6;
-export const MONTHS_PER_ROW = 3;
-export const MONTH_ROWS = 4;
+export const MONTHS_PER_ROW = 4;
+export const MONTH_ROWS = 3;
 export const MONTH_COUNT = MONTHS_PER_ROW * MONTH_ROWS;
 
 export const CELL = 1.0;

@@ -8,10 +8,10 @@
 {% block content %}
 <div class="tui-panel">
   <div class="tui-panel__head">
-    <h2 class="tui-panel__title">[ TAGS ]</h2>
+    <span>[ TOPICS ]</span>
   </div>
   <div class="tui-panel__body">
-    <p class="welcome-desc">> All topics used across the blog. Select one to filter posts:</p>
+    <header class="page-heading"><p class="page-eyebrow">/tags/</p><h1>Follow a thread<span aria-hidden="true">_</span></h1><p class="section-intro">Browse the ideas that keep showing up in my writing.</p></header>
 
     {% set tags_taxonomy = get_taxonomy(kind="tags") %}
     {% if tags_taxonomy.items %}

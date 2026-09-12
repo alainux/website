@@ -73,6 +73,16 @@ No additional CI steps are required — the host reads `public: public` from `st
 - **`statichost.yml`** — Points the host at the `public/` build folder.
 - **`scripts/build.sh`** — Generates `data/build.toml` with ISO and human-readable timestamps. Must be used for both `build` and `serve`.
 
+The homepage introduction, name, location, focus, and social links are configured
+under `[extra]` in `zola.toml`. Its typography and layout live in
+`sass/_home.scss`; writing and project lists share the `entry` macro in
+`templates/macros.html`.
+
+The contribution panel labels the date of its GitHub data snapshot. Without a
+`GITHUB_TOKEN` in `.env`, builds retain the cached data. The 3D chart includes a
+rotation control, starts paused for reduced-motion preferences, and keeps its
+summary and links usable if WebGL or the CDN is unavailable.
+
 ---
 
 ## Tech Stack

@@ -41,12 +41,17 @@ export function createScene(canvas, pal, cells) {
   const controls = new OrbitControls(camera, canvas);
   controls.enableDamping = true;
   controls.dampingFactor = 0.08;
-  controls.enablePan = true;
+  controls.enablePan = false;
+  controls.enableZoom = false;
   controls.screenSpacePanning = true;
   controls.minPolarAngle = Math.PI * 0.15;
   controls.maxPolarAngle = Math.PI * 0.495;
   controls.autoRotate = true;
-  controls.autoRotateSpeed = 0.5;
+  controls.autoRotateSpeed = 0.35;
+  // Let touch users scroll the page; pointer users can still orbit the chart.
+  controls.touches.ONE = null;
+  controls.touches.TWO = null;
+  canvas.style.touchAction = 'pan-y';
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.8));
   const keyLight = new THREE.DirectionalLight(0xffffff, 0.6);
@@ -58,10 +63,10 @@ export function createScene(canvas, pal, cells) {
   const span = Math.max(extent.maxX - extent.minX, extent.maxZ - extent.minZ);
 
   function buildHorizonGrid() {
-    const size = span * 4 + 40 * CELL;
+    const size = span + 14 * CELL;
     const divs = Math.round(size / CELL);
     const g = new THREE.GridHelper(size, divs, pal.gridMain, pal.gridMain);
-    g.material.opacity = 0.12;
+    g.material.opacity = 0.055;
     g.material.transparent = true;
     g.material.depthWrite = false;
     g.position.set(CELL / 2, 0.002, CELL / 2);
@@ -181,13 +186,13 @@ export function createScene(canvas, pal, cells) {
   }
 
   function disposeGroup(group) {
-    group.clear();
     for (const child of group.children) {
       if (child.material) {
         if (child.material.map) child.material.map.dispose();
         child.material.dispose();
       }
     }
+    group.clear();
   }
 
   /* monthOffset mirrors data.js; recomputed here from the same constants. */
@@ -214,7 +219,17 @@ export function createScene(canvas, pal, cells) {
     }
   }
 
+  function updatePalette(nextPalette) {
+    pal = nextPalette;
+    scene.remove(horizonGrid);
+    horizonGrid.geometry.dispose();
+    horizonGrid.material.dispose();
+    horizonGrid = buildHorizonGrid();
+    scene.add(horizonGrid);
+  }
+
   return {
+    updatePalette,
     THREE, renderer, scene, camera, controls,
     mesh, barMat, lineMat, tileMat, edges, rebuildEdges, writeInstance,
     currentH, todayRing, monthsGroup, buildMonthLabels, horizonGrid, buildHorizonGrid,

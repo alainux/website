@@ -4,12 +4,13 @@
 
 {% if tags_taxonomy.items %}
   <nav class="section-tag-filter" aria-label="Filter posts by tag">
-    <span class="tag-filter-label">FILTER BY TAG:</span>
+    <span class="tag-filter-label">Explore a topic</span>
 
     <div class="tags-cloud">
+      <a href="{{ get_url(path='blog/') }}" class="item-tag{% if active_tag is not defined %} item-tag-active{% endif %}"{% if active_tag is not defined %} aria-current="page"{% endif %}>all notes</a>
       {% for term in tags_taxonomy.items %}
         <a href="{{ term.permalink }}"
-           class="item-tag{% if active_tag is defined and active_tag == term.name %} item-tag-active{% endif %}">
+           class="item-tag{% if active_tag is defined and active_tag == term.name %} item-tag-active{% endif %}"{% if active_tag is defined and active_tag == term.name %} aria-current="page"{% endif %}>
           #{{ term.name }} ({{ term.pages | length }})
         </a>
       {% endfor %}

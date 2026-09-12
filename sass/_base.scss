@@ -16,6 +16,8 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--bar-h) + 20px);
 }
 
 body {
@@ -104,6 +106,7 @@ hr {
 
 /* Respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

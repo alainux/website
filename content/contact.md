@@ -4,11 +4,16 @@ path = "contact"
 description = "Contact Alain Jacomet — AI Engineering Lead & Senior Software Engineer"
 +++
 
-You can reach me via any of the following channels:
+Good projects start with a conversation. If you’re working on an interesting problem, want to collaborate, or just want to compare notes, say hello.
 
-```
-[CODEBERG]  https://codeberg.org/ialan
-[LINKEDIN]  https://linkedin.com/in/alainux
-```
+## Find me here
 
-Feel free to send an email or connect on social media. I am open to interesting projects, open-source collaborations, or just talking about tech.
+- [LinkedIn — connect or send a message](https://linkedin.com/in/alainux)
+- [Codeberg — open-source work](https://codeberg.org/ialan)
+- [GitHub — code and experiments](https://github.com/alainux)
+
+## Working together
+
+For software development and IT consulting, take a look at [Jacomet’s services](@/business.md).
+
+Based in Berlin, Germany. Happy to connect in English or Spanish.

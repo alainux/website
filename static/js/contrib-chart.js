@@ -1,15 +1,15 @@
-/* ============================================================
- * contrib-chart.js
- * Entry point for the homepage GitHub contribution chart.
- * The implementation is split into focused ES modules under
- * ./gh-chart/ (config, data, theme, scene, chart). This file
- * only kicks off the orchestrator once the DOM is ready.
- * ============================================================ */
-
-import { initContribChart } from './gh-chart/chart.js';
+/* Keep the activity summary usable when WebGL or the CDN is unavailable. */
+async function startContribChart() {
+  try {
+    const { initContribChart } = await import('./gh-chart/chart.js');
+    initContribChart();
+  } catch (error) {
+    console.warn('The interactive contribution chart is unavailable.', error);
+  }
+}
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initContribChart, { once: true });
+  document.addEventListener('DOMContentLoaded', startContribChart, { once: true });
 } else {
-  initContribChart();
+  startContribChart();
 }

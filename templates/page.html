@@ -7,7 +7,7 @@
 {% block og_type %}article{% endblock %}
 {% block og_article %}
   {% if page.date %}<meta property="article:published_time" content="{{ page.date | date(format='%Y-%m-%d') }}">{% endif %}
-  <meta property="article:author" content="{{ config.title }}">
+  <meta property="article:author" content="{{ config.extra.author_name }}">
 {% endblock og_article %}
 {% block twitter_title %}{{ page.title }}{% endblock %}
 {% block twitter_description %}{{ page.description | default(value=config.description) }}{% endblock %}
@@ -15,17 +15,21 @@
 {% block html_lang %}{{ page.extra.lang | default(value='en') }}{% endblock %}
 
 {% block content %}
-<article class="tui-panel">
+<article class="tui-panel article-panel">
   <div class="tui-panel__head">
-    <h2 class="tui-panel__title">[ {{ page.title | upper }} ]</h2>
+    <span>[ {{ page.slug }}.md ]</span>
   </div>
   <div class="tui-panel__body">
+    <header class="page-heading">
+      <p class="page-eyebrow">{{ current_path }}</p>
+      <h1>{{ page.title }}</h1>
+    </header>
 
     {% if page.date and not page.extra.print %}
     <header class="page-meta">
-      <span class="meta-item">DATE: {{ page.date | date(format=config.extra.date_format) }}</span>
+      <span class="meta-item"><time datetime="{{ page.date | date(format='%Y-%m-%d') }}">{{ page.date | date(format=config.extra.date_format) }}</time></span>
       {% if page.extra.github %}
-      <span class="meta-item">CODE: <a href="{{ page.extra.github }}" target="_blank" rel="noopener noreferrer" class="terminal-link">{{ page.extra.github }}</a></span>
+      <span class="meta-item"><a href="{{ page.extra.github }}" target="_blank" rel="noopener noreferrer" class="terminal-link">[ View source ↗ ]</a></span>
       {% endif %}
     </header>
     {% endif %}

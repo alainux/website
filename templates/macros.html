@@ -8,6 +8,22 @@
 {% if variant == "status" %}
 <a href="{{ href }}" class="status-nav-item{% if active %} active{% endif %}"{% if active %} aria-current="page"{% endif %}><span class="nav-label">{{ label }}</span></a>
 {% else %}
-<a href="{{ href }}" class="nav-link{% if active %} active{% endif %}"{% if active %} aria-current="page"{% endif %} role="menuitem"><span class="nav-label">{{ label }}</span></a>
+<a href="{{ href }}" class="nav-link{% if active %} active{% endif %}"{% if active %} aria-current="page"{% endif %}><span class="nav-label">{{ label }}</span></a>
 {% endif %}
+{% endmacro %}
+
+{% macro entry(page) %}
+<li class="list-item">
+  <div class="entry-meta">
+    {% if page.date %}<time class="item-date" datetime="{{ page.date | date(format='%Y-%m-%d') }}">{{ page.date | date(format=config.extra.date_format) }}</time>{% endif %}
+    {% if page.extra.lang and page.extra.lang != "en" %}<span class="item-lang-badge">[ {{ page.extra.lang | upper }} ]</span>{% endif %}
+  </div>
+  <a href="{{ page.permalink }}" class="item-link" aria-label="{{ page.title }}">{{ page.title }}<span class="entry-arrow" aria-hidden="true">↗</span></a>
+  {% if page.description %}<p class="project-desc">{{ page.description }}</p>{% endif %}
+  {% if page.taxonomies.tags %}
+  <div class="item-tags">
+    {% for tag in page.taxonomies.tags %}<a href="{{ get_taxonomy_url(kind='tags', name=tag) }}" class="item-tag">#{{ tag }}</a>{% endfor %}
+  </div>
+  {% endif %}
+</li>
 {% endmacro %}

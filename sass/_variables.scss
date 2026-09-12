@@ -83,6 +83,8 @@
   /* Brand / semantic roles */
   --primary:        #7aa2f7; /* links, active, focus */
   --primary-strong: #3d59a1; /* pressed / dimmed primary */
+  --action-bg:      var(--primary);
+  --action-fg:      var(--surface-alt);
   --success:        #9ece6a; /* strings, diff add, hover fill */
   --warning:        #e0af68; /* warnings, hover accent */
   --danger:         #f7768e; /* errors, close */
@@ -108,20 +110,20 @@
   /* Typography */
   --font-mono: 'JetBrainsMono Nerd Font', 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
   --font-size-base: 14px;
-  --font-size-sm: 10px;
+  --font-size-sm: 11px;
   --font-size-md: 12px;
   --line-height-base: 1.6;
 
   /* Bar chrome — statusline + winbar share dimensions */
-  --bar-h: 28px;
-  --bar-font-size: var(--font-size-md);
-  --bar-pad-x: 12px;
+  --bar-h: 38px;
+  --bar-font-size: 11px;
+  --bar-pad-x: 9px;
   --bar-icon-size: 12px;
   --bar-text-size: 11px;
 
   /* Chip chrome — title/foot pills */
-  --chip-h: 24px;
-  --chip-font-size: 12px;
+  --chip-h: 22px;
+  --chip-font-size: 11px;
   --chip-bg: var(--surface);
 
   /* Atmospheric gradients */
@@ -177,6 +179,8 @@
    THEME: Tokyo Day (light)
    ============================================================ */
 [data-theme="light"] {
+  --action-bg: var(--primary-strong);
+  --action-fg: var(--surface);
   --page-bg-grad: linear-gradient(180deg, #f4f4f8 0%, #ededf1 100%);
   --accent-glow: rgba(46, 125, 233, 0.14);
   --chip-bg: var(--surface);

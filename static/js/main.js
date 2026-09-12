@@ -3,6 +3,11 @@
 
   var htmlEl = document.documentElement;
   var windowBody = document.getElementById('window-body');
+  var WORDS_PER_MINUTE = 220;
+
+  function savePreference(key, value) {
+    try { localStorage.setItem(key, value); } catch (_) {}
+  }
 
   /* ── Theme ────────────────────────────────────────────────── */
   var themeToggle = document.getElementById('theme-toggle');
@@ -15,13 +20,17 @@
     var tx = isLight ? 'LIGHT' : 'DARK';
     if (themeIcon) themeIcon.textContent = ic;
     if (themeText) themeText.textContent = tx;
+    if (themeToggle) {
+      themeToggle.setAttribute('aria-pressed', String(isLight));
+      themeToggle.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme');
+    }
   }
 
   function toggleTheme() {
     var isLight = htmlEl.getAttribute('data-theme') === 'light';
     var next = isLight ? 'dark' : 'light';
     htmlEl.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
+    savePreference('theme', next);
     paintTheme();
   }
 
@@ -41,13 +50,14 @@
     var tx = isFull ? 'FULL' : 'CENTERED';
     if (layoutIcon) layoutIcon.textContent = ic;
     if (layoutText) layoutText.textContent = tx;
+    if (layoutToggle) layoutToggle.setAttribute('aria-pressed', String(isFull));
   }
 
   function toggleLayout() {
     var isFull = htmlEl.getAttribute('data-layout') === 'full';
     var next = isFull ? 'centered' : 'full';
     htmlEl.setAttribute('data-layout', next);
-    localStorage.setItem('layout', next);
+    savePreference('layout', next);
     paintLayout();
   }
 
@@ -71,7 +81,7 @@
     }
     var text = prose.textContent || '';
     var words = text.trim().split(/\s+/).filter(Boolean).length;
-    var mins = Math.max(1, Math.ceil(words / 220));
+    var mins = Math.max(1, Math.ceil(words / WORDS_PER_MINUTE));
     if (wordsEl) wordsEl.querySelector('.winbar-text').textContent = words.toLocaleString() + ' words';
     if (readTimeEl) readTimeEl.querySelector('.winbar-text').textContent = mins + ' min';
   }
@@ -87,23 +97,46 @@
     }
   } catch (_) {}
 
-  /* ── Glare follow on .tui-panel ────────────────────────────── */
-  var panels = document.querySelectorAll('.tui-panel');
-  if (panels.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    for (var p = 0; p < panels.length; p++) {
-      (function (panel) {
-        var glare = document.createElement('div');
-        glare.className = 'tui-panel__glare';
-        panel.insertBefore(glare, panel.firstChild);
-
-        panel.addEventListener('mousemove', function (e) {
-          var r = panel.getBoundingClientRect();
-          glare.style.setProperty('--glare-x', (e.clientX - r.left) + 'px');
-          glare.style.setProperty('--glare-y', (e.clientY - r.top) + 'px');
-        });
-      })(panels[p]);
-    }
+  /* Glare is a pointer enhancement; touch and reduced-motion views stay static. */
+  function attachPanelGlare(panel) {
+    var glare = document.createElement('div');
+    glare.className = 'tui-panel__glare';
+    glare.setAttribute('aria-hidden', 'true');
+    panel.insertBefore(glare, panel.firstChild);
+    panel.addEventListener('pointermove', function (event) {
+      var bounds = panel.getBoundingClientRect();
+      glare.style.setProperty('--glare-x', (event.clientX - bounds.left) + 'px');
+      glare.style.setProperty('--glare-y', (event.clientY - bounds.top) + 'px');
+    });
   }
+  if (matchMedia('(pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.tui-panel').forEach(attachPanelGlare);
+  }
+
+  var menu = document.getElementById('nav-hamburger');
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && menu && menu.open) {
+      menu.open = false;
+      menu.querySelector('summary').focus();
+    }
+  });
+  document.addEventListener('click', function (event) {
+    if (menu && menu.open && !menu.contains(event.target)) menu.open = false;
+  });
+
+  function renderMath() {
+    if (!window.renderMathInElement || !windowBody) return;
+    window.renderMathInElement(windowBody, {
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false },
+        { left: '\\(', right: '\\)', display: false },
+        { left: '\\[', right: '\\]', display: true }
+      ],
+      throwOnError: false
+    });
+  }
+  renderMath();
 
   /* ── Print button (CV pages) ─────────────────────────────── */
   var printBtn = document.querySelector('.print-btn');

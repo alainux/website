@@ -1,94 +1,91 @@
 {% extends "base.html" %}
+{% import "macros.html" as ui %}
+
+{% block title %}{{ config.extra.author_name }} — {{ config.title }}{% endblock %}
 
 {% block content %}
-<div class="tui-panel">
-  <div class="tui-panel__head">
-    <h2 class="tui-panel__title">[ WELCOME ]</h2>
-  </div>
-  <div class="tui-panel__body">
-    <h1 class="welcome-title">{{ config.title }}</h1>
-    <p class="welcome-subtitle">> AI Engineering Lead and Senior Software Engineer</p>
-    <p class="welcome-desc">
-      Welcome to my personal terminal workspace. I design robust web applications, low-latency backends, and command line tools. Here you will find my thoughts on engineering, some project logs, and information about my professional career.
-    </p>
-  </div>
+<div class="workspace-heading">
+  <span class="workspace-brand"><span aria-hidden="true">◆</span> {{ config.extra.site_name }}<span class="workspace-caption"> / personal space</span></span>
+  <span class="workspace-caption">code · notes · curiosity</span>
 </div>
 
-{% include "partials/github_contributions.html" %}
-
-<section class="tui-panel" id="home-business">
-  <div class="tui-panel__head">
-    <h2 class="tui-panel__title">[ BUSINESS ]</h2>
-  </div>
+<section class="tui-panel welcome-panel" aria-labelledby="welcome-title">
+  <div class="tui-panel__head"><span>[ WELCOME ]</span></div>
   <div class="tui-panel__body">
-    <p><strong>Jacomet</strong> provides IT consulting, software development, SaaS products, applications, games, and related digital services.</p>
-    <p>For services and customer contact details, see the <a href="{{ get_url(path='business') }}" class="terminal-link">business profile</a>.</p>
+    <p class="welcome-eyebrow"><span aria-hidden="true">~ $</span> whoami<span class="buffer-label">about.md</span></p>
+    <h1 class="welcome-title" id="welcome-title">{{ config.extra.author_first_name }}<br><span>{{ config.extra.author_last_name }}</span><span class="welcome-cursor" aria-hidden="true">_</span></h1>
+    <div class="welcome-grid">
+      <div class="welcome-copy">
+        <p class="welcome-subtitle">{{ config.extra.author_role }}</p>
+        <p class="welcome-desc">{{ config.extra.author_intro }}</p>
+        <div class="welcome-actions">
+          <a class="terminal-btn terminal-btn--primary" href="{{ get_url(path='projects/') }}">[ Explore my work <span aria-hidden="true">↗</span> ]</a>
+          <a class="terminal-link" href="{{ get_url(path='contact') }}">[ Say hello <span aria-hidden="true">→</span> ]</a>
+        </div>
+      </div>
+      <aside class="welcome-context" aria-label="About Alain">
+        <p class="context-heading">// the short version</p>
+        <dl>
+          <dt>Based in</dt><dd>{{ config.extra.author_location }}</dd>
+          <dt>Working with</dt><dd>{{ config.extra.author_focus }}</dd>
+        </dl>
+        <a class="terminal-link" href="{{ get_url(path='cv') }}">[ Read my CV <span aria-hidden="true">↗</span> ]</a>
+      </aside>
+    </div>
+    <nav class="welcome-elsewhere" aria-label="Find me elsewhere">
+      <span>elsewhere</span>
+      <a href="{{ config.extra.codeberg_url }}">[ Codeberg ↗ ]</a>
+      <a href="{{ config.extra.github_url }}">[ GitHub ↗ ]</a>
+      <a href="{{ config.extra.linkedin_url }}">[ LinkedIn ↗ ]</a>
+    </nav>
   </div>
 </section>
 
+{% include "partials/github_contributions.html" %}
+
 <div class="grid-two-cols">
-  <!-- Latest Posts -->
-  <section class="tui-panel" id="home-posts">
-    <div class="tui-panel__head">
-      <h2 class="tui-panel__title">[ {{ config.extra.latest_posts }} ]</h2>
-    </div>
+  <section class="tui-panel" id="home-posts" aria-labelledby="home-posts-title">
+    <div class="tui-panel__head"><h2 class="tui-panel__title" id="home-posts-title">[ {{ config.extra.latest_posts }} ]</h2></div>
     <div class="tui-panel__body">
+      <p class="panel-intro">Notes from the workbench.</p>
       <ul class="terminal-list">
         {% set blog_section = get_section(path="blog/_index.md") %}
-        {% if blog_section and blog_section.pages %}
-          {% for page in blog_section.pages | slice(end=5) %}
-            <li class="list-item">
-              <div class="list-item-row">
-                <span class="item-date">{{ page.date | date(format=config.extra.date_format) }}</span>
-                {% if page.extra.lang %}
-                  <span class="item-lang-badge">[{{ page.extra.lang | upper }}]</span>
-                {% endif %}
-                <a href="{{ page.permalink }}" class="item-link">{{ page.title }}</a>
-              </div>
-              {% if page.taxonomies.tags %}
-                <div class="item-tags">
-                  {% for tag in page.taxonomies.tags %}
-                    <a href="{{ get_taxonomy_url(kind="tags", name=tag) }}" class="item-tag">#{{ tag }}</a>
-                  {% endfor %}
-                </div>
-              {% endif %}
-            </li>
-          {% endfor %}
+        {% for page in blog_section.pages | slice(end=3) %}
+          {{ ui::entry(page=page) }}
         {% else %}
-          <li class="list-item empty-list">No posts found.</li>
-        {% endif %}
+          <li class="list-item empty-list">The first note is still in the buffer.</li>
+        {% endfor %}
       </ul>
     </div>
     <nav class="tui-panel__foot tui-panel__foot--right" aria-label="View all posts">
-      <a href="{{ get_url(path="blog/") }}" class="terminal-btn">[ {{ config.extra.view_all_posts }} ]</a>
+      <a href="{{ get_url(path='blog/') }}" class="terminal-btn">[ {{ config.extra.view_all_posts }} ↗ ]</a>
     </nav>
   </section>
 
-  <!-- Latest Projects -->
-  <section class="tui-panel" id="home-projects">
-    <div class="tui-panel__head">
-      <h2 class="tui-panel__title">[ {{ config.extra.latest_projects }} ]</h2>
-    </div>
+  <section class="tui-panel" id="home-projects" aria-labelledby="home-projects-title">
+    <div class="tui-panel__head"><h2 class="tui-panel__title" id="home-projects-title">[ {{ config.extra.latest_projects }} ]</h2></div>
     <div class="tui-panel__body">
+      <p class="panel-intro">Ideas, made tangible.</p>
       <ul class="terminal-list">
         {% set projects_section = get_section(path="projects/_index.md") %}
-        {% if projects_section and projects_section.pages %}
-          {% for page in projects_section.pages | slice(end=5) %}
-            <li class="list-item project-item">
-              <a href="{{ page.permalink }}" class="item-link">{{ page.title }}</a>
-              <p class="project-desc">{{ page.description }}</p>
-            </li>
-          {% endfor %}
+        {% for page in projects_section.pages | slice(end=3) %}
+          {{ ui::entry(page=page) }}
         {% else %}
-          <li class="list-item empty-list">No projects found.</li>
-        {% endif %}
+          <li class="list-item empty-list">Something is taking shape.</li>
+        {% endfor %}
       </ul>
     </div>
-    {% if projects_section and projects_section.pages | length > 5 %}
     <nav class="tui-panel__foot tui-panel__foot--right" aria-label="View all projects">
-      <a href="{{ get_url(path="projects/") }}" class="terminal-btn">[ {{ config.extra.view_all_projects }} ]</a>
+      <a href="{{ get_url(path='projects/') }}" class="terminal-btn">[ {{ config.extra.view_all_projects }} ↗ ]</a>
     </nav>
-    {% endif %}
   </section>
 </div>
+
+<section class="tui-panel business-panel" id="home-business" aria-labelledby="home-business-title">
+  <div class="tui-panel__head"><h2 class="tui-panel__title" id="home-business-title">[ LET’S BUILD SOMETHING ]</h2></div>
+  <div class="tui-panel__body business-content">
+    <div><h3>Have an interesting problem?</h3><p>Through Jacomet, I offer software development and IT consulting.<br>Good conversations are a good place to start.</p></div>
+    <a href="{{ get_url(path='business') }}" class="terminal-link">[ Services & contact <span aria-hidden="true">↗</span> ]</a>
+  </div>
+</section>
 {% endblock content %}

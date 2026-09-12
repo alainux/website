@@ -5,8 +5,9 @@
 
 .markdown-content {
   margin-top: 1rem;
-  font-size: 14px;
-  line-height: 1.7;
+  font-size: 15px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
   color: var(--text);
 
   /* Paragraphs */
@@ -461,7 +462,7 @@
   font-size: var(--font-size-md);
   font-family: var(--font-mono);
   color: var(--text-muted);
-  margin-bottom: 1rem;
+  margin: 20px 0 1rem;
 
   a {
     color: var(--primary);
@@ -469,6 +470,23 @@
 
     &:hover { color: var(--success); }
   }
+}
+
+.page-heading {
+  h1 { font-size: clamp(28px, 4vw, 42px); line-height: 1.25; letter-spacing: -0.05em; overflow-wrap: anywhere; }
+  h1 > span { color: var(--success); }
+}
+.page-eyebrow { color: var(--text-muted); font-size: 11px; margin-bottom: 18px; overflow-wrap: anywhere; }
+.article-panel .tui-panel__body { padding: 36px 40px; }
+.collection-panel .list-item { padding-block: 28px; }
+.collection-panel .item-link { font-size: 19px; }
+.collection-panel .project-desc { max-width: 66ch; }
+
+@media (max-width: 600px) {
+  .article-panel .tui-panel__body { padding: 28px 20px; }
+  .markdown-content { font-size: 14px; line-height: 1.85; }
+  .page-meta { gap: 12px; }
+  .collection-panel .item-link { font-size: 16px; }
 }
 
 /* All print overrides live in _print.scss to keep concerns separated. */

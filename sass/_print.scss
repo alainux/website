@@ -9,7 +9,9 @@
      surface that references var(--surface)/--border/--md-* then paints
      light instead of leaking the dark terminal colours (e.g. the
      code-block label, figure/table backgrounds, syntax tokens). */
-  :root {
+  :root,
+  :root[data-color-theme],
+  :root[data-color-theme][data-theme] {
     --surface: #fff;
     --page-bg: #fff;
     --surface-alt: #fff;
@@ -22,6 +24,14 @@
     --primary: #000;
     --success: #333;
     --info: #333;
+    --violet: #333;
+    --orange: #333;
+    --warning: #333;
+    --primary-strong: #333;
+    --action-bg: #fff;
+    --action-fg: #000;
+    --status-bg: #fff;
+    --status-fg: #000;
     --head-fg: #000;
     --chip-bg: #fff;
     --md-code-inline-bg: #f4f4f4;
@@ -49,6 +59,23 @@
   .terminal-btn {
     display: none !important;
   }
+
+  .workspace-heading,
+  .entry-arrow,
+  .welcome-eyebrow,
+  .welcome-cursor,
+  .welcome-actions,
+  .welcome-elsewhere,
+  .page-eyebrow,
+  .article-panel > .tui-panel__head,
+  .collection-panel > .tui-panel__head { display: none !important; }
+
+  .page-heading h1 { font-size: 24pt; margin-bottom: 16pt; }
+  .welcome-grid, .grid-two-cols { display: block; }
+  .welcome-context { border: none; padding: 0; margin-top: 16pt; }
+  .business-content { display: block; }
+  .item-link::before, .item-link::after,
+  .item-tag::before, .item-tag::after { content: none !important; }
 
   /* Flatten container / window to plain white page */
   body {
