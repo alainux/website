@@ -5,6 +5,7 @@
 {% set proj_url  = get_url(path="projects/") %}
 {% set cv_url    = get_url(path="cv") %}
 {% set cont_url  = get_url(path="contact") %}
+{% set biz_url   = get_url(path="business") %}
 {% set lang_is_es = page.extra.lang is defined and page.extra.lang == "es" %}
 <html lang="{% block html_lang %}{{ page.extra.lang | default(value='en') }}{% endblock %}" data-color-theme="{{ config.extra.theme | default(value='tokyo-night') }}" data-theme="dark" data-layout="centered">
 <head>
@@ -78,11 +79,13 @@
     {% set nav_proj_active  = current_path is starting_with("/projects") %}
     {% set nav_cv_active    = current_path is starting_with("/cv") %}
     {% set nav_cont_active  = current_path is starting_with("/contact") %}
+    {% set nav_biz_active   = current_path is starting_with("/business") %}
     <li class="nav-list-item">{{ nav::link(href=home_url, label="home", active=nav_home_active, variant="status") }}</li>
     <li class="nav-list-item">{{ nav::link(href=blog_url, label="blog", active=nav_blog_active, variant="status") }}</li>
     <li class="nav-list-item">{{ nav::link(href=proj_url, label="projects", active=nav_proj_active, variant="status") }}</li>
     <li class="nav-list-item">{{ nav::link(href=cv_url, label="cv", active=nav_cv_active, variant="status") }}</li>
     <li class="nav-list-item">{{ nav::link(href=cont_url, label="contact", active=nav_cont_active, variant="status") }}</li>
+    <li class="nav-list-item">{{ nav::link(href=biz_url, label="business", active=nav_biz_active, variant="status") }}</li>
   </ul>
 </nav>
 
@@ -101,6 +104,7 @@
             {{ nav::link(href=proj_url, label="projects", active=nav_proj_active, variant="menu") }}
             {{ nav::link(href=cv_url, label="cv", active=nav_cv_active, variant="menu") }}
             {{ nav::link(href=cont_url, label="contact", active=nav_cont_active, variant="menu") }}
+            {{ nav::link(href=biz_url, label="business", active=nav_biz_active, variant="menu") }}
 
             {% if lang_is_es %}
             <div class="hamburger-divider" aria-hidden="true"></div>
